@@ -1,7 +1,36 @@
-const express = require('express');
-const debug = require('debug')('campaign-manager:users');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import debug from 'debug';
+import jwt from 'jsonwebtoken';
+import User from '../models/user.js';
+
 const router = express.Router();
+
+router.post('/register', async function(req, res, next) {
+  try {
+    const {
+      email,
+      password,
+      username,
+    } = req.body;
+
+    const newUser = new User({
+      email,
+      password,
+      username,
+    });
+    const result = await newUser.save();
+    res.send({
+      result: true,
+    });  
+  } catch(error) {
+    debug(`${process.env.APP_NAME}:users:error`)(`Error: ${error}`);
+    console.error(error);  
+    res.send({
+      result: false,
+      error: error.message,
+    });  
+  }
+});
 
 router.post('/generateToken', function(req, res, next) {
   const jwtSecretKey = process.env.JWT_SECRET_KEY
@@ -26,9 +55,9 @@ router.get('/validation', function(req, res, next) {
       return res.status(401).send('Error!');
     }
   } catch (error) {
-    debug(`Error: ${error}`);
+    debug(`${process.env.APP_NAME}:users:error`)(`Error: ${error}`);
     return res.status(401).send('Error!');
   }
 });
 
-module.exports = router;
+export default router;

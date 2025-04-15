@@ -3,10 +3,12 @@
 /**
  * Module dependencies.
  */
-const debug = require('debug')('campaign-manager:server');
-const http = require('http');
-const app = require('./app');
-const normalizePort = require('./helpers/normalizePort');
+import Debug from 'debug';
+import http from 'http';
+import app from './app.js';
+import normalizePort from './helpers/normalizePort.js';
+
+const debug = Debug(`${process.env.APP_NAME}:server`);
 
 /**
  * Get port from environment and store in Express.
