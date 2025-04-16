@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
+import campaignRouter from './routes/campaign.js';
 
 dotenv.config();
 
@@ -22,5 +23,6 @@ mongoose.connect(`${process.env.MONGO_DATABASE}`)
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api/v1/campaigns', campaignRouter);
 
 export default app;
