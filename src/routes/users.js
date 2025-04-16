@@ -1,11 +1,11 @@
 import express from 'express';
 import debug from 'debug';
-import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
+import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-router.post('/register', async function(req, res, next) {
+router.post('/register', async (req, res) => {
   try {
     const {
       email,
@@ -13,44 +13,125 @@ router.post('/register', async function(req, res, next) {
       username,
     } = req.body;
 
-    const newUser = new User({
+    const user = await User.create({
       email,
       password,
       username,
     });
-    const result = await newUser.save();
-    res.send({
-      result: true,
-    });  
+
+    const { accessToken, refreshToken } = await user.generateTokens();
+    return res.status(201).json({
+      accessToken,
+      refreshToken,
+    });
   } catch(error) {
     debug(`${process.env.APP_NAME}:users:error`)(`Error: ${error}`);
     console.error(error);  
-    res.send({
-      result: false,
+    return res.status(500).json({
       error: error.message,
     });  
   }
 });
 
-router.post('/generateToken', function(req, res, next) {
-  const jwtSecretKey = process.env.JWT_SECRET_KEY
-  const data = {
-    time: Date(),
-    userId: 12,
+router.post('/login', async (req, res) => {
+  try {
+    const {
+      password,
+      username,
+    } = req.body;
+
+    const user = await User.login(username, password);
+    if (!user) {
+      return res.status(401).json({
+        error: 'Неверное имя пользователя или пароль',
+      });
+    }
+
+    const { accessToken, refreshToken } = await user.generateTokens();
+    return res.status(201).json({
+      accessToken,
+      refreshToken,
+    });
+  } catch(error) {
+    debug(`${process.env.APP_NAME}:users:error`)(`Error: ${error}`);
+    console.error(error);  
+    return res.status(500).json({
+      error: error.message,
+    });
   }
-  const token = jwt.sign(data, jwtSecretKey)
-  res.send(token);
 });
 
-router.get('/validation', function(req, res, next) {
-  const tokenHeaderKey = process.env.TOKEN_HEADER_KEY
-  const jwtSecretKey = process.env.JWT_SECRET_KEY
-
+router.post('/logout', async (req, res) => {
   try {
-    const token = req.header(tokenHeaderKey);
-    const verified = jwt.verify(token, jwtSecretKey);
-    if (verified) {
-      return res.send('Verified!');
+    const { refreshToken } = req.body;
+
+    await User.updateOne(
+      { 'refreshTokens.token': refreshToken },
+      { $pull: { refreshTokens: { token: refreshToken } } },
+    );
+
+    return res.status(204).end();
+  } catch(error) {
+    debug(`${process.env.APP_NAME}:users:error`)(`Error: ${error}`);
+    console.error(error);  
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
+router.post('/refresh-token', async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    const user = await User.findOne({ refreshToken });
+    if (!user) {
+      return res.status(403).json({ error: 'Недействительный токен!' });
+    }
+  
+    const tokenData = user.refreshTokens.find(t => t.token === refreshToken);
+    if (new Date(tokenData.expiresAt) < new Date()) {
+      await User.updateOne(
+        { id: user.id },
+        { $pull: { refreshTokens: { token: refreshToken } } },
+      );
+      return res.status(403).json({
+        error: 'Токен истек!',
+      });
+    }
+
+    const tokens = await user.generateTokens();
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000 );
+    await User.updateOne(
+      { id: user.id },
+      {
+        $pull: { refreshTokens: { token: refreshToken } },
+        $push: { refreshTokens: { token: tokens.refreshToken, expiresAt } },
+      },
+    );
+
+    return res.json({
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    })
+  } catch(error) {
+    debug(`${process.env.APP_NAME}:users:error`)(`Error: ${error}`);
+    console.error(error);  
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+});
+
+router.get('/validation', authMiddleware, (req, res, next) => {
+  try {
+    const { user } = req;
+    if (user) {
+      return res.json({
+        username: user.username,
+        role: user.role,
+        avatar: user.avatar,
+      });
     } else {
       return res.status(401).send('Error!');
     }

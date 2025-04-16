@@ -1,4 +1,6 @@
+import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
+import { generateAccessToken, generateRefreshToken } from '../helpers/token.js';
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -23,6 +25,83 @@ const UserSchema = new mongoose.Schema({
     select: false,
     minlength: [6, 'Пароль должен быть не короче 6 символов'],
   },
+  role: {
+    type: String,
+    enum: ['player', 'gm', 'admin'],
+    default: 'player'
+  },
+
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  verificationToken: String,
+  verificationExpire: Date,
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
+
+  refreshTokens: [{
+    token: { type: String, required: true },
+    expiresAt: { type: Date, required: true },
+  }],
+  refreshTokens: [{
+    token: { type: String, required: true },
+    expiresAt: { type: Date, required: true },
+  }],
+
+  avatar: {
+    type: String,
+    default: 'https://i.imgur.com/3ZqjY7Q.png',
+  },
+  lastLogin: Date,
+}, {
+  timestamps: true,
 });
+
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+
+  this.password = await bcrypt.hash(this.password, 12);
+});
+
+UserSchema.methods.checkPassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+};
+
+UserSchema.methods.addRefreshToken = async function (token) {
+  this.refreshTokens.push({
+    token,
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  });
+  return this.save();
+};
+
+UserSchema.methods.generateTokens = async function () {
+  const accessToken = generateAccessToken(this.id, this.role);
+  const refreshToken = generateRefreshToken(this.id, this.role);
+  await this.addRefreshToken(refreshToken);
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
+
+UserSchema.statics.login = async function (username, password) {
+  const user = await this
+    .findOne({ username })
+    .select('+password');
+  if (!user) {
+    return null;
+  }
+
+  const isCorrectPassword = await user.checkPassword(password);
+  if (!isCorrectPassword) {
+    return null;
+  }
+
+  return user;
+};
 
 export default mongoose.model('User', UserSchema);
