@@ -19,7 +19,7 @@ router.post('/register', async (req, res) => {
       username,
     });
 
-    const { accessToken, refreshToken } = await user.generateTokens();
+    const { accessToken, refreshToken } = await user.generateTokens(true);
     return res.status(201).json({
       accessToken,
       refreshToken,
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    const { accessToken, refreshToken } = await user.generateTokens();
+    const { accessToken, refreshToken } = await user.generateTokens(true);
     return res.status(201).json({
       accessToken,
       refreshToken,
@@ -100,7 +100,7 @@ router.post('/refresh-token', async (req, res) => {
       });
     }
 
-    const tokens = await user.generateTokens();
+    const tokens = await user.generateTokens(false);
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000 );
     await User.updateOne(
       { id: user.id },

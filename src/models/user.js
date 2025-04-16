@@ -78,9 +78,12 @@ UserSchema.methods.addRefreshToken = async function (token) {
   return this.save();
 };
 
-UserSchema.methods.generateTokens = async function () {
+UserSchema.methods.generateTokens = async function (updateLastLogin=false) {
   const accessToken = generateAccessToken(this.id, this.role);
   const refreshToken = generateRefreshToken(this.id, this.role);
+  if (updateLastLogin) {
+    this.lastLogin = new Date();
+  }
   await this.addRefreshToken(refreshToken);
   return {
     accessToken,
