@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./src/index.js",
-    "debug": "DEBUG=campaign-manager:* node ./src/index.js"
+    "dev": "node --watch ./src/index.js",
+    "debug": "DEBUG=campaign-manager:* npm run dev"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
