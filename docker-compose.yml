@@ -29,5 +29,6 @@ services:
     ports:
       - "5000:5000"
     volumes:
+      - ./package.json:/app/package.json
       - ./src/:/app/src
     command: npm run dev
