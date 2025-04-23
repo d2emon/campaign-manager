@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 
+import * as errorHandlers from './handlers/error.js';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import campaignRouter from './routes/campaign.js';
@@ -24,5 +25,9 @@ mongoose.connect(`${process.env.MONGO_DATABASE}`)
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/v1/campaigns', campaignRouter);
+
+app.use(errorHandlers.error404);
+app.use(errorHandlers.logError);
+app.use(errorHandlers.defaultError);
 
 export default app;

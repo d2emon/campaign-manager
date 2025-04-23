@@ -1,6 +1,3 @@
-import { verifyToken } from '../helpers/token.js';
-import User from '../models/user.js';
-
 const gmMiddleware = async (req, res, next) => {
   const { user } = req;
 
