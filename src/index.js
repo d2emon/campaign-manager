@@ -3,17 +3,16 @@
 /**
  * Module dependencies.
  */
-import Debug from 'debug';
 import http from 'http';
 import app from './app.js';
+import config from './helpers/config.js';
+import debug from './helpers/debug.js';
 import normalizePort from './helpers/normalizePort.js';
-
-const debug = Debug(`${process.env.APP_NAME}:server`);
 
 /**
  * Get port from environment and store in Express.
  */
-const port = normalizePort(process.env.PORT || '5000');
+const port = normalizePort(config.PORT || '5000');
 app.set('port', port);
 
 /**
@@ -56,7 +55,7 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  debug('server')('Listening on ' + bind);
 }
 
 /**

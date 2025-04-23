@@ -107,4 +107,6 @@ UserSchema.statics.login = async function (username, password) {
   return user;
 };
 
+UserSchema.index({ refreshToken: 1 }, { unique: true });
+
 export default mongoose.model('User', UserSchema);
