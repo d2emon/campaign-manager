@@ -17,7 +17,7 @@ export const registerUser = async (req, res, next) => {
     });
     if (duplicates > 0) {
       return res.status(400).json({
-        error: 'Пользователь с таким именем или адресом электронной почты уже существует!',
+        error: 'Email или имя пользователя уже заняты',
       })
     }
 

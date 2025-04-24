@@ -22,6 +22,7 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Пароль обязателен'],
+    match: [/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/, 'Пароль слишком простой'],
     select: false,
     minlength: [6, 'Пароль должен быть не короче 6 символов'],
   },
@@ -103,6 +104,9 @@ UserSchema.statics.login = async function (username, password) {
   if (!isCorrectPassword) {
     return null;
   }
+
+  this.lastLogin = Date.now();
+  await this.save();
 
   return user;
 };
