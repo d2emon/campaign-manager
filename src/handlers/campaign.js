@@ -30,12 +30,15 @@ export const createCampaign = async (req, res, next) => {
   }
 };
 
-export const getCampaign = async (req, res) => {
+export const getCampaign = async (req, res, next) => {
   try {
     const campaign = await Campaign.findOne({
-      id: req.params.id,
-      players: req.user.id,
-    });
+      _id: req.params.id,
+      $or: [
+        { gameMaster: req.user.id },
+        { players: req.user.id },
+      ],
+    }).populate('npcs');
 
     if (!campaign) {
       return res.status(404).json({
@@ -49,12 +52,12 @@ export const getCampaign = async (req, res) => {
   }
 };
 
-export const updateCampaign = async (req, res) => {
+export const updateCampaign = async (req, res, next) => {
   try {
     const { title, description, genre } = req.body;
     const campaign = await Campaign.updateOne(
       {
-        id: req.params.id,
+        _id: req.params.id,
         gameMaster: req.user.id,
       },
       {
@@ -69,7 +72,7 @@ export const updateCampaign = async (req, res) => {
   }
 };
 
-export const removeCampaign = async (req, res) => {
+export const removeCampaign = async (req, res, next) => {
   try {
     await Campaign.deleteOne({
       id: req.params.id,
@@ -83,7 +86,7 @@ export const removeCampaign = async (req, res) => {
   }
 };
 
-export const joinCampaign = async (req, res) => {
+export const joinCampaign = async (req, res, next) => {
   try {
     const campaign = await Campaign.findOne({
       id: req.params.id,

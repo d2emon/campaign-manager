@@ -26,6 +26,11 @@ const CampaignSchema = new mongoose.Schema({
   isPublic: { type: Boolean, default: false },
   lastActive: { type: Date, default: Date.now },
 
+  npcs: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'NPC' 
+  }],
+
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 }, {
