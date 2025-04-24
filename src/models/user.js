@@ -105,8 +105,8 @@ UserSchema.statics.login = async function (username, password) {
     return null;
   }
 
-  this.lastLogin = Date.now();
-  await this.save();
+  user.lastLogin = Date.now();
+  await user.save();
 
   return user;
 };

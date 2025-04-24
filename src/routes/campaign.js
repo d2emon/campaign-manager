@@ -16,5 +16,7 @@ router.put('/:id', authMiddleware, gmMiddleware, campaignHandler.updateCampaign)
 router.delete('/:id', authMiddleware, gmMiddleware, campaignHandler.removeCampaign);
 
 router.post('/:id/join', authMiddleware, campaignHandler.joinCampaign);
-      
+
+router.post('/:id/npc/generate', authMiddleware, gmMiddleware, campaignHandler.addRandomNpc);
+
 export default router;

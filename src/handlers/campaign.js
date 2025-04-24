@@ -1,4 +1,5 @@
 import Campaign from '../models/campaign.js';
+import NPC from '../models/npc.js';
 
 export const listCampaigns = async (req, res, next) => {
   try {
@@ -108,6 +109,26 @@ export const joinCampaign = async (req, res, next) => {
     await campaign.save();
 
     return res.json(campaign);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const addRandomNpc = async (req, res, next) => {
+  try {
+    const item = new NPC();
+    await item.generate();
+    item.campaign = req.params.id;
+    await item.save();
+
+    await Campaign.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: { npcs: item.id },
+      },
+    );
+
+    return res.json(item);
   } catch (error) {
     return next(error);
   }
