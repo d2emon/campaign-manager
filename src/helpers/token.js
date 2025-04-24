@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
+import config from './config.js';
 
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
-const ACCESS_TOKEN_EXPIRES = '15m';
-const REFRESH_TOKEN_EXPIRES = '7d';
+console.log('token', config.JWT_SECRET_KEY);
 
 export const generateAccessToken = (userId, role) => {
   return jwt.sign(
@@ -10,8 +9,8 @@ export const generateAccessToken = (userId, role) => {
       userId,
       role,
     },
-    JWT_SECRET_KEY,
-    { expiresIn: ACCESS_TOKEN_EXPIRES },
+    config.JWT_SECRET_KEY,
+    { expiresIn: config.ACCESS_TOKEN_EXPIRES },
   );
 };
 
@@ -21,8 +20,8 @@ export const generateRefreshToken = (userId, role) => {
       userId,
       role,
     },
-    JWT_SECRET_KEY,
-    { expiresIn: REFRESH_TOKEN_EXPIRES },
+    config.JWT_SECRET_KEY,
+    { expiresIn: config.REFRESH_TOKEN_EXPIRES },
   );
 };
   

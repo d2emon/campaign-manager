@@ -1,11 +1,11 @@
-import debug from 'debug';
+import debug from '../helpers/debug.js';
 
 export const error404 = (req, res) => res.status(404).send({
   error: 'Page not found!',
 });
 
 export const logError = (err, req, res, next) => {
-  debug(`${process.env.APP_NAME}:error`)(`Error: ${err}`);
+  debug('error')(`Error: ${err}`);
   console.error(err.stack);
   return next(err);
 };
