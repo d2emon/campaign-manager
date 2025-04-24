@@ -8,7 +8,10 @@ import mongoose from 'mongoose';
 import * as errorHandlers from './handlers/error.js';
 import indexRouter from './routes/index.js';
 import campaignRouter from './routes/campaign.js';
+import locationRouter from './routes/location.js';
+import noteRouter from './routes/note.js';
 import npcRouter from './routes/npc.js';
+import questRouter from './routes/quest.js';
 import usersRouter from './routes/users.js';
 
 dotenv.config();
@@ -25,7 +28,10 @@ mongoose.connect(`${process.env.MONGO_DATABASE}`)
 
 app.use('/', indexRouter);
 app.use('/api/v1/campaigns', campaignRouter);
+app.use('/api/v1/location', locationRouter);
+app.use('/api/v1/note', noteRouter);
 app.use('/api/v1/npc', npcRouter);
+app.use('/api/v1/quest', questRouter);
 app.use('/users', usersRouter);
 
 app.use(errorHandlers.error404);

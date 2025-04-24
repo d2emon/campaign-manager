@@ -30,6 +30,18 @@ const CampaignSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'NPC' 
   }],
+  locations: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Location' 
+  }],
+  quests: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Quest' 
+  }],
+  notes: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Note' 
+  }],
 
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }

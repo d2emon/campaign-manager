@@ -1,10 +1,10 @@
 import Campaign from '../models/campaign.js';
-import NPC from '../models/npc.js';
+import Note from '../models/note.js';
 
-export const createNPC = async (req, res, next) => {
+export const createNote = async (req, res, next) => {
   try {
     const { name, race, role } = req.body;
-    const item = await NPC.create({
+    const item = await Note.create({
       name,
       race,
       role,
@@ -14,19 +14,19 @@ export const createNPC = async (req, res, next) => {
     await Campaign.findByIdAndUpdate(
       req.params.campaignId,
       {
-        $push: { npcs: item.id },
+        $push: { notes: item.id },
       },
     );
 
-    return res.status(201).json(npc);
+    return res.status(201).json(item);
   } catch (error) {
     return next(error);
   }
 };
 
-export const getNPC = async (req, res, next) => {
+export const getNote = async (req, res, next) => {
   try {
-    const item = await NPC.findOne({
+    const item = await Note.findOne({
       _id: req.params.id,
       campaign: req.params.campaignId,
     }).populate('campaign');
@@ -43,10 +43,10 @@ export const getNPC = async (req, res, next) => {
   }
 };
 
-export const updateNPC = async (req, res, next) => {
+export const updateNote = async (req, res, next) => {
   try {
     const { name, race, role } = req.body;
-    const item = await NPC.updateOne(
+    const item = await Note.updateOne(
       {
         _id: req.params.id,
         campaign: req.params.campaignId,
@@ -63,9 +63,9 @@ export const updateNPC = async (req, res, next) => {
   }
 };
   
-export const removeNPC = async (req, res, next) => {
+export const removeNote = async (req, res, next) => {
   try {
-    await NPC.deleteOne({
+    await Note.deleteOne({
       _id: req.params.id,
       campaign: req.params.campaignId,
     });
@@ -76,4 +76,3 @@ export const removeNPC = async (req, res, next) => {
     return next(error);
   }
 };
-  

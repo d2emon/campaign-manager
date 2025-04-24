@@ -38,7 +38,12 @@ export const getCampaign = async (req, res, next) => {
         { gameMaster: req.user.id },
         { players: req.user.id },
       ],
-    }).populate('npcs');
+    }).populate([
+      'npcs',
+      'locations',
+      'quests',
+      'notes',
+    ]);
 
     if (!campaign) {
       return res.status(404).json({
