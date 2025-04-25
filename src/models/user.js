@@ -45,10 +45,6 @@ const UserSchema = new mongoose.Schema({
     token: { type: String, required: true },
     expiresAt: { type: Date, required: true },
   }],
-  refreshTokens: [{
-    token: { type: String, required: true },
-    expiresAt: { type: Date, required: true },
-  }],
 
   avatar: {
     type: String,
@@ -110,7 +106,5 @@ UserSchema.statics.login = async function (username, password) {
 
   return user;
 };
-
-UserSchema.index({ refreshToken: 1 }, { unique: true });
 
 export default mongoose.model('User', UserSchema);

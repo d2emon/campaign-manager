@@ -9,6 +9,24 @@ export const registerUser = async (req, res, next) => {
       username,
     } = req.body;
 
+    if (!email) {
+      return res.status(400).json({
+        error: 'Email обязателен для заполнения',
+      })
+    }
+
+    if (!password) {
+      return res.status(400).json({
+        error: 'Пароль обязателен для заполнения',
+      })
+    }
+
+    if (!username) {
+      return res.status(400).json({
+        error: 'Имя пользователя обязательно для заполнения',
+      })
+    }
+
     const duplicates = await User.countDocuments({
       $or: [
         { username },
@@ -44,6 +62,8 @@ export const loginUser = async (req, res, next) => {
       password,
       username,
     } = req.body;
+
+    // TODO: Use email to login
 
     const user = await User.login(username, password);
     if (!user) {
@@ -81,17 +101,20 @@ export const refreshToken = async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
 
-    const user = await User.findOne({ refreshToken });
+    const user = await User.findOne({ 'refreshTokens.token': refreshToken });
     if (!user) {
       return res.status(403).json({ error: 'Недействительный токен!' });
     }
 
     const tokenData = user.refreshTokens.find(t => t.token === refreshToken);
+    await User.updateOne(
+      { id: user.id },
+      {
+        $pull: { refreshTokens: { token: refreshToken } },
+      },
+    );
+
     if (new Date(tokenData.expiresAt) < new Date()) {
-      await User.updateOne(
-        { id: user.id },
-        { $pull: { refreshTokens: { token: refreshToken } } },
-      );
       return res.status(403).json({
         error: 'Токен истек!',
       });
@@ -102,7 +125,6 @@ export const refreshToken = async (req, res, next) => {
     await User.updateOne(
       { id: user.id },
       {
-        $pull: { refreshTokens: { token: refreshToken } },
         $push: { refreshTokens: { token: tokens.refreshToken, expiresAt } },
       },
     );
@@ -111,24 +133,6 @@ export const refreshToken = async (req, res, next) => {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
     })
-  } catch (err) {
-    return next(err);
-  }
-};
-
-export const validateUser = async (req, res, next) => {
-  try {
-    const { user } = req;
-
-    if (user) {
-      return res.json({
-        username: user.username,
-        role: user.role,
-        avatar: user.avatar,
-      });
-    } else {
-      return res.status(401).send('Error!');
-    }
   } catch (err) {
     return next(err);
   }
