@@ -1,7 +1,6 @@
 import request from 'supertest';
 import app from '../src/app';
 import User from '../src/models/user';
-import { refreshToken } from '../src/handlers/users';
 
 describe('Auth API', () => {
   beforeAll(async () => {
@@ -59,7 +58,6 @@ describe('Auth API', () => {
           },
         ],
       });
-      console.log(user);
 
       const res = await request(app)
       .post('/auth/refresh-token')
