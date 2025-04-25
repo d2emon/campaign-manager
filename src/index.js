@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 import http from 'http';
+import mongoose from 'mongoose';
 import app from './app.js';
 import config from './helpers/config.js';
 import debug from './helpers/debug.js';
@@ -14,6 +15,8 @@ import normalizePort from './helpers/normalizePort.js';
  */
 const port = normalizePort(config.PORT || '5000');
 app.set('port', port);
+
+mongoose.connect(`${config.MONGO_DATABASE}`)
 
 /**
  * Create HTTP server.

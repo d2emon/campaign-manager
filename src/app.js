@@ -2,10 +2,8 @@ import express from 'express';
 // import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import mongoose from 'mongoose';
 
 import * as errorHandlers from './handlers/error.js';
-import config from './helpers/config.js';
 
 import indexRouter from './routes/index.js';
 import campaignRouter from './routes/campaign.js';
@@ -23,15 +21,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
-mongoose.connect(`${config.MONGO_DATABASE}`)
-
 app.use('/', indexRouter);
 app.use('/api/v1/campaigns', campaignRouter);
 app.use('/api/v1/location', locationRouter);
 app.use('/api/v1/note', noteRouter);
 app.use('/api/v1/npc', npcRouter);
 app.use('/api/v1/quest', questRouter);
-app.use('/users', usersRouter);
+app.use('/auth', usersRouter);
 
 app.use(errorHandlers.error404);
 app.use(errorHandlers.logError);
