@@ -18,7 +18,7 @@ export const createNPC = async (req, res, next) => {
       },
     );
 
-    return res.status(201).json(npc);
+    return res.status(201).json(item);
   } catch (error) {
     return next(error);
   }
