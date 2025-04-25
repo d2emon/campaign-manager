@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from './config.js';
 
-console.log('token', config.JWT_SECRET_KEY);
-
 export const generateAccessToken = (userId, role) => {
   return jwt.sign(
     {
@@ -26,5 +24,5 @@ export const generateRefreshToken = (userId, role) => {
 };
   
 export const verifyToken = (token) => {
-  return jwt.verify(token, JWT_SECRET_KEY);
+  return jwt.verify(token, config.JWT_SECRET_KEY);
 };
