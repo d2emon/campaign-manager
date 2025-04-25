@@ -9,16 +9,16 @@ describe('Campaign API', () => {
 
   beforeAll(async () => {
     const user = await User.create({
-      email: 'gm@example.com',
+      email: 'newgm@example.com',
       password: 'Password123',
-      username: 'game_master',
+      username: 'new_game_master',
       role: 'gm',
     });
     userId = user._id.toString();
 
     const loginRes = await request(app)
       .post('/auth/login')
-      .send({ username: 'game_master', password: 'Password123' });
+      .send({ username: 'new_game_master', password: 'Password123' });
 
     token = loginRes.body.accessToken;
   });

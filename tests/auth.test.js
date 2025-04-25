@@ -3,14 +3,6 @@ import app from '../src/app';
 import User from '../src/models/user';
 
 describe('Auth API', () => {
-  beforeAll(async () => {
-    const user = await User.create({
-      email: 'test@example.com',
-      password: 'Password123',
-      username: 'testuser',
-    });
-  });
-
   it('POST /auth/register – успешная регистрация', async () => {
     const res = await request(app)
       .post('/auth/register')
