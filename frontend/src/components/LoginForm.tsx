@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useAuth from '../hooks/useAuth';
+import Field from './Field';
 
 const schema = yup.object({
   username: yup
@@ -14,6 +16,8 @@ const schema = yup.object({
 })
 
 const LoginForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     authError,
     handleLogin,
@@ -28,9 +32,14 @@ const LoginForm = () => {
   })
 
   const onSubmit = async (data: { username: string, password: string }) => {
-    const success = await handleLogin(data.username, data.password);
-    if (success) {
-      window.location.href = '/dashboard';
+    setIsLoading(true);
+    try {
+      const success = await handleLogin(data.username, data.password);
+      if (success) {
+        window.location.href = '/dashboard';
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -44,38 +53,18 @@ const LoginForm = () => {
           Вход в RPG Campaign Manager
         </h1>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">
-            Имя пользователя
-          </label>
-          <input
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-primary"
-            placeholder="Имя пользователя"
-            {...register('username')}
-          />
-          {errors.username && (
-            <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
-              {errors.username.message}
-            </div>
-          )}
-        </div>
+        <Field
+          label="Имя пользователя"
+          inputProps={register('username')}
+          error={errors.username}
+        />
 
-        <div className="mb-6">
-          <label className="block text-gray-700 mb-2">
-            Пароль
-          </label>
-          <input
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-primary"
-            type="password"
-            placeholder="Пароль"
-            {...register('password')}
-          />
-          {errors.password && (
-            <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
-              {errors.password.message}
-            </div>
-          )}
-        </div>
+        <Field
+          label="Пароль"
+          type="password"
+          inputProps={register('password')}
+          error={errors.password}
+        />
 
         {authError && (
           <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
@@ -86,8 +75,9 @@ const LoginForm = () => {
         <button
           type="submit"
           className="w-full bg-primary text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+          disabled={isLoading}
         >
-          Войти
+          { isLoading ? 'Загрузка...' : 'Войти' }
         </button>
       </form>
     </div>
