@@ -6,7 +6,7 @@ import RegisterPage from './pages/RegisterPage';
 import PrivateRoute from './components/PrivateRoute';
 import DashboardPage from './pages/DashboardPage';
 
-function App() {
+const App = () => {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token) {
@@ -29,6 +29,6 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default App;
