@@ -3,7 +3,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import PrivateRoute from './components/PrivateRoute';
 import DashboardPage from './pages/DashboardPage';
-import CampaignForm from './components/CampaignForm';
+import CampaignFormPage from './pages/EditCampaignPage';
+import CampaignDetailsPage from './pages/CampaignDetailsPage';
 const App = () => {
   return (
     <Router>
@@ -13,9 +14,11 @@ const App = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/campaigns/new" element={<CampaignForm />} />
-          <Route path="/campaigns/:id/edit" element={<CampaignForm />} />
+          <Route path="/campaigns/new" element={<CampaignFormPage />} />
+          <Route path="/campaigns/:id/edit" element={<CampaignFormPage />} />
+          <Route path="/campaigns/:id" element={<CampaignDetailsPage />} />
         </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
