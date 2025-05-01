@@ -1,5 +1,5 @@
 import api from './api';
-import { RegisterDTO } from './register.dto';
+import { RegisterDTO } from '../types/register.dto';
 
 export const login = async (username: string, password: string) => {
   const response = await api.post('/auth/login', { username, password });
