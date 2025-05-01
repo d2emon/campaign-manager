@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import { login, logout, register, refreshToken } from '../services/auth';
-import { RegisterDTO } from '../types/register.dto';
+import { login, logout, register, refreshToken, RegisterDTO } from '../services/auth';
+import { User } from '../types/user';
 
 const useAuth = () => {
-  const [user, setUser] = useState<{ username: string } | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -61,7 +61,11 @@ const useAuth = () => {
       const { accessToken, refreshToken } = await login(username, password);
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      const userData = { username };
+      const userData = {
+        username,
+        email: '',
+        role: '',
+      };
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
       setIsAuthenticated(true);
@@ -96,7 +100,11 @@ const useAuth = () => {
       const { accessToken, refreshToken } = await register(user);
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      const userData = { username: user.username };
+      const userData: User = {
+        username: user.username,
+        email: user.email,
+        role: user.role || 'player',
+      };
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
       setIsAuthenticated(true);

@@ -1,5 +1,11 @@
 import api from './api';
-import { RegisterDTO } from '../types/register.dto';
+
+export type RegisterDTO = {
+  email: string,
+  password: string,
+  role?: string,
+  username: string,
+};
 
 export const login = async (username: string, password: string) => {
   const response = await api.post('/auth/login', { username, password });

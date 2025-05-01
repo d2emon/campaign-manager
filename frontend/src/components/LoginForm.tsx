@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import useAuth from '../hooks/useAuth';
 import Field from './Field';
 import PasswordField from './PasswordField';
+import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object({
   username: yup
@@ -18,7 +19,7 @@ const schema = yup.object({
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate();
   const {
     authError,
     handleLogin,
@@ -37,7 +38,7 @@ const LoginForm = () => {
     try {
       const success = await handleLogin(data.username, data.password);
       if (success) {
-        window.location.href = '/dashboard';
+        navigate('/dashboard');
       }
     } finally {
       setIsLoading(false);
