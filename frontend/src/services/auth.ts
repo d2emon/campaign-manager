@@ -1,5 +1,15 @@
 import api from './api';
 
+interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: {
+    id: string;
+    username: string;
+    email: string;
+  };
+}
+
 export type RegisterDTO = {
   email: string,
   password: string,
@@ -7,7 +17,7 @@ export type RegisterDTO = {
   username: string,
 };
 
-export const login = async (username: string, password: string) => {
+export const login = async (username: string, password: string): Promise<LoginResponse> => {
   const response = await api.post('/auth/login', { username, password });
   return response.data;
 };
@@ -17,13 +27,12 @@ export const logout = async (refreshToken: string) => {
   return response.data;
 };
 
-export const register = async (user: RegisterDTO) => {
+export const register = async (user: RegisterDTO): Promise<LoginResponse> => {
   const response = await api.post('/auth/register', user);
   return response.data;
 };
 
 export const refreshToken = async (refreshToken: string) => {
-  const response = await api.post('/auth/refresh', { refreshToken });
+  const response = await api.post('/auth/refresh-token', { refreshToken });
   return response.data;
 };
-
