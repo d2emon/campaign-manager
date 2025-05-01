@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import { login, logout, register } from '../services/auth';
+import { login, logout, register, refreshToken } from '../services/auth';
 import { RegisterDTO } from '../types/register.dto';
 
 const useAuth = () => {
@@ -11,7 +11,7 @@ const useAuth = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const navigate = useNavigate();
 
-  const checkAccessToken = () => {
+  const checkAccessToken = useCallback(() => {
     const token = localStorage.getItem('accessToken');
     if (token) {
       const decoded = jwtDecode(token);
@@ -22,15 +22,49 @@ const useAuth = () => {
       return true;
     }
     return false;
-  };
+  }, []);
+
+  const handleTokenRefresh = useCallback(async () => {
+    try {
+      const refreshTokenValue = localStorage.getItem('refreshToken');
+      if (!refreshTokenValue) {
+        throw new Error('No refresh token');
+      }
+
+      const response = await refreshToken(refreshTokenValue);
+      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('refreshToken', response.refreshToken);
+      return true;
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      return false;
+    }
+  }, []);
+
+  const checkAndRefreshToken =  useCallback(async () => {
+    const hasValidToken = checkAccessToken();
+    if (!hasValidToken) {
+      const refreshSuccess = await handleTokenRefresh();
+      if (!refreshSuccess) {
+        setIsAuthenticated(false);
+        setUser(null);
+        return false;
+      }
+    }
+    return true;
+  }, [checkAccessToken, handleTokenRefresh]);
 
   const handleLogin = async (username: string, password: string) => {
     try {
-      const { accessToken } = await login(username, password);
-      const userData = { username };
+      const { accessToken, refreshToken } = await login(username, password);
       localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      const userData = { username };
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
+      setIsAuthenticated(true);
       setAuthError(null);
       return true;
     } catch (error) {
@@ -40,20 +74,32 @@ const useAuth = () => {
   };
 
   const handleLogout = async () => {
-    await logout();
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
-    setUser(null);
-    navigate('/login');
+    try {
+      const refreshTokenValue = localStorage.getItem('refreshToken');
+      if (refreshTokenValue) {
+        await logout(refreshTokenValue);
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      setUser(null);
+      setIsAuthenticated(false);
+      navigate('/login');
+    }
   };
 
   const handleRegister = async (user: RegisterDTO) => {
     try {
-      const { accessToken } = await register(user);
-      const userData = { username: user.username };
+      const { accessToken, refreshToken } = await register(user);
       localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      const userData = { username: user.username };
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
+      setIsAuthenticated(true);
       setAuthError(null);
       return true;
     } catch (error) {
@@ -63,20 +109,29 @@ const useAuth = () => {
   };
 
   useEffect(() => {
-    const hasToken = checkAccessToken();
-    if (hasToken) {
-      const userData = JSON.parse(localStorage.getItem('user') || 'null');
-      setUser(userData);
-      setIsAuthenticated(!!userData);
-    } else {
-      setIsAuthenticated(false);
-    }
-    setIsInitialized(true);
-  }, []);
+    const initializeAuth = async () => {
+      const tokenValid = await checkAndRefreshToken();
+      if (tokenValid) {
+        const userData = JSON.parse(localStorage.getItem('user') || 'null');
+        setUser(userData);
+        setIsAuthenticated(!!userData);
+      }
+      setIsInitialized(true);
+    };
+  
+    initializeAuth();
+
+    // Устанавливаем интервал для проверки токена каждые 5 минут
+    const interval = setInterval(async () => {
+      await checkAndRefreshToken();
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [checkAndRefreshToken]);
 
   return {
     authError,
-    checkAccessToken, // : () => !!localStorage.getItem('accessToken'),
+    checkAccessToken,
     isAuthenticated,
     isInitialized,
     handleLogin,
