@@ -9,7 +9,13 @@ export const listCampaigns = async (req, res, next) => {
         { players: req.user.id },
       ],
     })
-    return res.json(campaigns);
+    return res.json(campaigns.map(campaign => ({
+      id: campaign._id,
+      title: campaign.title,
+      description: campaign.description,
+      genre: campaign.genre,
+      gameMaster: campaign.gameMaster,
+    })));
   } catch (error) {
     return next(error);
   }
