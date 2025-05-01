@@ -38,6 +38,12 @@ const LoginForm = ({ isLoading, onSubmit }: LoginFormProps) => {
       className="space-y-6"
       onSubmit={handleSubmit(onSubmit)}
     >
+      {authError && (
+        <div className="rounded-md bg-red-50 p-4">
+          <div className="text-sm text-red-700">{authError}</div>
+        </div>
+      )}
+
       <Field
         id="username"
         label="Имя пользователя"
@@ -51,12 +57,6 @@ const LoginForm = ({ isLoading, onSubmit }: LoginFormProps) => {
         inputProps={register('password')}
         error={errors.password}
       />
-
-      {authError && (
-        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
-          {authError}
-        </div>
-      )}
 
       <button
         type="submit"
