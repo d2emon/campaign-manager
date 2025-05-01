@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useAuth from '../hooks/useAuth';
+import Field from './Field';
 
 const schema = yup.object({
   username: yup
@@ -14,6 +16,8 @@ const schema = yup.object({
 })
 
 const LoginForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     authError,
     handleLogin,
@@ -28,30 +32,55 @@ const LoginForm = () => {
   })
 
   const onSubmit = async (data: { username: string, password: string }) => {
-    const success = await handleLogin(data.username, data.password);
-    if (success) {
-      window.location.href = '/dashboard';
+    setIsLoading(true);
+    try {
+      const success = await handleLogin(data.username, data.password);
+      if (success) {
+        window.location.href = '/dashboard';
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        placeholder="Имя пользователя"
-        {...register('username')}
-      />
-      {errors.username && <p>{errors.username.message}</p>}
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form
+        className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <h1 className="text-2xl font-bold mb-6 text-center text-primary">
+          Вход в RPG Campaign Manager
+        </h1>
 
-      <input
-        type="password"
-        placeholder="Пароль"
-        {...register('password')}
-      />
-      {errors.password && <p>{errors.password.message}</p>}
+        <Field
+          label="Имя пользователя"
+          inputProps={register('username')}
+          error={errors.username}
+        />
 
-      {authError && <p style={{ color: '#ff0000' }}>{authError}</p>}
-      <button type="submit">Войти</button>
-    </form>
+        <Field
+          label="Пароль"
+          type="password"
+          inputProps={register('password')}
+          error={errors.password}
+        />
+
+        {authError && (
+          <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+            {authError}
+          </div>
+        )}
+
+        <button
+          type="submit"
+          className="w-full bg-primary text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+          disabled={isLoading}
+        >
+          { isLoading ? 'Загрузка...' : 'Войти' }
+        </button>
+      </form>
+    </div>
   );
 };
 

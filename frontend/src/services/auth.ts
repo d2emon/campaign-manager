@@ -1,4 +1,5 @@
 import api from './api';
+import { RegisterDTO } from './register.dto';
 
 export const login = async (username: string, password: string) => {
   const response = await api.post('/auth/login', { username, password });
@@ -8,3 +9,9 @@ export const login = async (username: string, password: string) => {
 export const logout = () => {
   localStorage.removeItem('accessToken');
 };
+
+export const register = async (user: RegisterDTO) => {
+  const response = await api.post('/auth/register', user);
+  return response.data;
+};
+
