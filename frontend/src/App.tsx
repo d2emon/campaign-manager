@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -7,16 +5,6 @@ import PrivateRoute from './components/PrivateRoute';
 import DashboardPage from './pages/DashboardPage';
 
 const App = () => {
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      const decoded = jwtDecode(token);
-      if (decoded.exp && decoded.exp * 1000 < Date.now()) {
-        localStorage.removeItem('accessToken');
-      }
-    }
-  }, []);
-
   return (
     <BrowserRouter>
       <Routes>
