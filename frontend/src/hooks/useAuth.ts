@@ -1,22 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import { login, logout, register } from '../services/auth';
 import { RegisterDTO } from '../types/register.dto';
 
 const useAuth = () => {
   const [user, setUser] = useState<{ username: string } | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = () => {
+  const checkAccessToken = () => {
     const token = localStorage.getItem('accessToken');
     if (token) {
-      const userData = JSON.parse(localStorage.getItem('user') || 'null');
-      setUser(userData);
+      const decoded = jwtDecode(token);
+      if (decoded.exp && decoded.exp * 1000 < Date.now()) {
+        localStorage.removeItem('accessToken');
+        return false;
+      }
       return true;
     }
     return false;
@@ -60,11 +62,23 @@ const useAuth = () => {
     }
   };
 
+  useEffect(() => {
+    const hasToken = checkAccessToken();
+    if (hasToken) {
+      const userData = JSON.parse(localStorage.getItem('user') || 'null');
+      setUser(userData);
+      setIsAuthenticated(!!userData);
+    } else {
+      setIsAuthenticated(false);
+    }
+    setIsInitialized(true);
+  }, []);
+
   return {
     authError,
-    checkAccessToken: () => !!localStorage.getItem('accessToken'),
-    checkAuth,
-    isAuthenticated: !!user,
+    checkAccessToken, // : () => !!localStorage.getItem('accessToken'),
+    isAuthenticated,
+    isInitialized,
     handleLogin,
     handleLogout,
     handleRegister,
