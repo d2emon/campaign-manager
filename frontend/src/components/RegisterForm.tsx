@@ -5,6 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useAuth from '../hooks/useAuth';
 import Field from './Field';
+import PasswordField from './PasswordField';
+import PasswordStrength from './PasswordStrength';
 
 const schema = yup.object({
   username: yup
@@ -28,17 +30,20 @@ const RegisterForm = () => {
 
   const {
     authError,
-    handleLogin,
     handleRegister,
   } = useAuth();
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   })
+
+  const passwordValue = watch('password');
+  const confirmPasswordValue = watch('confirmPassword');
 
   const onSubmit = async (data: { email: string, username: string, password: string }) => {
     setIsLoading(true);
@@ -67,28 +72,35 @@ const RegisterForm = () => {
         </h1>
 
         <Field
-          error={errors.username}
-          inputProps={register('username')}
-          label="Имя пользователя"
-        />
-        <Field
           error={errors.email}
           inputProps={register('email')}
           label="Email"
           type="email"
         />
         <Field
+          error={errors.username}
+          inputProps={register('username')}
+          label="Имя пользователя"
+        />
+        <PasswordField
           error={errors.password}
           inputProps={register('password')}
           label="Пароль"
-          type="password"
         />
-        <Field
+        <div className="mb-4 py-2">
+          <PasswordStrength password={passwordValue} />
+        </div>
+        <PasswordField
           error={errors.confirmPassword}
           inputProps={register('confirmPassword')}
           label="Подтвердите пароль"
-          type="password"
         />
+
+        {passwordValue && confirmPasswordValue && passwordValue !== confirmPasswordValue && (
+          <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+            Пароли не совпадают
+          </div>
+        )}
 
         {authError && (
           <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">

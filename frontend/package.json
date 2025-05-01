@@ -17,6 +17,7 @@
     "jwt-decode": "^4.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-feather": "^2.0.10",
     "react-hook-form": "^7.56.1",
     "react-router-dom": "^6.30.0",
     "react-scripts": "5.0.1",
