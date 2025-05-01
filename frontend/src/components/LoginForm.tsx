@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useAuth from '../hooks/useAuth';
 import Field from './Field';
+import PasswordField from './PasswordField';
 
 const schema = yup.object({
   username: yup
@@ -59,9 +60,8 @@ const LoginForm = () => {
           error={errors.username}
         />
 
-        <Field
+        <PasswordField
           label="Пароль"
-          type="password"
           inputProps={register('password')}
           error={errors.password}
         />
