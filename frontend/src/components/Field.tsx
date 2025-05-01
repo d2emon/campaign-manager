@@ -1,9 +1,14 @@
-import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
+import { FieldError } from 'react-hook-form';
+import { InputHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 export type FieldProps = {
   error?: FieldError,
-  inputProps: UseFormRegisterReturn,
+  id: string,
+  inputProps: InputHTMLAttributes<HTMLInputElement> | TextareaHTMLAttributes<HTMLTextAreaElement>,
   label: string,
+  max?: number,
+  min?: number,
+  placeholder?: string,
   type?: string,
   afterInput?: React.ReactNode,
 }
@@ -11,29 +16,53 @@ export type FieldProps = {
 const Field = (props: FieldProps) => {
   const {
     error,
+    id,
     inputProps,
     label,
+    max,
+    min,
+    placeholder,
     type,
     afterInput,
   } = props;
 
+  console.log(id, inputProps, inputProps.value);
+
   return (
     <div className="mb-6 relative">
-      <label className="block text-gray-700 mb-2">
+      <label
+        htmlFor={id}
+        className="block text-sm font-medium text-gray-700 mb-2"
+      >
         {label}
       </label>
-      <input
-        className="w-full p-2 border rounded focus:ring-2 focus:ring-primary"
-        type={type}
-        placeholder={label}
-        {...inputProps}
-      />
-      {afterInput}
-      {error && (
-        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
-          {error.message}
-        </div>
-      )}
+      <div>
+        {type === 'textarea' ? (
+          <textarea
+            id={id}
+            {...(inputProps as TextareaHTMLAttributes<HTMLTextAreaElement>)}
+            className="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm min-h-[150px]"
+            rows={4}
+            placeholder={placeholder || label}
+          />
+        ) : (
+            <input
+              className="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              type={type}
+              id={id}
+              placeholder={placeholder || label}
+              {...(inputProps as InputHTMLAttributes<HTMLInputElement>)}
+              min={min}
+              max={max}
+            />
+        )}
+        {afterInput}
+        {error && (
+          <div className="mt-2 text-red-600">
+            {error.message}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

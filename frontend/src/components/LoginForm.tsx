@@ -56,12 +56,14 @@ const LoginForm = () => {
         </h1>
 
         <Field
+          id="username"
           label="Имя пользователя"
           inputProps={register('username')}
           error={errors.username}
         />
 
         <PasswordField
+          id="password"
           label="Пароль"
           inputProps={register('password')}
           error={errors.password}

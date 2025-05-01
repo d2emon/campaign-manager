@@ -73,17 +73,20 @@ const RegisterForm = () => {
         </h1>
 
         <Field
+          id="email"
           error={errors.email}
           inputProps={register('email')}
           label="Email"
           type="email"
         />
         <Field
+          id="username"
           error={errors.username}
           inputProps={register('username')}
           label="Имя пользователя"
         />
         <PasswordField
+          id="password"
           error={errors.password}
           inputProps={register('password')}
           label="Пароль"
@@ -92,6 +95,7 @@ const RegisterForm = () => {
           <PasswordStrength password={passwordValue} />
         </div>
         <PasswordField
+          id="confirmPassword"
           error={errors.confirmPassword}
           inputProps={register('confirmPassword')}
           label="Подтвердите пароль"
