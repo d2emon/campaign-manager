@@ -51,6 +51,7 @@ const RegisterForm = () => {
       const success = await handleRegister({
         email: data.email,
         password: data.password,
+        role: 'gm',
         username: data.username,
       });
       if (success) {
