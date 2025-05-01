@@ -57,7 +57,7 @@ const CampaignForm = ({ initialData, isEditing, isLoading, onSubmit, onCancel }:
       setValue('gameSystem', initialData.gameSystem || '');
       setValue('maxPlayers', initialData.maxPlayers || 4);
     }
-  }, [initialData]);
+  }, [initialData, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

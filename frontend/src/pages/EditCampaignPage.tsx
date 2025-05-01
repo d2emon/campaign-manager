@@ -27,7 +27,7 @@ const CampaignFormPage = () => {
 
       loadCampaign();
     }
-  }, [id]);
+  }, [id, navigate]);
 
   const handleSubmit = async (data: Partial<Campaign>) => {
     if (!user) return;
