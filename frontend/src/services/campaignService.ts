@@ -1,22 +1,20 @@
 import api from './api';
 
-export type Campaign = {
+export interface Campaign {
   id: string;
   title: string;
   description: string;
   gameSystem: string;
   maxPlayers: number;
-  gmId: string;
   createdAt: string;
   updatedAt: string;
-};
+}
 
 export type CreateCampaignDTO = {
   title: string;
   description: string;
   gameSystem: string;
   maxPlayers: number;
-  gmId: string;
 };
 
 export const getCampaigns = async () => {
@@ -35,7 +33,7 @@ export const createCampaign = async (data: CreateCampaignDTO) => {
 };
 
 export const updateCampaign = async (id: string, data: Partial<CreateCampaignDTO>) => {
-  const response = await api.patch<Campaign>(`/api/v1/campaigns/${id}`, data);
+  const response = await api.put<Campaign>(`/api/v1/campaigns/${id}`, data);
   return response.data;
 };
 

@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import { getCampaigns, Campaign } from '../services/campaignService';
 
 const DashboardPage = () => {
   const { user, handleLogout, isInitialized } = useAuth();
   const navigate = useNavigate();
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const isReady = isInitialized && !isLoading;
@@ -17,6 +19,19 @@ const DashboardPage = () => {
         setIsLoading(false);
       }
     }
+
+    const loadCampaigns = async () => {
+      try {
+        const data = await getCampaigns();
+        setCampaigns(data);
+      } catch (error) {
+        console.error('Error loading campaigns:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadCampaigns();
   }, [user, navigate, isInitialized]);
 
   if (!isReady) {
@@ -67,6 +82,57 @@ const DashboardPage = () => {
                     Создать кампанию
                   </button>
                 </div>
+
+                {isLoading ? (
+                  <div className="flex justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+                  </div>
+                ) : campaigns.length === 0 ? (
+                  <div className="text-center py-12">
+                    <h3 className="text-lg font-medium text-gray-900">У вас пока нет кампаний</h3>
+                    <p className="mt-2 text-gray-500">
+                      Создайте свою первую кампанию, чтобы начать игру
+                    </p>
+                  </div>                    
+                ) : (
+                  <div className="mt-4">
+                    {campaigns.map((campaign) => (
+                      <div
+                        key={campaign.id}
+                        className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition cursor-pointer"
+                        onClick={() => navigate(`/campaigns/${campaign.id}`)}
+                      >
+                        <div className="p-6">
+                          <div className="flex justify-between items-start">
+                            <h3 className="text-lg font-medium text-gray-900">
+                              {campaign.title}
+                            </h3>
+                            <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                              {campaign.gameSystem || 'Без системы'}
+                            </span>
+                          </div>
+                          <p className="mt-2 text-gray-500 line-clamp-3">
+                            {campaign.description}
+                          </p>
+                          <div className="mt-4 flex items-center justify-between">
+                            <div className="flex items-center text-sm text-gray-500">
+                              <span>Игроков: {campaign.maxPlayers || 6}</span>
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/campaigns/${campaign.id}/edit`);
+                              }}
+                              className="text-sm text-blue-600 hover:text-blue-800"
+                            >
+                              Редактировать
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
