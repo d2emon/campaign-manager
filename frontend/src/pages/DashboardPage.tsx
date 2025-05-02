@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import { useAuth } from '../contexts/AuthContext';
 import { getCampaigns, Campaign } from '../services/campaignService';
 
 const DashboardPage = () => {
-  const { user, handleLogout, isInitialized } = useAuth();
+  const { user, logout, isInitialized } = useAuth();
   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,7 +57,7 @@ const DashboardPage = () => {
                 {user?.username}
               </span>
               <button
-                onClick={handleLogout}
+                onClick={logout}
                 className="px-4 py-2 text-sm text-red-600 hover:text-red-800"
               >
                 Выйти

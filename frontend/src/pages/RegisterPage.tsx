@@ -1,26 +1,22 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import RegisterForm from '../components/RegisterForm';
-import useAuth from '../hooks/useAuth';
+import { useAuth } from '../contexts/AuthContext';
 
 const RegisterPage = () => {
-  const navigate = useNavigate();
-  const { handleRegister } = useAuth();
+  const { register } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: { email: string, username: string, password: string }) => {
     setIsLoading(true);
 
     try {
-      const success = await handleRegister({
+      await register({
         email: data.email,
         password: data.password,
         role: 'gm',
         username: data.username,        
       });
-      if (success) {
-        navigate('/dashboard');
-      }
     } finally {
       setIsLoading(false);
     }

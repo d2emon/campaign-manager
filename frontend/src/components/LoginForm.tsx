@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import useAuth from '../hooks/useAuth';
+import { useAuth } from '../contexts/AuthContext';
 import Field from './Field';
 import PasswordField from './PasswordField';
 
@@ -22,7 +22,7 @@ const schema = yup.object({
 
 const LoginForm = ({ isLoading, onSubmit }: LoginFormProps) => {
   const {
-    authError,
+    errorMessage,
   } = useAuth();
 
   const {
@@ -38,9 +38,9 @@ const LoginForm = ({ isLoading, onSubmit }: LoginFormProps) => {
       className="space-y-6"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {authError && (
+      {errorMessage && (
         <div className="rounded-md bg-red-50 p-4">
-          <div className="text-sm text-red-700">{authError}</div>
+          <div className="text-sm text-red-700">{errorMessage}</div>
         </div>
       )}
 

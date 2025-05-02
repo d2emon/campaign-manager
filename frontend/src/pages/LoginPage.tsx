@@ -1,21 +1,17 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import LoginForm from '../components/LoginForm';
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const { handleLogin } = useAuth();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: { username: string, password: string }) => {
     setIsLoading(true);
 
     try {
-      const success = await handleLogin(data.username, data.password);
-      if (success) {
-        navigate('/dashboard');
-      }
+      await login(data.username, data.password);
     } finally {
       setIsLoading(false);
     }
