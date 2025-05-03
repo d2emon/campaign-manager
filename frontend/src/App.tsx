@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './pages/PrivateRoute';
 import DashboardPage from './pages/DashboardPage';
 import CampaignFormPage from './pages/EditCampaignPage';
 import CampaignDetailsPage from './pages/CampaignDetailsPage';

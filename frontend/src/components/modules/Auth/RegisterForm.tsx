@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useAuth } from '../contexts/AuthContext';
-import Field from './Field';
-import PasswordField from './PasswordField';
-import PasswordStrength from './PasswordStrength';
+import { useAuth } from '../../../contexts/AuthContext';
+import Field from '../../ui/Field';
+import PasswordField from '../../ui/PasswordField';
+import PasswordStrength from '../../ui/PasswordStrength';
 
 interface RegisterFormProps {
   isLoading: boolean;

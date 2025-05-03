@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import LoginForm from '../components/LoginForm';
+import LoginForm from '../components/modules/Auth/LoginForm';
 
 const LoginPage = () => {
   const { login } = useAuth();

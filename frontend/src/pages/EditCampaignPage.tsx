@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import CampaignForm from '../components/CampaignForm';
+import CampaignForm from '../components/modules/Campaign/CampaignForm';
 import { useAuth } from '../contexts/AuthContext';
 import { getCampaign, createCampaign, updateCampaign, Campaign } from '../services/campaignService';
 
