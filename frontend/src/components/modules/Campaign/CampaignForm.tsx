@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import Field from '../../ui/Field';
-import { Campaign } from '../../../services/campaignService';
-import { Button } from '../../ui/Button';
+import Button from 'components/ui/Button';
+import Field from 'components/ui/Field';
+import { Campaign } from 'services/campaignService';
 
 interface CampaignFormProps {
   initialData?: Partial<Campaign>;

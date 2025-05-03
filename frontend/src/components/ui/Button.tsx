@@ -3,7 +3,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   full?: boolean;
 }
   
-export const Button = ({ variant = 'primary', full = false, children, ...props }: ButtonProps) => {
+const Button = ({ variant = 'primary', full = false, children, ...props }: ButtonProps) => {
   const baseStyles = "px-4 py-2 text-sm font-medium border shadow-sm rounded-md transition disabled:opacity-50";
   const focusStyles = "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary";
   const variants = {
@@ -20,3 +20,5 @@ export const Button = ({ variant = 'primary', full = false, children, ...props }
     </button>
   );
 };
+
+export default Button;
