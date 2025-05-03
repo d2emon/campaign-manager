@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import PrivateRoute from './pages/PrivateRoute';
-import DashboardPage from './pages/DashboardPage';
-import CampaignFormPage from './pages/EditCampaignPage';
-import CampaignDetailsPage from './pages/CampaignDetailsPage';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider } from 'contexts/AuthContext';
+import LoginPage from 'pages/LoginPage';
+import RegisterPage from 'pages/RegisterPage';
+import PrivateRoute from 'pages/PrivateRoute';
+import DashboardPage from 'pages/DashboardPage';
+import CampaignFormPage from 'pages/EditCampaignPage';
+import CampaignDetailsPage from 'pages/CampaignDetailsPage';
 
 const App = () => {
   return (
