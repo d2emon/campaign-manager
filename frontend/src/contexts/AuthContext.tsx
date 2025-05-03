@@ -7,7 +7,7 @@ import {
   refreshToken as refreshTokenApi,
   register as registerApi,
   RegisterDTO,
-} from '../services/auth';
+} from 'services/auth';
 
 interface User {
   username: string;
