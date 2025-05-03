@@ -26,8 +26,6 @@ const Field = (props: FieldProps) => {
     afterInput,
   } = props;
 
-  console.log(id, inputProps, inputProps.value);
-
   return (
     <div className="mb-6 relative">
       <label
