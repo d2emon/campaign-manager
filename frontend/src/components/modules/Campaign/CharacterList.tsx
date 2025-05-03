@@ -1,10 +1,13 @@
 import { Character } from 'types/character';
+import Button from 'components/ui/Button';
 
 interface CharacterListProps {
   characters?: Character[];
+  onEdit?: (character: Character) => void;
+  onDelete?: (character: Character) => void;
 }
 
-const CharacterList = ({ characters }: CharacterListProps) => {
+const CharacterList = ({ characters, onEdit, onDelete }: CharacterListProps) => {
   if (!characters || characters.length === 0) {
     return (
       <div className="text-center text-gray-500 py-4">
@@ -29,8 +32,30 @@ const CharacterList = ({ characters }: CharacterListProps) => {
                 Игрок: {character.playerName}
               </p>
             </div>
-            <div className="text-sm text-gray-500">
-              Уровень {character.level}
+            <div className="flex items-center space-x-2">
+              <div className="text-sm text-gray-500">
+                Уровень {character.level}
+              </div>
+              {(onEdit || onDelete) && (
+                <div className="flex space-x-2">
+                  {onEdit && (
+                    <Button
+                      variant="secondary"
+                      onClick={() => onEdit(character)}
+                    >
+                      Редактировать
+                    </Button>
+                  )}
+                  {onDelete && (
+                    <Button
+                      variant="danger"
+                      onClick={() => onDelete(character)}
+                    >
+                      Удалить
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
           </div>
           <div className="mt-2">

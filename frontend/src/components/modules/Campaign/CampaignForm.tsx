@@ -1,12 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
 import CharacterList from './CharacterList';
+import CharacterForm from './CharacterForm';
 import { Campaign } from 'services/campaignService';
 import { Character } from 'types/character';
+import { createCharacter, updateCharacter, deleteCharacter } from 'services/characterService';
 
 interface CampaignFormProps {
   initialData?: Partial<Campaign>;
@@ -51,6 +53,10 @@ const CampaignForm = ({
   onSubmit, 
   onCancel 
 }: CampaignFormProps) => {
+  const [isCharacterFormOpen, setIsCharacterFormOpen] = useState(false);
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [isCharacterLoading, setIsCharacterLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -62,13 +68,62 @@ const CampaignForm = ({
 
   useEffect(() => {
     if (initialData) {
-      console.log('initialData', initialData);
       setValue('title', initialData.title || '');
       setValue('description', initialData.description || '');
       setValue('gameSystem', initialData.gameSystem || '');
       setValue('maxPlayers', initialData.maxPlayers || 4);
     }
   }, [initialData, setValue]);
+
+  const handleEditCharacter = (character: Character) => {
+    setSelectedCharacter(character);
+    setIsCharacterFormOpen(true);
+  };
+
+  const handleDeleteCharacter = async (character: Character) => {
+    if (window.confirm('Вы уверены, что хотите удалить этого персонажа?')) {
+      try {
+        setIsCharacterLoading(true);
+        await deleteCharacter(character.id);
+        // Обновляем список персонажей после удаления
+        const updatedCharacters = characters.filter(c => c.id !== character.id);
+        onSubmit({ ...initialData, characters: updatedCharacters });
+      } catch (error) {
+        console.error('Ошибка при удалении персонажа:', error);
+      } finally {
+        setIsCharacterLoading(false);
+      }
+    }
+  };
+
+  const handleCharacterSubmit = async (data: Partial<Character>) => {
+    try {
+      setIsCharacterLoading(true);
+      let updatedCharacter: Character;
+      
+      if (selectedCharacter) {
+        updatedCharacter = await updateCharacter(selectedCharacter.id, data);
+      } else {
+        updatedCharacter = await createCharacter({
+          ...data,
+          campaignId: initialData?.id || '',
+        } as any);
+      }
+
+      // Обновляем список персонажей
+      const updatedCharacters = selectedCharacter
+        ? characters.map(c => c.id === selectedCharacter.id ? updatedCharacter : c)
+        : [...characters, updatedCharacter];
+
+      onSubmit({ ...initialData, characters: updatedCharacters });
+      setIsCharacterFormOpen(false);
+      setSelectedCharacter(null);
+    } catch (error) {
+      console.error('Ошибка при сохранении персонажа:', error);
+    } finally {
+      setIsCharacterLoading(false);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -124,10 +179,40 @@ const CampaignForm = ({
         max={20}
       />
 
+      {isCharacterFormOpen && (
+        <CharacterForm
+          initialData={selectedCharacter || undefined}
+          isEditing={!!selectedCharacter}
+          isLoading={isCharacterLoading}
+          onSubmit={handleCharacterSubmit}
+          onCancel={() => {
+            setIsCharacterFormOpen(false);
+            setSelectedCharacter(null);
+          }}
+        />
+      )}
+
       {isEditing && (
         <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Персонажи кампании</h2>
-          <CharacterList characters={characters} />
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Персонажи кампании</h2>
+            <Button
+              type="button"
+              variant="primary"
+              onClick={() => {
+                setSelectedCharacter(null);
+                setIsCharacterFormOpen(true);
+              }}
+            >
+              Добавить персонажа
+            </Button>
+          </div>
+          
+          <CharacterList
+            characters={characters}
+            onEdit={handleEditCharacter}
+            onDelete={handleDeleteCharacter}
+          />
         </div>
       )}
 
