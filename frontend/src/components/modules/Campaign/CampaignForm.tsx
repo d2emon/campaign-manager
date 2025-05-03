@@ -4,10 +4,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
+import CharacterList from './CharacterList';
 import { Campaign } from 'services/campaignService';
+import { Character } from 'types/character';
 
 interface CampaignFormProps {
   initialData?: Partial<Campaign>;
+  characters?: Character[];
   isEditing: boolean;
   isLoading: boolean;
   onSubmit: (data: Partial<Campaign>) => Promise<void>;
@@ -40,7 +43,14 @@ type CampaignFormData = {
   maxPlayers: number;
 };
 
-const CampaignForm = ({ initialData, isEditing, isLoading, onSubmit, onCancel }: CampaignFormProps) => {
+const CampaignForm = ({ 
+  initialData, 
+  characters = [], 
+  isEditing, 
+  isLoading, 
+  onSubmit, 
+  onCancel 
+}: CampaignFormProps) => {
   const {
     register,
     handleSubmit,
@@ -113,6 +123,13 @@ const CampaignForm = ({ initialData, isEditing, isLoading, onSubmit, onCancel }:
         min={1}
         max={20}
       />
+
+      {isEditing && (
+        <div className="bg-white shadow rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-4">Персонажи кампании</h2>
+          <CharacterList characters={characters} />
+        </div>
+      )}
 
       <div className="flex justify-end space-x-4">
         <Button

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import CharacterList from 'components/modules/Campaign/CharacterList';
 import { getCampaign, deleteCampaign, Campaign } from 'services/campaignService';
 
 const CampaignDetailsPage = () => {
@@ -63,7 +64,7 @@ const CampaignDetailsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow rounded-lg p-6">
+        <div className="bg-white shadow rounded-lg p-6 mb-6">
           <div className="flex justify-between items-start mb-6">
             <h1 className="text-2xl font-bold text-gray-900">{campaign.title}</h1>
             <div className="flex space-x-4">
@@ -99,14 +100,21 @@ const CampaignDetailsPage = () => {
                 <dt className="text-sm font-medium text-gray-500">Максимум игроков</dt>
                 <dd className="mt-1 text-sm text-gray-900">{campaign.maxPlayers}</dd>
               </div>
-              <div>
-                <dt className="text-sm font-medium text-gray-500">Создана</dt>
-                <dd className="mt-1 text-sm text-gray-900">
-                  {new Date(campaign.createdAt).toLocaleDateString()}
-                </dd>
-              </div>
+              {campaign.createdAt && (
+                <div>
+                  <dt className="text-sm font-medium text-gray-500">Создана</dt>
+                  <dd className="mt-1 text-sm text-gray-900">
+                    {new Date(campaign.createdAt).toLocaleDateString()}
+                  </dd>
+                </div>
+              )}
             </dl>
           </div>
+        </div>
+
+       <div className="bg-white shadow rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-4">Персонажи кампании</h2>
+          <CharacterList characters={campaign.characters} />
         </div>
       </div>
     </div>

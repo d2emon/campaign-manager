@@ -85,7 +85,7 @@ const DashboardPage = () => {
                             {campaign.title}
                           </h3>
                           <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-                            {campaign.gameSystem || 'Без системы'}
+                            {campaign.gameSystem}
                           </span>
                         </div>
                         <p className="mt-2 text-gray-500 line-clamp-3">
@@ -93,7 +93,7 @@ const DashboardPage = () => {
                         </p>
                         <div className="mt-4 flex items-center justify-between">
                           <div className="flex items-center text-sm text-gray-500">
-                            <span>Игроков: {campaign.maxPlayers || 6}</span>
+                            <span>Игроков: {campaign.maxPlayers}</span>
                           </div>
                           <button
                             onClick={(e) => {
