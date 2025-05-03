@@ -5,6 +5,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 import Field from '../../ui/Field';
 import PasswordField from '../../ui/PasswordField';
 import PasswordStrength from '../../ui/PasswordStrength';
+import { Button } from '../../ui/Button';
 
 interface RegisterFormProps {
   isLoading: boolean;
@@ -91,13 +92,13 @@ const RegisterForm = ({ isLoading, onSubmit }: RegisterFormProps) => {
         </div>
       )}
 
-      <button
+      <Button
         type="submit"
-        className="w-full bg-primary text-white py-2 px-4 rounded hover:bg-blue-600 transition"
         disabled={isLoading}
+        full
       >
-        { isLoading ? 'Загрузка...' : 'Зарегистрироваться' }
-      </button>
+        { isLoading ? 'Загрузка...' : 'Зарегистрироваться' }        
+      </Button>
     </form>
   );
 };

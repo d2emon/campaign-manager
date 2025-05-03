@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Field from '../../ui/Field';
 import { Campaign } from '../../../services/campaignService';
+import { Button } from '../../ui/Button';
 
 interface CampaignFormProps {
   initialData?: Partial<Campaign>;
@@ -114,20 +115,20 @@ const CampaignForm = ({ initialData, isEditing, isLoading, onSubmit, onCancel }:
       />
 
       <div className="flex justify-end space-x-4">
-        <button
+        <Button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+          variant="secondary"
         >
           Отмена
-        </button>
-        <button
+        </Button>
+        <Button
           type="submit"
           disabled={isLoading}
-          className="px-4 py-2 text-sm font-medium text-white bg-primary border border-transparent rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
+          variant="primary"
         >
           {isLoading ? 'Сохранение...' : isEditing ? 'Сохранить' : 'Создать'}
-        </button>
+        </Button>
       </div>
     </form>
   );

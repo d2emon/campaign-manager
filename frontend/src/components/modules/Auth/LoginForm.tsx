@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import { useAuth } from '../../../contexts/AuthContext';
 import Field from '../../ui/Field';
 import PasswordField from '../../ui/PasswordField';
+import { Button } from '../../ui/Button';
 
 interface LoginFormProps {
   isLoading: boolean;
@@ -58,13 +59,13 @@ const LoginForm = ({ isLoading, onSubmit }: LoginFormProps) => {
         error={errors.password}
       />
 
-      <button
+      <Button
         type="submit"
-        className="w-full bg-primary text-white py-2 px-4 rounded hover:bg-blue-600 transition"
         disabled={isLoading}
+        full
       >
         { isLoading ? 'Загрузка...' : 'Войти' }
-      </button>
+      </Button>
     </form>
   );
 };
