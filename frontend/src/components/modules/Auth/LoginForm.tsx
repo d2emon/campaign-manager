@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { useAuth } from '../../../contexts/AuthContext';
 import Field from '../../ui/Field';
 import PasswordField from '../../ui/PasswordField';
-import { Button } from '../../ui/Button';
+import { Button } from 'components/ui/Button';
 
 interface LoginFormProps {
   isLoading: boolean;

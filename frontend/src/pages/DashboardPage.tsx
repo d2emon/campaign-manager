@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { getCampaigns, Campaign } from '../services/campaignService';
+import { useAuth } from 'contexts/AuthContext';
+import { getCampaigns, Campaign } from 'services/campaignService';
 
 const DashboardPage = () => {
   const { user, logout, isInitialized } = useAuth();

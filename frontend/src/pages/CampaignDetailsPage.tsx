@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getCampaign, deleteCampaign, Campaign } from '../services/campaignService';
+import { getCampaign, deleteCampaign, Campaign } from 'services/campaignService';
 
 const CampaignDetailsPage = () => {
   const navigate = useNavigate();
