@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Header } from 'components/layout/Header';
 import { useAuth } from 'contexts/AuthContext';
 import { getCampaigns, Campaign } from 'services/campaignService';
 
 const DashboardPage = () => {
-  const { user, logout, isInitialized } = useAuth();
+  const { user, isInitialized } = useAuth();
   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [isLoading, setIsLoading] = useState(true);
