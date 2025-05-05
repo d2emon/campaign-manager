@@ -7,7 +7,7 @@ const CampaignDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const { data: campaign, isLoading } = useGetCampaignQuery(`${id}`);
   const { refetch: refetchCampaigns } = useGetCampaignsQuery();
-  const [deleteCampaign, { isLoading: isDeleting }] = useDeleteCampaignMutation();
+  const [deleteCampaign] = useDeleteCampaignMutation();
 
   const handleDelete = async () => {
     if (id) {
