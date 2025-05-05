@@ -23,7 +23,7 @@ const CampaignFormPage = () => {
 
   useEffect(() => {
     refetchCampaign();
-  }, [id]);
+  }, [id, refetchCampaign]);
 
   const handleSubmit = async (data: Partial<Campaign>) => {
     if (!user) return;
