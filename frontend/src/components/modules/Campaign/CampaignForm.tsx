@@ -6,7 +6,7 @@ import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
 import CharacterList from './CharacterList';
 import CharacterForm from './CharacterForm';
-import { Campaign } from 'services/campaignService';
+import { Campaign } from 'services/campaignApi';
 import { Character } from 'types/character';
 import { createCharacter, updateCharacter, deleteCharacter } from 'services/characterService';
 

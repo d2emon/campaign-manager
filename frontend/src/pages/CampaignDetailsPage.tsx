@@ -1,35 +1,19 @@
-import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CharacterList from 'components/modules/Campaign/CharacterList';
-import { getCampaign, deleteCampaign, Campaign } from 'services/campaignService';
+import { useGetCampaignQuery, useDeleteCampaignMutation, useGetCampaignsQuery } from 'services/campaignApi';
 
 const CampaignDetailsPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [campaign, setCampaign] = useState<Campaign | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const loadCampaign = async () => {
-      try {
-        if (id) {
-          const data = await getCampaign(id);
-          setCampaign(data);
-        }
-      } catch (error) {
-        console.error('Error loading campaign:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadCampaign();
-  }, [id]);
+  const { data: campaign, isLoading } = useGetCampaignQuery(`${id}`);
+  const { refetch: refetchCampaigns } = useGetCampaignsQuery();
+  const [deleteCampaign, { isLoading: isDeleting }] = useDeleteCampaignMutation();
 
   const handleDelete = async () => {
     if (id) {
       try {
         await deleteCampaign(id);
+        refetchCampaigns();
         navigate('/');
       } catch (error) {
         console.error('Error deleting campaign:', error);

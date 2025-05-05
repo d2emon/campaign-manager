@@ -1,49 +1,43 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CampaignForm from 'components/modules/Campaign/CampaignForm';
 import { useAuth } from 'contexts/AuthContext';
-import { getCampaign, createCampaign, updateCampaign, Campaign } from 'services/campaignService';
+import {
+  Campaign,
+  CampaignCreateDTO,
+  useCreateCampaignMutation,
+  useGetCampaignQuery,
+  useGetCampaignsQuery,
+  useUpdateCampaignMutation,
+} from 'services/campaignApi';
 
 const CampaignFormPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [campaign, setCampaign] = useState<Partial<Campaign> | null>(null);
-  const [isLoading, setIsLoading] = useState(!!id);
   const { user } = useAuth();
+  const { refetch: refetchCampaigns } = useGetCampaignsQuery();
+  const { data: campaign, isLoading: isLoadingCampaign, refetch: refetchCampaign } = useGetCampaignQuery(`${id}`);
+  const [createCampaign, { isLoading: isCreating }] = useCreateCampaignMutation();
+  const [updateCampaign, { isLoading: isUpdating }] = useUpdateCampaignMutation();
+  const isLoading = isLoadingCampaign || isCreating || isUpdating;
 
   useEffect(() => {
-    if (id) {
-      const loadCampaign = async () => {
-        try {
-          const data = await getCampaign(id);
-          setCampaign(data);
-        } catch (error) {
-          console.error('Error loading campaign:', error);
-          navigate('/dashboard');
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      loadCampaign();
-    }
-  }, [id, navigate]);
+    refetchCampaign();
+  }, [id]);
 
   const handleSubmit = async (data: Partial<Campaign>) => {
     if (!user) return;
 
-    setIsLoading(true);
     try {
       if (id) {
-        await updateCampaign(id, data);
+        await updateCampaign({ id, data });
       } else {
-        await createCampaign(data as Omit<Campaign, 'id' | 'createdAt' | 'updatedAt'>);
+        await createCampaign(data as CampaignCreateDTO);
       }
+      refetchCampaigns();
       navigate('/dashboard');
     } catch (error) {
       console.error('Error saving campaign:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 

@@ -1,40 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'contexts/AuthContext';
-import { getCampaigns, Campaign } from 'services/campaignService';
+import { useGetCampaignsQuery } from 'services/campaignApi';
 
 const DashboardPage = () => {
   const { user, isInitialized } = useAuth();
   const navigate = useNavigate();
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const isReady = isInitialized && !isLoading;
+  const { data: campaigns, isLoading: isCampaignsLoading } = useGetCampaignsQuery();
 
   useEffect(() => {
     if (isInitialized) {
       if (!user) {
         navigate('/login');
-      } else {
-        setIsLoading(false);
       }
     }
-
-    const loadCampaigns = async () => {
-      try {
-        const data = await getCampaigns();
-        setCampaigns(data);
-      } catch (error) {
-        console.error('Error loading campaigns:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadCampaigns();
   }, [user, navigate, isInitialized]);
 
-  if (!isReady) {
+  if (!isInitialized) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -59,11 +41,11 @@ const DashboardPage = () => {
                 </button>
               </div>
 
-              {isLoading ? (
+              {isCampaignsLoading ? (
                 <div className="flex justify-center">
                   <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
                 </div>
-              ) : campaigns.length === 0 ? (
+              ) : !campaigns || campaigns.length === 0 ? (
                 <div className="text-center py-12">
                   <h3 className="text-lg font-medium text-gray-900">У вас пока нет кампаний</h3>
                   <p className="mt-2 text-gray-500">
