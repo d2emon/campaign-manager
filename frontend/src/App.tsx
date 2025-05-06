@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { Header } from 'components/layout/Header';
+import Header from 'components/layout/Header';
 import { AuthProvider } from 'contexts/AuthContext';
 import CampaignDetailsPage from 'pages/CampaignDetailsPage';
 import CharacterDetailsPage from 'pages/CharacterDetailsPage';
