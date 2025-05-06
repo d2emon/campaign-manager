@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { Campaign } from 'types/campaign';
-import { API_URL } from './api';
+import { baseQueryWithReauth } from './BaseQueryWithReauth';
 import { mapNPC } from './npcApi';
 
 export type CampaignCreateDTO = Omit<Campaign, 'id' | 'createdAt' | 'updatedAt'>;
@@ -44,37 +44,37 @@ const mapCampaign = (campaign: any): Campaign => ({
 
 export const campaignsApi = createApi({
   reducerPath: 'campaignsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/api/v1/campaigns` }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     createCampaign: builder.mutation<Campaign, CampaignCreateDTO>({
       query: (data) => injectToken({
-        url: '',
+        url: '/api/v1/campaigns',
         method: 'POST',
         body: data,
       }),
     }),
     getCampaigns: builder.query<Campaign[], void>({
       query: () => injectToken({
-        url: '',
+        url: '/api/v1/campaigns',
       }),
       transformResponse: (response: any) => response ? response.map(mapCampaign) : [],
     }),
     getCampaign: builder.query<Campaign | null, string>({
       query: (id) => injectToken({
-        url: `/${id}`,
+        url: `/api/v1/campaigns/${id}`,
       }),
       transformResponse: (response: any) => response ? mapCampaign(response) : null,
     }),
     updateCampaign: builder.mutation<Campaign, CampaignUpdateDTO>({
       query: (data) => injectToken({
-        url: `/${data.id}`,
+        url: `/api/v1/campaigns/${data.id}`,
         method: 'PUT',
         body: data.data,
       }),
     }),
     deleteCampaign: builder.mutation<void, string>({
       query: (id) => injectToken({
-        url: `/${id}`,
+        url: `/api/v1/campaigns/${id}`,
         method: 'DELETE',
       }),
     }),

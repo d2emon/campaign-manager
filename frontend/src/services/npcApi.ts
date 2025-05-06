@@ -1,6 +1,6 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { Character } from 'types/character';
-import { API_URL } from './api';
+import { baseQueryWithReauth } from './BaseQueryWithReauth';
 
 interface NPCCreateDTO {
   name?: string;
@@ -43,31 +43,31 @@ export const mapNPC = (npc: any): Character => ({
   
 export const npcApi = createApi({
   reducerPath: 'npcApi',
-  baseQuery: fetchBaseQuery({ baseUrl: `${API_URL}/api/v1/npc` }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     createNPC: builder.mutation<Character, { campaignId: string, data: NPCCreateDTO }>({
       query: ({ campaignId, data }) => injectToken({
-        url: `/${campaignId}`,
+        url: `/api/v1/npc/${campaignId}`,
         method: 'POST',
         body: data,
       }),
     }),
     getNPC: builder.query<Character | null, { campaignId: string, id: string }>({
       query: ({ campaignId, id }) => injectToken({
-        url: `/${campaignId}/${id}`,
+        url: `/api/v1/npc/${campaignId}/${id}`,
       }),
       transformResponse: (response: any) => response ? mapNPC(response) : null,
     }),
     updateNPC: builder.mutation<Character, NPCUpdateDTO>({
       query: ({ campaignId, id, data }) => injectToken({
-        url: `/${campaignId}/${id}`,
+        url: `/api/v1/npc/${campaignId}/${id}`,
         method: 'PUT',
         body: data,
       }),
     }),
     deleteNPC: builder.mutation<void, { campaignId: string, id: string }>({
       query: ({ campaignId, id }) => injectToken({
-        url: `/${campaignId}/${id}`,
+        url: `/api/v1/npc/${campaignId}/${id}`,
         method: 'DELETE',
       }),
     }),
