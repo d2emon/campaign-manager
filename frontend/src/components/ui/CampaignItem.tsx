@@ -13,7 +13,7 @@ interface CampaignItemProps {
 
 const CampaignItem = ({ className, title, onEdit, onDelete, children, isLoading }: CampaignItemProps) => {
   if (isLoading) {
-    return <Spinner />;
+    return <Spinner size="lg" />;
   }
 
   return (
