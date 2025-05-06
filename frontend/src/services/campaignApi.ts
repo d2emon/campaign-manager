@@ -10,17 +10,6 @@ export interface CampaignUpdateDTO {
   data: Partial<Campaign>;
 }
 
-const injectToken = (args: any) => {
-  const accessToken = localStorage.getItem('accessToken');
-  return {
-    ...args,
-    headers: {
-      ...args.headers,
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-};
-
 const mapCampaign = (campaign: any): Campaign => ({
   id: campaign?.id,
   title: campaign?.title,
