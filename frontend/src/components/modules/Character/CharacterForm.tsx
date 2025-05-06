@@ -4,7 +4,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
-import Paper from 'components/ui/Paper';
 import { Character } from 'types/character';
 
 interface CharacterFormProps {
@@ -76,58 +75,52 @@ const CharacterForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <Paper>
-        <h2 className="text-xl font-semibold mb-4">
-          {isEditing ? 'Редактирование персонажа' : 'Создание персонажа'}
-        </h2>
+      <Field
+        id="name"
+        error={errors.name}
+        inputProps={register('name')}
+        label="Имя персонажа"
+      />
 
-        <Field
-          id="name"
-          error={errors.name}
-          inputProps={register('name')}
-          label="Имя персонажа"
-        />
+      <Field
+        id="playerName"
+        error={errors.playerName}
+        inputProps={register('playerName')}
+        label="Имя игрока"
+      />
 
-        <Field
-          id="playerName"
-          error={errors.playerName}
-          inputProps={register('playerName')}
-          label="Имя игрока"
-        />
+      <Field
+        id="race"
+        error={errors.race}
+        inputProps={register('race')}
+        label="Раса"
+      />
 
-        <Field
-          id="race"
-          error={errors.race}
-          inputProps={register('race')}
-          label="Раса"
-        />
+      <Field
+        id="class"
+        error={errors.class}
+        inputProps={register('class')}
+        label="Класс"
+      />
 
-        <Field
-          id="class"
-          error={errors.class}
-          inputProps={register('class')}
-          label="Класс"
-        />
+      <Field
+        id="level"
+        error={errors.level}
+        inputProps={register('level', { valueAsNumber: true })}
+        label="Уровень"
+        type="number"
+        min={1}
+        max={20}
+      />
 
-        <Field
-          id="level"
-          error={errors.level}
-          inputProps={register('level', { valueAsNumber: true })}
-          label="Уровень"
-          type="number"
-          min={1}
-          max={20}
-        />
-
-        <Field
-          id="description"
-          error={errors.description}
-          inputProps={register('description')}
-          label="Описание"
-          placeholder="Опишите вашего персонажа..."
-          type="textarea"
-        />
-      </Paper>
+      <Field
+        id="description"
+        error={errors.description}
+        inputProps={register('description')}
+        label="Описание"
+        placeholder="Опишите вашего персонажа..."
+        type="textarea"
+      />
 
       <div className="flex justify-end space-x-4">
         <Button
