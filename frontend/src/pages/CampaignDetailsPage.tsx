@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import Breadcrumbs from 'components/layout/Breadcrumbs';
 import CampaignDetails from 'components/modules/Campaign/CampaignDetails';
 import { useGetCampaignQuery, useDeleteCampaignMutation, useGetCampaignsQuery } from 'services/campaignApi';
 
@@ -46,7 +47,10 @@ const CampaignDetailsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50">
+      <Breadcrumbs
+        campaign={campaign}
+      />
       <CampaignDetails
         campaign={campaign}
         isLoading={isLoading}

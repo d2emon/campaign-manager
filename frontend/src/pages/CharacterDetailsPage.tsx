@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import Breadcrumbs from 'components/layout/Breadcrumbs';
 import CharacterDetails from 'components/modules/Character/CharacterDetails';
 import { useGetCampaignQuery, useGetCampaignsQuery } from 'services/campaignApi';
 import { useGetNPCQuery, useDeleteNPCMutation } from 'services/npcApi';
@@ -10,6 +11,7 @@ const CharacterDetailsPage = () => {
     campaignId: id || '',
     id: characterId || '',
   });
+  const { data: campaign } = useGetCampaignQuery(id || '');
   const [deleteNPC] = useDeleteNPCMutation();
   const { refetch: refetchCampaign } = useGetCampaignQuery(id || '');
   const { refetch: refetchCampaigns } = useGetCampaignsQuery();
@@ -55,7 +57,11 @@ const CharacterDetailsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50">
+      <Breadcrumbs
+        campaign={campaign}
+        character={character}
+      />
       <CharacterDetails
         character={character}
         isLoading={isLoading}
