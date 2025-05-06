@@ -1,13 +1,14 @@
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { Header } from './components/layout/Header';
+import { Header } from 'components/layout/Header';
 import { AuthProvider } from 'contexts/AuthContext';
-import LoginPage from 'pages/LoginPage';
-import RegisterPage from 'pages/RegisterPage';
-import PrivateRoute from 'pages/PrivateRoute';
+import CampaignDetailsPage from 'pages/CampaignDetailsPage';
 import DashboardPage from 'pages/DashboardPage';
 import CampaignFormPage from 'pages/EditCampaignPage';
-import CampaignDetailsPage from 'pages/CampaignDetailsPage';
+import EditCharacterPage from 'pages/EditCharacterPage';
+import LoginPage from 'pages/LoginPage';
+import PrivateRoute from 'pages/PrivateRoute';
+import RegisterPage from 'pages/RegisterPage';
 import { store } from './store';
 
 const App = () => {
@@ -26,6 +27,9 @@ const App = () => {
                 <Route path="/campaigns/new" element={<CampaignFormPage />} />
                 <Route path="/campaigns/:id/edit" element={<CampaignFormPage />} />
                 <Route path="/campaigns/:id" element={<CampaignDetailsPage />} />
+                <Route path="/campaigns/:id/characters/new" element={<EditCharacterPage />} />
+                <Route path="/campaigns/:id/characters/:characterId/edit" element={<EditCharacterPage />} />
+                <Route path="/campaigns/:id/characters/:characterId" element={<EditCharacterPage />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
