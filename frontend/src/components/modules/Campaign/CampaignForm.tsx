@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
 import CharacterList from './CharacterList';
-import CharacterForm from './CharacterForm';
+import CharacterForm from '../Character/CharacterForm';
 import { Campaign } from 'services/campaignApi';
 import { Character } from 'types/character';
 import { useCreateNPCMutation, useUpdateNPCMutation, useDeleteNPCMutation } from 'services/npcApi';
@@ -203,27 +203,16 @@ const CampaignForm = ({
       )}
 
       {isEditing && (
-        <div className="bg-white shadow rounded-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Персонажи кампании</h2>
-            <Button
-              type="button"
-              variant="primary"
-              onClick={() => {
-                setSelectedCharacter(null);
-                setIsCharacterFormOpen(true);
-              }}
-            >
-              Добавить персонажа
-            </Button>
-          </div>
-          
-          <CharacterList
-            characters={initialData?.npcs || []}
-            onEdit={handleEditCharacter}
-            onDelete={handleDeleteCharacter}
-          />
-        </div>
+        <CharacterList
+          characters={initialData?.npcs || []}
+          withAddButton
+          onAdd={() => {
+            setSelectedCharacter(null);
+            setIsCharacterFormOpen(true);
+          }}
+          onEdit={handleEditCharacter}
+          onDelete={handleDeleteCharacter}
+        />
       )}
     </>
   );

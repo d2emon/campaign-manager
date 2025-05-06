@@ -96,10 +96,7 @@ const CampaignDetailsPage = () => {
           </div>
         </div>
 
-       <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Персонажи кампании</h2>
-          <CharacterList characters={campaign.npcs} />
-        </div>
+        <CharacterList characters={campaign.npcs} />
       </div>
     </div>
   );
