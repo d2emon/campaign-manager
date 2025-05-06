@@ -1,6 +1,13 @@
 import CharacterList from 'components/modules/Campaign/CharacterList';
+import Avatar from 'components/ui/Avatar';
+import Badge from 'components/ui/Badge';
 import CampaignItem from 'components/ui/CampaignItem';
-import { Campaign } from 'services/campaignApi';
+import DataBlock from 'components/ui/DataBlock';
+import DataItem from 'components/ui/DataItem';
+import DateItem from 'components/ui/DateItem';
+import Spinner from 'components/ui/Spinner';
+import TextBlock from 'components/ui/TextBlock';
+import { Campaign } from 'types/campaign';
 
 interface CampaignDetailsProps {
   campaign: Campaign;
@@ -10,10 +17,10 @@ interface CampaignDetailsProps {
 }
 
 const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit }: CampaignDetailsProps) => {
-  if (isLoading || !campaign) {
+  if (!campaign) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <Spinner size="lg" />
       </div>
     );
   }
@@ -22,38 +29,56 @@ const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit }: CampaignDeta
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <CampaignItem
         className="mb-6"
+        isLoading={isLoading}
         title={campaign.title}
         onDelete={onDelete}
         onEdit={onEdit}
       >
         <div className="mb-6">
-          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-            {campaign.gameSystem}
-          </span>
+          { campaign.genre && <Badge variant="primary">{campaign.genre}</Badge> }
+          { campaign.gameSystem && <Badge variant="primary">{campaign.gameSystem}</Badge> }
+          { campaign.isPublic && <Badge variant="primary">Публичная</Badge> }
         </div>
 
-        <div className="prose max-w-none">
-          <p className="text-gray-700">{campaign.description}</p>
+        <div className="mb-6">
+          <Avatar
+            src={campaign.coverImage}
+            alt={campaign.title}
+            className="w-full object-cover"
+            size="xxl"
+          />
         </div>
 
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">Информация о кампании</h2>
+        <TextBlock>
+          {campaign.description}
+        </TextBlock>
+
+        <DataBlock title="Информация о кампании">
           <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Максимум игроков</dt>
-              <dd className="mt-1 text-sm text-gray-900">{campaign.maxPlayers}</dd>
-            </div>
-            {campaign.createdAt && (
-              <div>
-                <dt className="text-sm font-medium text-gray-500">Создана</dt>
-                <dd className="mt-1 text-sm text-gray-900">
-                  {new Date(campaign.createdAt).toLocaleDateString()}
-                </dd>
-              </div>
-            )}
+            <DateItem label="Создана:" date={campaign.createdAt} />
+            <DateItem label="Последняя активность:" date={campaign.lastActive} />
+            <DataItem label="Мастер:">{campaign.gameMaster}</DataItem>
+            <DataItem label="Игроков">{campaign.players?.length}</DataItem>
+            <DataItem label="Код для приглашения">{campaign.inviteCode}</DataItem>
           </dl>
-        </div>
+        </DataBlock>
       </CampaignItem>
+
+      <div className="my-6 pt-6">
+        Игроки
+      </div>
+
+      <div className="my-6 pt-6">
+        Локации
+      </div>
+
+      <div className="my-6 pt-6">
+        Квесты
+      </div>
+
+      <div className="my-6 pt-6">
+        Заметки
+      </div>
 
       <CharacterList characters={campaign.npcs} />
     </div>
