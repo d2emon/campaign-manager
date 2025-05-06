@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { Header } from 'components/layout/Header';
 import { AuthProvider } from 'contexts/AuthContext';
 import CampaignDetailsPage from 'pages/CampaignDetailsPage';
+import CharacterDetailsPage from 'pages/CharacterDetailsPage';
 import DashboardPage from 'pages/DashboardPage';
 import CampaignFormPage from 'pages/EditCampaignPage';
 import EditCharacterPage from 'pages/EditCharacterPage';
@@ -29,7 +30,7 @@ const App = () => {
                 <Route path="/campaigns/:id" element={<CampaignDetailsPage />} />
                 <Route path="/campaigns/:id/characters/new" element={<EditCharacterPage />} />
                 <Route path="/campaigns/:id/characters/:characterId/edit" element={<EditCharacterPage />} />
-                <Route path="/campaigns/:id/characters/:characterId" element={<EditCharacterPage />} />
+                <Route path="/campaigns/:id/characters/:characterId" element={<CharacterDetailsPage />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
