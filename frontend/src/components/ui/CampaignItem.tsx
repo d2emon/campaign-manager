@@ -1,15 +1,21 @@
 import Button from './Button';
 import Paper from './Paper';
+import Spinner from './Spinner';
 
 interface CampaignItemProps {
   className?: string;
+  isLoading?: boolean;
   title: string;
   onEdit: () => void;
   onDelete: () => void;
   children: React.ReactNode;
 }
 
-const CampaignItem = ({ className, title, onEdit, onDelete, children }: CampaignItemProps) => {
+const CampaignItem = ({ className, title, onEdit, onDelete, children, isLoading }: CampaignItemProps) => {
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <Paper className={className}>
       <div className="flex justify-between items-start mb-6">
