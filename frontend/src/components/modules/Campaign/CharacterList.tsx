@@ -1,7 +1,7 @@
-import { Character } from 'types/character';
+import { useNavigate } from 'react-router-dom';
 import Button from 'components/ui/Button';
 import Paper from 'components/ui/Paper';
-
+import { Character } from 'types/character';
 interface CharacterListProps {
   characters?: Character[];
   withAddButton?: boolean;
@@ -11,6 +11,8 @@ interface CharacterListProps {
 }
 
 const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: CharacterListProps) => {
+  const navigate = useNavigate();
+
   if (!characters || characters.length === 0) {
     return (
       <Paper>
@@ -19,6 +21,10 @@ const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: C
         </div>
       </Paper>
     );
+  }
+
+  const showCharacter = (character: Character) => {
+    navigate(`/campaigns/${character.campaign}/characters/${character.id}`);
   }
 
   return (
@@ -41,6 +47,7 @@ const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: C
           <Paper
             key={character.id}
             className="hover:shadow-md transition-shadow"
+            onClick={() => showCharacter(character)}
           >
             <div className="flex justify-between items-start">
               <div>
