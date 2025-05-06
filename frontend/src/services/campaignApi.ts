@@ -47,44 +47,51 @@ export const campaignsApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     createCampaign: builder.mutation<Campaign, CampaignCreateDTO>({
-      query: (data) => injectToken({
+      query: (data) => ({
         url: '/api/v1/campaigns',
         method: 'POST',
         body: data,
       }),
     }),
     getCampaigns: builder.query<Campaign[], void>({
-      query: () => injectToken({
+      query: () => ({
         url: '/api/v1/campaigns',
       }),
       transformResponse: (response: any) => response ? response.map(mapCampaign) : [],
     }),
     getCampaign: builder.query<Campaign | null, string>({
-      query: (id) => injectToken({
+      query: (id) => ({
         url: `/api/v1/campaigns/${id}`,
       }),
       transformResponse: (response: any) => response ? mapCampaign(response) : null,
     }),
     updateCampaign: builder.mutation<Campaign, CampaignUpdateDTO>({
-      query: (data) => injectToken({
+      query: (data) => ({
         url: `/api/v1/campaigns/${data.id}`,
         method: 'PUT',
         body: data.data,
       }),
     }),
     deleteCampaign: builder.mutation<void, string>({
-      query: (id) => injectToken({
+      query: (id) => ({
         url: `/api/v1/campaigns/${id}`,
         method: 'DELETE',
+      }),
+    }),
+    generateNPC: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/api/v1/campaigns/${id}/npc/generate`,
+        method: 'POST',
       }),
     }),
   }),
 });
 
 export const {
-  useCreateCampaignMutation,
-  useDeleteCampaignMutation,
   useGetCampaignQuery,
   useGetCampaignsQuery,
+  useCreateCampaignMutation,
+  useDeleteCampaignMutation,
+  useGenerateNPCMutation,
   useUpdateCampaignMutation,
 } = campaignsApi;
