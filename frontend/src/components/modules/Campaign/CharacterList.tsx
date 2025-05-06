@@ -46,7 +46,7 @@ const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: C
         {characters.map((character) => (
           <Paper
             key={character.id}
-            className="hover:shadow-md transition-shadow"
+            className="hover:shadow-md transition-shadow cursor-pointer"
             onClick={() => showCharacter(character)}
           >
             <div className="flex justify-between items-start">
