@@ -6,7 +6,7 @@ export interface Character {
   class: string;
   level: number;
   description: string;
-  campaignId: string;
+  campaign: string;
   createdAt: string;
   updatedAt: string;
 } 
