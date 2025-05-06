@@ -24,6 +24,22 @@ const injectToken = (args: any) => {
     },
   };
 };
+
+export const mapNPC = (npc: any): Character => ({
+  id: npc?.id,
+  name: npc?.name,
+  playerName: npc?.playerName,
+  race: npc?.race,
+  role: npc?.role,
+  characterClass: npc?.characterClass,
+  level: npc?.level,
+  description: npc?.description,
+  stats: npc?.stats,
+  campaign: npc?.campaign,
+  isPublic: npc?.isPublic,
+  createdAt: npc?.createdAt,
+  updatedAt: npc?.updatedAt,
+});
   
 export const npcApi = createApi({
   reducerPath: 'npcApi',
@@ -36,10 +52,11 @@ export const npcApi = createApi({
         body: data,
       }),
     }),
-    getNPC: builder.query<Character, { campaignId: string, id: string }>({
+    getNPC: builder.query<Character | null, { campaignId: string, id: string }>({
       query: ({ campaignId, id }) => injectToken({
         url: `/${campaignId}/${id}`,
       }),
+      transformResponse: (response: any) => response ? mapNPC(response) : null,
     }),
     updateNPC: builder.mutation<Character, NPCUpdateDTO>({
       query: ({ campaignId, id, data }) => injectToken({

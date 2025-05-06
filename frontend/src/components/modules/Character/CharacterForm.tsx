@@ -26,7 +26,7 @@ const schema = yup.object({
   race: yup
     .string()
     .required('Раса обязательна'),
-  class: yup
+  characterClass: yup
     .string()
     .required('Класс обязателен'),
   level: yup
@@ -41,7 +41,7 @@ type CharacterFormData = {
   name: string;
   playerName: string;
   race: string;
-  class: string;
+  characterClass: string;
   level: number;
   description: string;
 };
@@ -67,7 +67,7 @@ const CharacterForm = ({
       setValue('name', initialData.name || '');
       setValue('playerName', initialData.playerName || '');
       setValue('race', initialData.race || '');
-      setValue('class', initialData.class || '');
+      setValue('characterClass', initialData.characterClass || '');
       setValue('level', initialData.level || 1);
       setValue('description', initialData.description || '');
     }
@@ -97,9 +97,9 @@ const CharacterForm = ({
       />
 
       <Field
-        id="class"
-        error={errors.class}
-        inputProps={register('class')}
+        id="characterClass"
+        error={errors.characterClass}
+        inputProps={register('characterClass')}
         label="Класс"
       />
 

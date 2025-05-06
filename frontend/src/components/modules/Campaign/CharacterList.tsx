@@ -86,7 +86,7 @@ const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: C
             </div>
             <div className="mt-2">
               <p className="text-sm text-gray-600">
-                {character.race} {character.class}
+                {character.race} {character.characterClass}
               </p>
               {character.description && (
                 <p className="mt-2 text-sm text-gray-700">

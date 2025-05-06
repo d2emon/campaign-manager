@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { API_URL } from './api';
 import { Campaign } from 'types/campaign';
+import { API_URL } from './api';
+import { mapNPC } from './npcApi';
 
 export type CampaignCreateDTO = Omit<Campaign, 'id' | 'createdAt' | 'updatedAt'>;
 
@@ -32,7 +33,7 @@ const mapCampaign = (campaign: any): Campaign => ({
   isPublic: campaign?.isPublic,
   lastActive: campaign?.lastActive,
   maxPlayers: campaign?.maxPlayers || 0,
-  npcs: campaign?.npcs || [],
+  npcs: campaign?.npcs ? campaign?.npcs.map(mapNPC) : [],
   players: campaign?.players || [],
   locations: campaign?.locations || [],
   quests: campaign?.quests || [],

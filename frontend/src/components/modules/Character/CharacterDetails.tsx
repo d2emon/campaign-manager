@@ -49,7 +49,7 @@ const CharacterDetails = ({ character, isLoading, onDelete, onEdit }: CharacterD
             </div>
             <div>
               <dt className="text-sm font-medium text-gray-500">Класс</dt>
-              <dd className="mt-1 text-sm text-gray-900">{character.class}</dd>
+              <dd className="mt-1 text-sm text-gray-900">{character.characterClass}</dd>
             </div>
           </dl>
         </div>
