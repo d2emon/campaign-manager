@@ -8,7 +8,7 @@ export interface Campaign {
   description: string;
   gameSystem: string;
   maxPlayers: number;
-  characters?: Character[];
+  npcs?: Character[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -31,13 +31,13 @@ const injectToken = (args: any) => {
   };
 };
 
-const mapCampaign = (campaign: any) => ({
+const mapCampaign = (campaign: any): Campaign => ({
   id: campaign?.id,
   title: campaign?.title,
   description: campaign?.description,
   gameSystem: campaign?.gameSystem || 'Без системы',
   maxPlayers: campaign?.maxPlayers || 0,
-  characters: campaign?.characters || [],
+  npcs: campaign?.npcs || [],
   createdAt: campaign?.createdAt,
   updatedAt: campaign?.updatedAt,
 });
