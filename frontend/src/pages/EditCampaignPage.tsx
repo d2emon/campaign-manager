@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import CampaignForm from 'components/modules/Campaign/CampaignForm';
-import { useAuth } from 'contexts/AuthContext';
 import {
   Campaign,
   CampaignCreateDTO,
@@ -10,11 +10,12 @@ import {
   useGetCampaignsQuery,
   useUpdateCampaignMutation,
 } from 'services/campaignApi';
+import { selectUser } from 'store/auth';
 
 const CampaignFormPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { user } = useAuth();
+  const user = useSelector(selectUser);
   const { refetch: refetchCampaigns } = useGetCampaignsQuery();
   const { data: campaign, isLoading: isLoadingCampaign, refetch: refetchCampaign } = useGetCampaignQuery(`${id}`);
   const [createCampaign, { isLoading: isCreating }] = useCreateCampaignMutation();
@@ -23,7 +24,7 @@ const CampaignFormPage = () => {
 
   useEffect(() => {
     refetchCampaign();
-  }, [id]);
+  }, [id, refetchCampaign]);
 
   const handleSubmit = async (data: Partial<Campaign>) => {
     if (!user) return;

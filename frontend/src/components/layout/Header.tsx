@@ -1,8 +1,12 @@
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Button from 'components/ui/Button';
 import { useAuth } from 'contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import { selectUser } from 'store/auth';
+
 export const Header = ({ dark = false }: { dark?: boolean }) => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
+  const user = useSelector(selectUser);
 
   return (
     <header className={`${dark ? 'bg-dark text-white' : 'bg-white text-gray-900'} p-4 shadow-lg mb-6`}>

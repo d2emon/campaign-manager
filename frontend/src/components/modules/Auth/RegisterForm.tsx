@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -5,7 +6,7 @@ import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
 import PasswordField from 'components/ui/PasswordField';
 import PasswordStrength from 'components/ui/PasswordStrength';
-import { useAuth } from 'contexts/AuthContext';
+import { selectAuthError } from 'store/auth';
 
 interface RegisterFormProps {
   isLoading: boolean;
@@ -30,9 +31,7 @@ const schema = yup.object({
 })
 
 const RegisterForm = ({ isLoading, onSubmit }: RegisterFormProps) => {
-  const {
-    errorMessage,
-  } = useAuth();
+  const authError = useSelector(selectAuthError);
 
   const {
     register,
@@ -51,9 +50,9 @@ const RegisterForm = ({ isLoading, onSubmit }: RegisterFormProps) => {
       className="space-y-6"
       onSubmit={handleSubmit(onSubmit)}
     >
-      {errorMessage && (
+      {authError && (
         <div className="rounded-md bg-red-50 p-4">
-          <div className="text-sm text-red-700">{errorMessage}</div>
+          <div className="text-sm text-red-700">{authError}</div>
         </div>
       )}
 
