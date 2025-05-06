@@ -13,16 +13,6 @@ interface CharacterListProps {
 const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: CharacterListProps) => {
   const navigate = useNavigate();
 
-  if (!characters || characters.length === 0) {
-    return (
-      <Paper>
-        <div className="text-center text-gray-500 py-4">
-          В этой кампании пока нет персонажей
-        </div>
-      </Paper>
-    );
-  }
-
   const showCharacter = (character: Character) => {
     navigate(`/campaigns/${character.campaign}/characters/${character.id}`);
   }
@@ -42,61 +32,67 @@ const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: C
         )}
       </div>
 
-      <div className="space-y-4">
-        {characters.map((character) => (
-          <Paper
-            key={character.id}
-            className="hover:shadow-md transition-shadow cursor-pointer"
-            onClick={() => showCharacter(character)}
-          >
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {character.name}
-                </h3>
-                <p className="text-sm text-gray-500">
-                  Игрок: {character.playerName}
-                </p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="text-sm text-gray-500">
-                  Уровень {character.level}
+      { characters && characters.length > 0 ? (
+        <div className="space-y-4">
+          {characters.map((character) => (
+            <Paper
+              key={character.id}
+              className="hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => showCharacter(character)}
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {character.name}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    Игрок: {character.playerName}
+                  </p>
                 </div>
-                {(onEdit || onDelete) && (
-                  <div className="flex space-x-2">
-                    {onEdit && (
-                      <Button
-                        variant="secondary"
-                        onClick={() => onEdit(character)}
-                      >
-                        Редактировать
-                      </Button>
-                    )}
-                    {onDelete && (
-                      <Button
-                        variant="danger"
-                        onClick={() => onDelete(character)}
-                      >
-                        Удалить
-                      </Button>
-                    )}
+                <div className="flex items-center space-x-2">
+                  <div className="text-sm text-gray-500">
+                    Уровень {character.level}
                   </div>
+                  {(onEdit || onDelete) && (
+                    <div className="flex space-x-2">
+                      {onEdit && (
+                        <Button
+                          variant="secondary"
+                          onClick={() => onEdit(character)}
+                        >
+                          Редактировать
+                        </Button>
+                      )}
+                      {onDelete && (
+                        <Button
+                          variant="danger"
+                          onClick={() => onDelete(character)}
+                        >
+                          Удалить
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="mt-2">
+                <p className="text-sm text-gray-600">
+                  {character.race} {character.characterClass}
+                </p>
+                {character.description && (
+                  <p className="mt-2 text-sm text-gray-700">
+                    {character.description}
+                  </p>
                 )}
               </div>
-            </div>
-            <div className="mt-2">
-              <p className="text-sm text-gray-600">
-                {character.race} {character.characterClass}
-              </p>
-              {character.description && (
-                <p className="mt-2 text-sm text-gray-700">
-                  {character.description}
-                </p>
-              )}
-            </div>
-          </Paper>
-        ))}
-      </div>
+            </Paper>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center text-gray-500 py-4">
+          В этой кампании пока нет персонажей
+        </div>
+      )}
     </Paper>
   );
 };
