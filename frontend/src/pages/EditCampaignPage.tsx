@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import CampaignForm from 'components/modules/Campaign/CampaignForm';
+import Paper from 'components/ui/Paper';
 import {
   Campaign,
   CampaignCreateDTO,
@@ -53,7 +54,7 @@ const CampaignFormPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow rounded-lg p-6">
+        <Paper>
           <h1 className="text-2xl font-bold text-gray-900 mb-6">
             {id ? 'Редактирование кампании' : 'Создание новой кампании'}
           </h1>
@@ -64,7 +65,7 @@ const CampaignFormPage = () => {
             onSubmit={handleSubmit}
             onCancel={() => navigate('/')}
           />
-        </div>
+        </Paper>
       </div>
     </div>
   );

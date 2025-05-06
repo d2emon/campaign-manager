@@ -1,5 +1,6 @@
 import { Character } from 'types/character';
 import Button from 'components/ui/Button';
+import Paper from 'components/ui/Paper';
 
 interface CharacterListProps {
   characters?: Character[];
@@ -12,14 +13,16 @@ interface CharacterListProps {
 const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: CharacterListProps) => {
   if (!characters || characters.length === 0) {
     return (
-      <div className="text-center text-gray-500 py-4">
-        В этой кампании пока нет персонажей
-      </div>
+      <Paper>
+        <div className="text-center text-gray-500 py-4">
+          В этой кампании пока нет персонажей
+        </div>
+      </Paper>
     );
   }
 
   return (
-    <div className="bg-white shadow rounded-lg p-6">
+    <Paper>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Персонажи кампании</h2>
         {withAddButton && (
@@ -35,9 +38,9 @@ const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: C
 
       <div className="space-y-4">
         {characters.map((character) => (
-          <div
+          <Paper
             key={character.id}
-            className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow"
+            className="hover:shadow-md transition-shadow"
           >
             <div className="flex justify-between items-start">
               <div>
@@ -84,10 +87,10 @@ const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: C
                 </p>
               )}
             </div>
-          </div>
+          </Paper>
         ))}
       </div>
-    </div>
+    </Paper>
   );
 };
 

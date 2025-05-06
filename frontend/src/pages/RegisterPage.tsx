@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import RegisterForm from 'components/modules/Auth/RegisterForm';
+import Paper from 'components/ui/Paper';
 import { useAuth } from 'contexts/AuthContext';
 
 const RegisterPage = () => {
@@ -39,12 +40,12 @@ const RegisterPage = () => {
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <Paper>
             <RegisterForm
               isLoading={isLoading}
               onSubmit={onSubmit}
             />
-          </div>
+          </Paper>
         </div>
       </div>
     </div>

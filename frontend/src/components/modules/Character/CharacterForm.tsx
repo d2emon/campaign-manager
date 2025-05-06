@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
+import Paper from 'components/ui/Paper';
 import { Character } from 'types/character';
 
 interface CharacterFormProps {
@@ -75,7 +76,7 @@ const CharacterForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="bg-white shadow rounded-lg p-6">
+      <Paper>
         <h2 className="text-xl font-semibold mb-4">
           {isEditing ? 'Редактирование персонажа' : 'Создание персонажа'}
         </h2>
@@ -126,7 +127,7 @@ const CharacterForm = ({
           placeholder="Опишите вашего персонажа..."
           type="textarea"
         />
-      </div>
+      </Paper>
 
       <div className="flex justify-end space-x-4">
         <Button

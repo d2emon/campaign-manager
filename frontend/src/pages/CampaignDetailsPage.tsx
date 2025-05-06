@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import CharacterList from 'components/modules/Campaign/CharacterList';
+import Paper from 'components/ui/Paper';
 import { useGetCampaignQuery, useDeleteCampaignMutation, useGetCampaignsQuery } from 'services/campaignApi';
 
 const CampaignDetailsPage = () => {
@@ -48,7 +49,7 @@ const CampaignDetailsPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow rounded-lg p-6 mb-6">
+        <Paper className="mb-6">
           <div className="flex justify-between items-start mb-6">
             <h1 className="text-2xl font-bold text-gray-900">{campaign.title}</h1>
             <div className="flex space-x-4">
@@ -94,7 +95,7 @@ const CampaignDetailsPage = () => {
               )}
             </dl>
           </div>
-        </div>
+        </Paper>
 
         <CharacterList characters={campaign.npcs} />
       </div>

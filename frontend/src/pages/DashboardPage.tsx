@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useGetCampaignsQuery } from 'services/campaignApi';
 import { selectIsLoadingAuth, selectUser } from 'store/auth';
+import Paper from 'components/ui/Paper';
 
 const DashboardPage = () => {
   const isLoadingAuth = useSelector(selectIsLoadingAuth);
@@ -31,7 +32,7 @@ const DashboardPage = () => {
       <div className="px-4 py-6 sm:px-0">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Кампании */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <Paper>
             <div className="p-5">
               <h3 className="text-lg font-medium text-gray-900">Мои кампании</h3>
               <div className="mt-4">
@@ -57,9 +58,9 @@ const DashboardPage = () => {
               ) : (
                 <div className="mt-4">
                   {campaigns.map((campaign) => (
-                    <div
+                    <Paper
                       key={campaign.id}
-                      className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition cursor-pointer mb-4"
+                      className="hover:shadow-md transition cursor-pointer mb-4"
                       onClick={() => navigate(`/campaigns/${campaign.id}`)}
                     >
                       <div className="p-6">
@@ -89,15 +90,15 @@ const DashboardPage = () => {
                           </button>
                         </div>
                       </div>
-                    </div>
+                    </Paper>
                   ))}
                 </div>
               )}
             </div>
-          </div>
+          </Paper>
 
           {/* Персонажи */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <Paper>
             <div className="p-5">
               <h3 className="text-lg font-medium text-gray-900">Мои персонажи</h3>
               <div className="mt-4">
@@ -109,10 +110,10 @@ const DashboardPage = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </Paper>
 
           {/* Настройки */}
-          <div className="bg-white overflow-hidden shadow rounded-lg">
+          <Paper>
             <div className="p-5">
               <h3 className="text-lg font-medium text-gray-900">Настройки</h3>
               <div className="mt-4">
@@ -124,7 +125,7 @@ const DashboardPage = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </Paper>
         </div>
       </div>
     </main>
