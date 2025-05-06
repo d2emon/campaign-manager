@@ -8,9 +8,10 @@ interface CharacterListProps {
   onAdd?: () => void;
   onDelete?: (character: Character) => void;
   onEdit?: (character: Character) => void;
+  onGenerate?: () => void;
 }
 
-const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: CharacterListProps) => {
+const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit, onGenerate }: CharacterListProps) => {
   const navigate = useNavigate();
 
   const showCharacter = (character: Character) => {
@@ -22,13 +23,22 @@ const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit }: C
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Персонажи кампании</h2>
         {withAddButton && (
-          <Button
-            type="button"
-            variant="primary"
-            onClick={onAdd}
-        >
-            Добавить персонажа
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Button
+              type="button"
+              variant="primary"
+              onClick={onAdd}
+            >
+              Добавить персонажа
+            </Button>
+            <Button
+              type="button"
+              variant="primary"
+              onClick={onGenerate}
+            >
+              Сгенерировать персонажа
+            </Button>
+          </div>
         )}
       </div>
 

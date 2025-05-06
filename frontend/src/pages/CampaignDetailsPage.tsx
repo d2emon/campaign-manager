@@ -1,14 +1,20 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import Breadcrumbs from 'components/layout/Breadcrumbs';
 import CampaignDetails from 'components/modules/Campaign/CampaignDetails';
-import { useGetCampaignQuery, useDeleteCampaignMutation, useGetCampaignsQuery } from 'services/campaignApi';
+import {
+  useDeleteCampaignMutation,
+  useGenerateNPCMutation,
+  useGetCampaignQuery,
+  useGetCampaignsQuery,
+} from 'services/campaignApi';
 
 const CampaignDetailsPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const { data: campaign, isLoading } = useGetCampaignQuery(`${id}`);
+  const { data: campaign, isLoading, refetch: refetchCampaign } = useGetCampaignQuery(`${id}`);
   const { refetch: refetchCampaigns } = useGetCampaignsQuery();
   const [deleteCampaign] = useDeleteCampaignMutation();
+  const [generateNPC] = useGenerateNPCMutation();
 
   const handleDelete = async () => {
     if (id) {
@@ -18,6 +24,18 @@ const CampaignDetailsPage = () => {
         navigate('/');
       } catch (error) {
         console.error('Error deleting campaign:', error);
+      }
+    }
+  };
+
+  const handleGenerateNPC = async () => {
+    if (id) {
+      try {
+        await generateNPC(id);
+        refetchCampaigns();
+        refetchCampaign();
+      } catch (error) {
+        console.error('Error generating NPC:', error);
       }
     }
   };
@@ -56,6 +74,7 @@ const CampaignDetailsPage = () => {
         isLoading={isLoading}
         onDelete={handleDelete}
         onEdit={() => navigate(`/campaigns/${id}/edit`)}
+        onGenerate={handleGenerateNPC}
       />
     </div>
   );

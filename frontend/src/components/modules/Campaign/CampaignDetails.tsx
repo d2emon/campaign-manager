@@ -13,11 +13,12 @@ import { Campaign } from 'types/campaign';
 interface CampaignDetailsProps {
   campaign: Campaign;
   isLoading: boolean;
-  onDelete: () => void;
-  onEdit: () => void;
+  onDelete?: () => void;
+  onEdit?: () => void;
+  onGenerate?: () => void;
 }
 
-const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit }: CampaignDetailsProps) => {
+const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit, onGenerate }: CampaignDetailsProps) => {
   const navigate = useNavigate();
 
   if (!campaign) {
@@ -89,6 +90,7 @@ const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit }: CampaignDeta
         onAdd={() => {
           navigate(`/campaigns/${campaign.id}/characters/new`);
         }}
+        onGenerate={onGenerate}
       />
     </div>
   );
