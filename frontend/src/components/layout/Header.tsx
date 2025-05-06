@@ -4,7 +4,7 @@ import Button from 'components/ui/Button';
 import { useAuth } from 'contexts/AuthContext';
 import { selectUser } from 'store/auth';
 
-export const Header = ({ dark = false }: { dark?: boolean }) => {
+const Header = ({ dark = false }: { dark?: boolean }) => {
   const { logout } = useAuth();
   const user = useSelector(selectUser);
 
@@ -67,3 +67,5 @@ export const Header = ({ dark = false }: { dark?: boolean }) => {
       </nav>
 
 */
+
+export default Header;
