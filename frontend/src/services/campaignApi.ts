@@ -53,10 +53,10 @@ export const campaignsApi = createApi({
       }),
     }),
     getCampaigns: builder.query<Campaign[], void>({
-      transformResponse: (response: any) => response ? response.map(mapCampaign) : [],
       query: () => injectToken({
         url: '',
       }),
+      transformResponse: (response: any) => response ? response.map(mapCampaign) : [],
     }),
     getCampaign: builder.query<Campaign | null, string>({
       query: (id) => injectToken({
