@@ -1,6 +1,12 @@
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  ReactNode,
+  useCallback,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   login as loginApi,
   logout as logoutApi,
@@ -8,17 +14,17 @@ import {
   register as registerApi,
   RegisterDTO,
 } from 'services/auth';
-
-interface User {
-  username: string;
-  email: string;
-  role: string;
-}
+import {
+  removeCredentials,
+  selectHasAccessToken,
+  selectIsLoadingAuth,
+  selectRefreshToken,
+  setAuthError,
+  setCredentials,
+  setIsLoadingAuth,
+} from 'store/auth';
 
 interface AuthContextType {
-  user: User | null;
-  errorMessage: string | null;
-  isInitialized: boolean;
   login: (username: string, password: string) => Promise<boolean>;
   register: (user: RegisterDTO) => Promise<boolean>;
   logout: () => Promise<void>;
@@ -39,94 +45,65 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const dispatch = useDispatch();
+  const hasAccessToken = useSelector(selectHasAccessToken);
+  const isLoadingAuth = useSelector(selectIsLoadingAuth);
+  const refreshToken = useSelector(selectRefreshToken);
   const navigate = useNavigate();
 
-  const checkAccessToken = useCallback(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      const decoded = jwtDecode(token);
-      if (decoded.exp && decoded.exp * 1000 < Date.now()) {
-        localStorage.removeItem('accessToken');
-        return false;
-      }
-      return true;
-    }
-    return false;
-  }, []);
-
   const handleTokenRefresh = useCallback(async () => {
+    if (!hasAccessToken) {
+      return;
+    }
+ 
     try {
-      const refreshToken = localStorage.getItem('refreshToken');
+      dispatch(setIsLoadingAuth(true));
+      dispatch(setAuthError(null));
       if (!refreshToken) {
         throw new Error('No refresh token');
       }
 
       const response = await refreshTokenApi(refreshToken);
-      localStorage.setItem('accessToken', response.accessToken);
-      localStorage.setItem('refreshToken', response.refreshToken);
-
-      return true;
+      dispatch(setCredentials({
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+      }));
     } catch (error) {
       console.error('Token refresh failed:', error);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      return false;
+      dispatch(setAuthError(`${error}`));
+      dispatch(removeCredentials());
+    } finally {
+      dispatch(setIsLoadingAuth(false));
     }
-  }, []);
+  }, [dispatch, hasAccessToken, refreshToken]);
 
-  const checkAndRefreshToken = useCallback(async () => {
-    const hasToken = checkAccessToken();
-    if (!hasToken) {
-      const refreshSuccess = await handleTokenRefresh();
-      if (!refreshSuccess) {
-        setUser(null);
-        return false;
-      }
-    }
-
-    return true;
-  }, [checkAccessToken, handleTokenRefresh]);
-  
   useEffect(() => {
-    const initializeAuth = async () => {
-      const tokenValid = await checkAndRefreshToken();
-      if (tokenValid) {
-        const userData = JSON.parse(localStorage.getItem('user') || 'null');
-        setUser(userData);
-      }
-      setIsInitialized(true);
-    };
-
-    initializeAuth();
-
     // Устанавливаем интервал для проверки токена каждые 5 минут
-    const interval = setInterval(async () => {
-      await checkAndRefreshToken();
-    }, 5 * 60 * 1000);
+    const interval = setInterval(handleTokenRefresh, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, [checkAndRefreshToken]);
+  }, [dispatch, handleTokenRefresh, isLoadingAuth]);
 
   const login = async (username: string, password: string) => {
     try {
-      const { accessToken, refreshToken } = await loginApi(username, password);
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      const userData: User = {
-        username: username,
-        email: '',
-        role: '',
-      };
-      localStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
-      setErrorMessage(null);
+      dispatch(setIsLoadingAuth(true));
+      dispatch(setAuthError(null));
+      const response = await loginApi(username, password);
+      dispatch(setCredentials({
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        user: {
+          username: username,
+          email: '',
+          role: 'player',
+        },
+      }));
+      dispatch(setIsLoadingAuth(false));
       navigate('/dashboard');
       return true;
     } catch (error) {
-      setErrorMessage(`${error}`);
+      dispatch(setAuthError(`${error}`));
+      dispatch(setIsLoadingAuth(false));
       return false;
     }
   };
@@ -134,36 +111,40 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const logout = async () => {
     try {
       const refreshTokenValue = localStorage.getItem('refreshToken');
+      dispatch(setIsLoadingAuth(true));
+      dispatch(setAuthError(null));
       if (refreshTokenValue) {
         await logoutApi(refreshTokenValue);
       }
     } catch (error) {
       console.error('Logout error:', error);
+      dispatch(setAuthError(`${error}`));
     } finally {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
-      setUser(null);
+      dispatch(removeCredentials());
+      dispatch(setIsLoadingAuth(false));
       navigate('/login');
     }
   };
 
   const register = async (user: RegisterDTO) => {
     try {
-      const { accessToken, refreshToken } = await registerApi(user);
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      const userData: User = {
-        username: user.username,
-        email: user.email,
-        role: user.role || 'player',
-      };
-      localStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
-      setErrorMessage(null);
+      dispatch(setIsLoadingAuth(true));
+      dispatch(setAuthError(null));
+      const response = await registerApi(user);
+      dispatch(setCredentials({
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken,
+        user: {
+          username: user.username,
+          email: user.email,
+          role: user.role || 'player',
+        },
+      }));
+      dispatch(setIsLoadingAuth(false));
       return true;
     } catch (error) {
-      setErrorMessage(`${error}`);
+      dispatch(setAuthError(`${error}`));
+      dispatch(setIsLoadingAuth(false));
       return false;
     }
   };
@@ -171,9 +152,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <AuthContext.Provider
       value={{
-        user,
-        errorMessage,
-        isInitialized,
         login,
         register,
         logout,

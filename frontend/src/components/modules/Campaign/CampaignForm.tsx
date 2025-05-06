@@ -1,14 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
-import CharacterList from './CharacterList';
-import CharacterForm from './CharacterForm';
-import { Campaign } from 'services/campaignApi';
+import { useDeleteLocationMutation } from 'services/locationApi';
+import { useDeleteNPCMutation } from 'services/npcApi';
+import { Campaign } from 'types/campaign';
 import { Character } from 'types/character';
-import { createCharacter, updateCharacter, deleteCharacter } from 'services/characterService';
+import { Location } from 'types/location';
+import CharacterList from './CharacterList';
+import LocationList from '../Location/LocationList';
 
 interface CampaignFormProps {
   initialData?: Partial<Campaign>;
@@ -53,9 +56,9 @@ const CampaignForm = ({
   onSubmit, 
   onCancel 
 }: CampaignFormProps) => {
-  const [isCharacterFormOpen, setIsCharacterFormOpen] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
-  const [isCharacterLoading, setIsCharacterLoading] = useState(false);
+  const navigate = useNavigate();
+  const [deleteNPC] = useDeleteNPCMutation();
+  const [deleteLocation] = useDeleteLocationMutation();
 
   const {
     register,
@@ -76,163 +79,128 @@ const CampaignForm = ({
   }, [initialData, setValue]);
 
   const handleEditCharacter = (character: Character) => {
-    setSelectedCharacter(character);
-    setIsCharacterFormOpen(true);
+    navigate(`/campaigns/${initialData?.id}/characters/${character.id}/edit`);
   };
 
   const handleDeleteCharacter = async (character: Character) => {
     if (window.confirm('Вы уверены, что хотите удалить этого персонажа?')) {
-      try {
-        setIsCharacterLoading(true);
-        await deleteCharacter(character.id);
-        // Обновляем список персонажей после удаления
-        const updatedCharacters = characters.filter(c => c.id !== character.id);
-        onSubmit({ ...initialData, characters: updatedCharacters });
-      } catch (error) {
-        console.error('Ошибка при удалении персонажа:', error);
-      } finally {
-        setIsCharacterLoading(false);
-      }
+      await deleteNPC({ campaignId: initialData?.id || '', id: character.id });
+      // Обновляем список персонажей после удаления
+      const updatedCharacters = characters.filter(c => c.id !== character.id);
+      onSubmit({ ...initialData, npcs: updatedCharacters });
     }
   };
 
-  const handleCharacterSubmit = async (data: Partial<Character>) => {
-    try {
-      setIsCharacterLoading(true);
-      let updatedCharacter: Character;
-      
-      if (selectedCharacter) {
-        updatedCharacter = await updateCharacter(selectedCharacter.id, data);
-      } else {
-        updatedCharacter = await createCharacter({
-          ...data,
-          campaignId: initialData?.id || '',
-        } as any);
-      }
+  const handleEditLocation = (location: Location) => {
+    navigate(`/campaigns/${initialData?.id}/locations/${location.id}/edit`);
+  };
 
-      // Обновляем список персонажей
-      const updatedCharacters = selectedCharacter
-        ? characters.map(c => c.id === selectedCharacter.id ? updatedCharacter : c)
-        : [...characters, updatedCharacter];
-
-      onSubmit({ ...initialData, characters: updatedCharacters });
-      setIsCharacterFormOpen(false);
-      setSelectedCharacter(null);
-    } catch (error) {
-      console.error('Ошибка при сохранении персонажа:', error);
-    } finally {
-      setIsCharacterLoading(false);
+  const handleDeleteLocation = async (location: Location) => {
+    if (window.confirm('Вы уверены, что хотите удалить эту локацию?')) {
+      await deleteLocation({ campaignId: initialData?.id || '', id: location.id });
+      // Обновляем список локаций после удаления
+      const updatedLocations = initialData?.locations?.filter(l => l.id !== location.id) || [];
+      onSubmit({ ...initialData, locations: updatedLocations });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <Field
-        id="title"
-        error={errors.title}
-        inputProps={register('title')}
-        label="Название кампании"
-      />
-
-      <Field
-        id="description"
-        error={errors.description}
-        inputProps={register('description')}
-        label="Описание"
-        placeholder="Опишите вашу кампанию..."
-        type="textarea"
-      />
-
-      <div className="mb-6">
-        <label
-          htmlFor="gameSystem"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Игровая система
-        </label>
-        <select
-          id="gameSystem"
-          {...register('gameSystem')}
-          className="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-        >
-          <option value="">Выберите систему</option>
-          <option value="dnd5e">Dungeons & Dragons 5e</option>
-          <option value="pathfinder2e">Pathfinder 2e</option>
-          <option value="call-of-cthulhu">Call of Cthulhu</option>
-          <option value="warhammer">Warhammer Fantasy</option>
-          <option value="other">Другая система</option>
-        </select>
-        {errors.gameSystem && (
-          <div className="mt-2 text-red-600">
-            {errors.gameSystem.message}
-          </div>
-        )}
-      </div>
-
-      <Field
-        id="maxPlayers"
-        error={errors.maxPlayers}
-        inputProps={register('maxPlayers', { valueAsNumber: true })}
-        label="Максимум игроков"
-        type="number"
-        min={1}
-        max={20}
-      />
-
-      {isCharacterFormOpen && (
-        <CharacterForm
-          initialData={selectedCharacter || undefined}
-          isEditing={!!selectedCharacter}
-          isLoading={isCharacterLoading}
-          onSubmit={handleCharacterSubmit}
-          onCancel={() => {
-            setIsCharacterFormOpen(false);
-            setSelectedCharacter(null);
-          }}
+    <>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <Field
+          id="title"
+          error={errors.title}
+          inputProps={register('title')}
+          label="Название кампании"
         />
-      )}
+
+        <Field
+          id="description"
+          error={errors.description}
+          inputProps={register('description')}
+          label="Описание"
+          placeholder="Опишите вашу кампанию..."
+          type="textarea"
+        />
+
+        <div className="mb-6">
+          <label
+            htmlFor="gameSystem"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Игровая система
+          </label>
+          <select
+            id="gameSystem"
+            {...register('gameSystem')}
+            className="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+          >
+            <option value="">Выберите систему</option>
+            <option value="dnd5e">Dungeons & Dragons 5e</option>
+            <option value="pathfinder2e">Pathfinder 2e</option>
+            <option value="call-of-cthulhu">Call of Cthulhu</option>
+            <option value="warhammer">Warhammer Fantasy</option>
+            <option value="other">Другая система</option>
+          </select>
+          {errors.gameSystem && (
+            <div className="mt-2 text-red-600">
+              {errors.gameSystem.message}
+            </div>
+          )}
+        </div>
+
+        <Field
+          id="maxPlayers"
+          error={errors.maxPlayers}
+          inputProps={register('maxPlayers', { valueAsNumber: true })}
+          label="Максимум игроков"
+          type="number"
+          min={1}
+          max={20}
+        />
+
+        <div className="flex justify-end space-x-4">
+          <Button
+            type="button"
+            onClick={onCancel}
+            variant="secondary"
+          >
+            Отмена
+          </Button>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            variant="primary"
+          >
+            {isLoading ? 'Сохранение...' : isEditing ? 'Сохранить' : 'Создать'}
+          </Button>
+        </div>
+      </form>
 
       {isEditing && (
-        <div className="bg-white shadow rounded-lg p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Персонажи кампании</h2>
-            <Button
-              type="button"
-              variant="primary"
-              onClick={() => {
-                setSelectedCharacter(null);
-                setIsCharacterFormOpen(true);
-              }}
-            >
-              Добавить персонажа
-            </Button>
-          </div>
-          
+        <div className="my-6 pt-6">
           <CharacterList
-            characters={characters}
+            characters={initialData?.npcs || []}
+            withAddButton
+            onAdd={() => {
+              navigate(`/campaigns/${initialData?.id}/characters/new`);
+            }}
             onEdit={handleEditCharacter}
             onDelete={handleDeleteCharacter}
           />
+          <LocationList
+            locations={initialData?.locations || []}
+            campaignId={initialData?.id || ''}
+            withAddButton
+            onAdd={() => {
+              navigate(`/campaigns/${initialData?.id}/locations/new`);
+            }}
+            onEdit={handleEditLocation}
+            onDelete={handleDeleteLocation}
+          />
         </div>
       )}
-
-      <div className="flex justify-end space-x-4">
-        <Button
-          type="button"
-          onClick={onCancel}
-          variant="secondary"
-        >
-          Отмена
-        </Button>
-        <Button
-          type="submit"
-          disabled={isLoading}
-          variant="primary"
-        >
-          {isLoading ? 'Сохранение...' : isEditing ? 'Сохранить' : 'Создать'}
-        </Button>
-      </div>
-    </form>
+    </>
   );
 };
 

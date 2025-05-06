@@ -1,41 +1,33 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import Breadcrumbs from 'components/layout/Breadcrumbs';
-import CampaignDetails from 'components/modules/Campaign/CampaignDetails';
-import {
-  useDeleteCampaignMutation,
-  useGenerateNPCMutation,
-  useGetCampaignQuery,
-  useGetCampaignsQuery,
-} from 'services/campaignApi';
+import CharacterDetails from 'components/modules/Character/CharacterDetails';
+import { useGetCampaignQuery, useGetCampaignsQuery } from 'services/campaignApi';
+import { useGetNPCQuery, useDeleteNPCMutation } from 'services/npcApi';
 
-const CampaignDetailsPage = () => {
+const CharacterDetailsPage = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
-  const { data: campaign, isLoading, refetch: refetchCampaign } = useGetCampaignQuery(`${id}`);
+  const { id, characterId } = useParams<{ id: string; characterId: string }>();
+  const { data: character, isLoading } = useGetNPCQuery({
+    campaignId: id || '',
+    id: characterId || '',
+  });
+  const { data: campaign } = useGetCampaignQuery(id || '');
+  const [deleteNPC] = useDeleteNPCMutation();
+  const { refetch: refetchCampaign } = useGetCampaignQuery(id || '');
   const { refetch: refetchCampaigns } = useGetCampaignsQuery();
-  const [deleteCampaign] = useDeleteCampaignMutation();
-  const [generateNPC] = useGenerateNPCMutation();
 
   const handleDelete = async () => {
     if (id) {
       try {
-        await deleteCampaign(id);
-        refetchCampaigns();
+        await deleteNPC({
+          campaignId: id || '',
+          id: characterId || '',
+        });
+        refetchCampaign();
+        refetchCampaigns()
         navigate('/');
       } catch (error) {
-        console.error('Error deleting campaign:', error);
-      }
-    }
-  };
-
-  const handleGenerateNPC = async () => {
-    if (id) {
-      try {
-        await generateNPC(id);
-        refetchCampaigns();
-        refetchCampaign();
-      } catch (error) {
-        console.error('Error generating NPC:', error);
+        console.error('Error deleting character:', error);
       }
     }
   };
@@ -48,11 +40,11 @@ const CampaignDetailsPage = () => {
     );
   }
 
-  if (!campaign) {
+  if (!character) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Кампания не найдена</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Персонаж не найден</h1>
           <button
             onClick={() => navigate('/')}
             className="mt-4 px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-600 transition"
@@ -68,16 +60,16 @@ const CampaignDetailsPage = () => {
     <div className="min-h-screen bg-gray-50">
       <Breadcrumbs
         campaign={campaign}
+        character={character}
       />
-      <CampaignDetails
-        campaign={campaign}
+      <CharacterDetails
+        character={character}
         isLoading={isLoading}
         onDelete={handleDelete}
-        onEdit={() => navigate(`/campaigns/${id}/edit`)}
-        onGenerate={handleGenerateNPC}
+        onEdit={() => navigate(`/characters/${id}/edit`)}
       />
     </div>
   );
 };
 
-export default CampaignDetailsPage; 
+export default CharacterDetailsPage;
