@@ -6,8 +6,8 @@ interface CampaignItemProps {
   className?: string;
   isLoading?: boolean;
   title: string;
-  onEdit: () => void;
-  onDelete: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
   children: React.ReactNode;
 }
 
