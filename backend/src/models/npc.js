@@ -24,6 +24,16 @@ const NPCSchema = new mongoose.Schema({
   },
 
   isPublic: { type: Boolean, default: false },
+}, {
+  timestamps: true,
+  toJSON: {
+    transform: function(doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+      return ret;
+    },
+    virtuals: true,
+  },
 });
 
 NPCSchema.methods.generate = async function () {

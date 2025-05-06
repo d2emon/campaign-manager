@@ -53,6 +53,14 @@ const UserSchema = new mongoose.Schema({
   lastLogin: Date,
 }, {
   timestamps: true,
+  toJSON: {
+    transform: function(doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+      return ret;
+    },
+    virtuals: true,
+  },
 });
 
 UserSchema.pre('save', async function (next) {

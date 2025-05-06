@@ -14,6 +14,16 @@ const NoteSchema = new mongoose.Schema({
   },
 
   isPublic: { type: Boolean, default: false },
+}, {
+  timestamps: true,
+  toJSON: {
+    transform: function(doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+      return ret;
+    },
+    virtuals: true,
+  },
 });
 
 export default mongoose.model('Note', NoteSchema);
