@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import CharacterList from 'components/modules/Campaign/CharacterList';
 import Avatar from 'components/ui/Avatar';
 import Badge from 'components/ui/Badge';
@@ -17,6 +18,8 @@ interface CampaignDetailsProps {
 }
 
 const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit }: CampaignDetailsProps) => {
+  const navigate = useNavigate();
+
   if (!campaign) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -80,7 +83,13 @@ const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit }: CampaignDeta
         Заметки
       </div>
 
-      <CharacterList characters={campaign.npcs} />
+      <CharacterList
+        characters={campaign.npcs}
+        withAddButton
+        onAdd={() => {
+          navigate(`/campaigns/${campaign.id}/characters/new`);
+        }}
+      />
     </div>
   );
 };
