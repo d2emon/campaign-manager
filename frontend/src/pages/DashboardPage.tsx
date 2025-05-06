@@ -59,7 +59,7 @@ const DashboardPage = () => {
                   {campaigns.map((campaign) => (
                     <div
                       key={campaign.id}
-                      className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition cursor-pointer"
+                      className="bg-white overflow-hidden shadow rounded-lg hover:shadow-md transition cursor-pointer mb-4"
                       onClick={() => navigate(`/campaigns/${campaign.id}`)}
                     >
                       <div className="p-6">
