@@ -95,7 +95,7 @@ export const removeCampaign = async (req, res, next) => {
 export const joinCampaign = async (req, res, next) => {
   try {
     const campaign = await Campaign.findOne({
-      id: req.params.id,
+      _id: req.params.id,
       inviteCode: req.query.inviteCode,
     });
 
