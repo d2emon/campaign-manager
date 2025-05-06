@@ -10,6 +10,7 @@ import DateItem from 'components/ui/DateItem';
 import Spinner from 'components/ui/Spinner';
 import TextBlock from 'components/ui/TextBlock';
 import { Campaign } from 'types/campaign';
+import LocationList from '../Location/LocationList';
 
 interface CampaignDetailsProps {
   campaign: Campaign;
@@ -95,9 +96,14 @@ const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit, onGenerate }: 
         Игроки
       </div>
 
-      <div className="my-6 pt-6">
-        Локации
-      </div>
+      <LocationList
+        campaignId={campaign.id}
+        locations={campaign.locations || []}
+        withAddButton
+        onAdd={() => {
+          navigate(`/campaigns/${campaign.id}/locations/new`);
+        }}
+      />
 
       <div className="my-6 pt-6">
         Квесты

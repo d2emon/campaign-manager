@@ -5,10 +5,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
-import CharacterList from './CharacterList';
+import { useDeleteLocationMutation } from 'services/locationApi';
 import { useDeleteNPCMutation } from 'services/npcApi';
 import { Campaign } from 'types/campaign';
 import { Character } from 'types/character';
+import { Location } from 'types/location';
+import CharacterList from './CharacterList';
+import LocationList from '../Location/LocationList';
 
 interface CampaignFormProps {
   initialData?: Partial<Campaign>;
@@ -55,6 +58,7 @@ const CampaignForm = ({
 }: CampaignFormProps) => {
   const navigate = useNavigate();
   const [deleteNPC] = useDeleteNPCMutation();
+  const [deleteLocation] = useDeleteLocationMutation();
 
   const {
     register,
@@ -84,6 +88,19 @@ const CampaignForm = ({
       // Обновляем список персонажей после удаления
       const updatedCharacters = characters.filter(c => c.id !== character.id);
       onSubmit({ ...initialData, npcs: updatedCharacters });
+    }
+  };
+
+  const handleEditLocation = (location: Location) => {
+    navigate(`/campaigns/${initialData?.id}/locations/${location.id}/edit`);
+  };
+
+  const handleDeleteLocation = async (location: Location) => {
+    if (window.confirm('Вы уверены, что хотите удалить эту локацию?')) {
+      await deleteLocation({ campaignId: initialData?.id || '', id: location.id });
+      // Обновляем список локаций после удаления
+      const updatedLocations = initialData?.locations?.filter(l => l.id !== location.id) || [];
+      onSubmit({ ...initialData, locations: updatedLocations });
     }
   };
 
@@ -161,15 +178,27 @@ const CampaignForm = ({
       </form>
 
       {isEditing && (
-        <CharacterList
-          characters={initialData?.npcs || []}
-          withAddButton
-          onAdd={() => {
-            navigate(`/campaigns/${initialData?.id}/characters/new`);
-          }}
-          onEdit={handleEditCharacter}
-          onDelete={handleDeleteCharacter}
-        />
+        <div className="my-6 pt-6">
+          <CharacterList
+            characters={initialData?.npcs || []}
+            withAddButton
+            onAdd={() => {
+              navigate(`/campaigns/${initialData?.id}/characters/new`);
+            }}
+            onEdit={handleEditCharacter}
+            onDelete={handleDeleteCharacter}
+          />
+          <LocationList
+            locations={initialData?.locations || []}
+            campaignId={initialData?.id || ''}
+            withAddButton
+            onAdd={() => {
+              navigate(`/campaigns/${initialData?.id}/locations/new`);
+            }}
+            onEdit={handleEditLocation}
+            onDelete={handleDeleteLocation}
+          />
+        </div>
       )}
     </>
   );
