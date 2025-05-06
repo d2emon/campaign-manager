@@ -13,7 +13,7 @@ import {
 } from 'services/campaignApi';
 import { selectUser } from 'store/auth';
 
-const CampaignFormPage = () => {
+const EditCampaignPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const user = useSelector(selectUser);
@@ -71,4 +71,4 @@ const CampaignFormPage = () => {
   );
 };
 
-export default CampaignFormPage; 
+export default EditCampaignPage; 

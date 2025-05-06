@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
 import CharacterList from './CharacterList';
-import CharacterForm from '../Character/CharacterForm';
 import { Campaign } from 'services/campaignApi';
 import { Character } from 'types/character';
-import { useCreateNPCMutation, useUpdateNPCMutation, useDeleteNPCMutation } from 'services/npcApi';
+import { useDeleteNPCMutation } from 'services/npcApi';
 
 interface CampaignFormProps {
   initialData?: Partial<Campaign>;
@@ -53,12 +53,8 @@ const CampaignForm = ({
   onSubmit, 
   onCancel 
 }: CampaignFormProps) => {
-  const [isCharacterFormOpen, setIsCharacterFormOpen] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
-  const [createNPC, { isLoading: isCreating }] = useCreateNPCMutation();
-  const [updateNPC, { isLoading: isUpdating }] = useUpdateNPCMutation();
-  const [deleteNPC, { isLoading: isDeleting }] = useDeleteNPCMutation();
-  const isCharacterLoading = isLoading || isCreating || isUpdating || isDeleting;
+  const navigate = useNavigate();
+  const [deleteNPC] = useDeleteNPCMutation();
 
   const {
     register,
@@ -79,8 +75,7 @@ const CampaignForm = ({
   }, [initialData, setValue]);
 
   const handleEditCharacter = (character: Character) => {
-    setSelectedCharacter(character);
-    setIsCharacterFormOpen(true);
+    navigate(`/campaigns/${initialData?.id}/characters/${character.id}/edit`);
   };
 
   const handleDeleteCharacter = async (character: Character) => {
@@ -90,30 +85,6 @@ const CampaignForm = ({
       const updatedCharacters = characters.filter(c => c.id !== character.id);
       onSubmit({ ...initialData, npcs: updatedCharacters });
     }
-  };
-
-  const handleCharacterSubmit = async (data: Partial<Character>) => {
-    let updatedCharacter: Character | undefined;
-      
-    if (selectedCharacter) {
-      const response = await updateNPC({ campaignId: initialData?.id || '', id: selectedCharacter.id, data });
-      updatedCharacter = response.data;
-    } else {
-      const response = await createNPC({ campaignId: initialData?.id || '', data });
-      updatedCharacter = response.data;
-    }
-
-    if (updatedCharacter) {
-      // Обновляем список персонажей
-      const updatedCharacters = selectedCharacter
-        ? characters.map(c => c.id === selectedCharacter.id ? updatedCharacter as Character : c)
-        : [...characters, updatedCharacter as Character];
-
-      onSubmit({ ...initialData, npcs: updatedCharacters });
-    }
-
-    setIsCharacterFormOpen(false);
-    setSelectedCharacter(null);
   };
 
   return (
@@ -189,26 +160,12 @@ const CampaignForm = ({
         </div>
       </form>
 
-      {isCharacterFormOpen && (
-        <CharacterForm
-          initialData={selectedCharacter || undefined}
-          isEditing={!!selectedCharacter}
-          isLoading={isCharacterLoading}
-          onSubmit={handleCharacterSubmit}
-          onCancel={() => {
-            setIsCharacterFormOpen(false);
-            setSelectedCharacter(null);
-          }}
-        />
-      )}
-
       {isEditing && (
         <CharacterList
           characters={initialData?.npcs || []}
           withAddButton
           onAdd={() => {
-            setSelectedCharacter(null);
-            setIsCharacterFormOpen(true);
+            navigate(`/campaigns/${initialData?.id}/characters/new`);
           }}
           onEdit={handleEditCharacter}
           onDelete={handleDeleteCharacter}
