@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CampaignForm from 'components/modules/Campaign/CampaignForm';
 import Paper from 'components/ui/Paper';
 import {
-  Campaign,
   CampaignCreateDTO,
   useCreateCampaignMutation,
   useGetCampaignQuery,
@@ -12,6 +11,7 @@ import {
   useUpdateCampaignMutation,
 } from 'services/campaignApi';
 import { selectUser } from 'store/auth';
+import { Campaign } from 'types/campaign';
 
 const EditCampaignPage = () => {
   const navigate = useNavigate();

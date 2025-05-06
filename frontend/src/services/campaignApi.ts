@@ -1,17 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_URL } from './api';
-import { Character } from 'types/character';
-
-export interface Campaign {
-  id: string;
-  title: string;
-  description: string;
-  gameSystem: string;
-  maxPlayers: number;
-  npcs?: Character[];
-  createdAt?: string;
-  updatedAt?: string;
-}
+import { Campaign } from 'types/campaign';
 
 export type CampaignCreateDTO = Omit<Campaign, 'id' | 'createdAt' | 'updatedAt'>;
 

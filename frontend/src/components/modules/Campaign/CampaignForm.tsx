@@ -6,9 +6,9 @@ import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
 import CharacterList from './CharacterList';
-import { Campaign } from 'services/campaignApi';
-import { Character } from 'types/character';
 import { useDeleteNPCMutation } from 'services/npcApi';
+import { Campaign } from 'types/campaign';
+import { Character } from 'types/character';
 
 interface CampaignFormProps {
   initialData?: Partial<Campaign>;

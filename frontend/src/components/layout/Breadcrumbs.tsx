@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Campaign } from 'services/campaignApi';
+import { Campaign } from 'types/campaign';
 import { Character } from 'types/character';
 
 interface BreadcrumbItem {
