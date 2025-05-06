@@ -1,3 +1,4 @@
+import { Copy } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
 import CharacterList from 'components/modules/Campaign/CharacterList';
 import Avatar from 'components/ui/Avatar';
@@ -28,6 +29,12 @@ const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit, onGenerate }: 
       </div>
     );
   }
+
+  const inviteUrl = `${window.location.origin}/campaigns/${campaign.id}/join?inviteCode=${campaign.inviteCode}`;
+
+  const copyInviteUrl = () => {
+    navigator.clipboard.writeText(inviteUrl);
+  };
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,12 +71,21 @@ const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit, onGenerate }: 
             <DataItem label="Мастер:">{campaign.gameMaster}</DataItem>
             <DataItem label="Игроков">{campaign.players?.length}</DataItem>
             <DataItem label="Ссылка для приглашения">
-              <Link
-                to={`/campaigns/${campaign.id}/join?inviteCode=${campaign.inviteCode}`}
-                className="text-blue-500 hover:text-blue-600"
-              >
-                /campaigns/{campaign.id}/join?inviteCode={campaign.inviteCode}
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link
+                  to={`/campaigns/${campaign.id}/join?inviteCode=${campaign.inviteCode}`}
+                  className="text-blue-500 hover:text-blue-600"
+                >
+                  {inviteUrl}
+                </Link>
+                <button
+                  onClick={copyInviteUrl}
+                  className="p-1 text-gray-500 hover:text-gray-700"
+                  title="Скопировать ссылку"
+                >
+                  <Copy size={18} />
+                </button>
+              </div>
             </DataItem>
           </dl>
         </DataBlock>
