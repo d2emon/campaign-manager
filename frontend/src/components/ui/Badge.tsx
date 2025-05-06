@@ -7,7 +7,7 @@ interface BadgeProps {
 }
 
 const Badge = ({ children, variant = 'primary', className = '' }: BadgeProps) => {
-  const baseClasses = 'px-2 py-1 text-xs font-medium rounded-full';
+  const baseClasses = 'px-2 py-1 mx-1 text-xs font-medium rounded-full';
   
   const variantClasses = {
     primary: 'bg-blue-100 text-blue-800',
