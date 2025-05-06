@@ -1,4 +1,4 @@
-import Paper from 'components/ui/Paper';
+import CampaignItem from 'components/ui/CampaignItem';
 import { Character } from 'types/character';
 
 interface CharacterDetailsProps {
@@ -19,25 +19,11 @@ const CharacterDetails = ({ character, isLoading, onDelete, onEdit }: CharacterD
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <Paper className="mb-6">
-        <div className="flex justify-between items-start mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">{character.name}</h1>
-          <div className="flex space-x-4">
-            <button
-              onClick={onEdit}
-              className="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-600 transition"
-            >
-              Редактировать
-            </button>
-            <button
-              onClick={onDelete}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
-            >
-              Удалить
-            </button>
-          </div>
-        </div>
-
+      <CampaignItem
+        title={character.name}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      >
         <div className="mb-6">
           <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
             Уровень {character.level}
@@ -65,7 +51,7 @@ const CharacterDetails = ({ character, isLoading, onDelete, onEdit }: CharacterD
             </div>
           </dl>
         </div>
-      </Paper>
+      </CampaignItem>
     </div>
   );
 };

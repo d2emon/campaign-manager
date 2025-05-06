@@ -1,5 +1,5 @@
 import CharacterList from 'components/modules/Campaign/CharacterList';
-import Paper from 'components/ui/Paper';
+import CampaignItem from 'components/ui/CampaignItem';
 import { Campaign } from 'services/campaignApi';
 
 interface CampaignDetailsProps {
@@ -20,25 +20,12 @@ const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit }: CampaignDeta
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <Paper className="mb-6">
-        <div className="flex justify-between items-start mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">{campaign.title}</h1>
-          <div className="flex space-x-4">
-            <button
-              onClick={onEdit}
-              className="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-600 transition"
-            >
-              Редактировать
-            </button>
-            <button
-              onClick={onDelete}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
-            >
-              Удалить
-            </button>
-          </div>
-        </div>
-
+      <CampaignItem
+        className="mb-6"
+        title={campaign.title}
+        onDelete={onDelete}
+        onEdit={onEdit}
+      >
         <div className="mb-6">
           <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
             {campaign.gameSystem}
@@ -66,7 +53,7 @@ const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit }: CampaignDeta
             )}
           </dl>
         </div>
-      </Paper>
+      </CampaignItem>
 
       <CharacterList characters={campaign.npcs} />
     </div>
