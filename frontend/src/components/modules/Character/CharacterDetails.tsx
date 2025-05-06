@@ -1,5 +1,9 @@
+import Badge from 'components/ui/Badge';
 import CampaignItem from 'components/ui/CampaignItem';
+import DataBlock from 'components/ui/DataBlock';
+import DataItem from 'components/ui/DataItem';
 import Spinner from 'components/ui/Spinner';
+import TextBlock from 'components/ui/TextBlock';
 import { Character } from 'types/character';
 
 interface CharacterDetailsProps {
@@ -27,32 +31,35 @@ const CharacterDetails = ({ character, isLoading, onDelete, onEdit }: CharacterD
         onDelete={onDelete}
       >
         <div className="mb-6">
-          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-            Уровень {character.level}
-          </span>
+            { character.isPublic && <Badge variant="primary">Публичный</Badge> }
         </div>
 
-        <div className="prose max-w-none">
-          <p className="text-gray-700">{character.description}</p>
-        </div>
+        <TextBlock>
+          {character.description}
+        </TextBlock>
 
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">Информация о персонаже</h2>
+        <DataBlock title="Информация о персонаже">
           <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Имя игрока</dt>
-              <dd className="mt-1 text-sm text-gray-900">{character.playerName}</dd>
-            </div>
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Раса</dt>
-              <dd className="mt-1 text-sm text-gray-900">{character.race}</dd>
-            </div>
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Класс</dt>
-              <dd className="mt-1 text-sm text-gray-900">{character.characterClass}</dd>
-            </div>
+            <DataItem label="Имя игрока:">{character.playerName}</DataItem>
+            <DataItem label="Раса:">{character.race}</DataItem>
+            <DataItem label="Класс:">
+              {character.characterClass}
+              {' '}
+              <Badge variant="primary">Уровень {character.level}</Badge>
+            </DataItem>
+            { character.profession && <DataItem label="Профессия:">{character.profession}</DataItem> }
+            { character.alignment && <DataItem label="Мировозрение:">{character.alignment}</DataItem> }
+            { character.trait && <DataItem label="Черта:">{character.trait}</DataItem> }
+            { character.role && <DataItem label="Роль:">{character.role}</DataItem> }
           </dl>
-        </div>
+        </DataBlock>
+
+        <DataBlock title="Характеристики">
+          <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <DataItem label="Сила:">{character.stats?.strength || '-'}</DataItem>
+            <DataItem label="Харизма:">{character.stats?.charisma || '-'}</DataItem>
+          </dl>
+        </DataBlock>
       </CampaignItem>
     </div>
   );
