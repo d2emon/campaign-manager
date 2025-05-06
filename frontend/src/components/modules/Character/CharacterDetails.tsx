@@ -1,4 +1,5 @@
 import CampaignItem from 'components/ui/CampaignItem';
+import Spinner from 'components/ui/Spinner';
 import { Character } from 'types/character';
 
 interface CharacterDetailsProps {
@@ -9,10 +10,10 @@ interface CharacterDetailsProps {
 }
 
 const CharacterDetails = ({ character, isLoading, onDelete, onEdit }: CharacterDetailsProps) => {
-  if (isLoading || !character) {
+  if (!character) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <Spinner size="lg" />
       </div>
     );
   }
@@ -20,6 +21,7 @@ const CharacterDetails = ({ character, isLoading, onDelete, onEdit }: CharacterD
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <CampaignItem
+        isLoading={isLoading}
         title={character.name}
         onEdit={onEdit}
         onDelete={onDelete}
