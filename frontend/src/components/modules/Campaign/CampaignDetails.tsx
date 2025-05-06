@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CharacterList from 'components/modules/Campaign/CharacterList';
 import Avatar from 'components/ui/Avatar';
 import Badge from 'components/ui/Badge';
@@ -63,7 +63,14 @@ const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit, onGenerate }: 
             <DateItem label="Последняя активность:" date={campaign.lastActive} />
             <DataItem label="Мастер:">{campaign.gameMaster}</DataItem>
             <DataItem label="Игроков">{campaign.players?.length}</DataItem>
-            <DataItem label="Код для приглашения">{campaign.inviteCode}</DataItem>
+            <DataItem label="Ссылка для приглашения">
+              <Link
+                to={`/campaigns/${campaign.id}/join?inviteCode=${campaign.inviteCode}`}
+                className="text-blue-500 hover:text-blue-600"
+              >
+                /campaigns/{campaign.id}/join?inviteCode={campaign.inviteCode}
+              </Link>
+            </DataItem>
           </dl>
         </DataBlock>
       </CampaignItem>

@@ -73,6 +73,12 @@ export const campaignsApi = createApi({
         method: 'POST',
       }),
     }),
+    joinCampaign: builder.mutation<void, { id: string, inviteCode: string }>({
+      query: ({ id, inviteCode }) => ({
+        url: `/api/v1/campaigns/${id}/join?inviteCode=${inviteCode}`,
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
@@ -82,5 +88,6 @@ export const {
   useCreateCampaignMutation,
   useDeleteCampaignMutation,
   useGenerateNPCMutation,
+  useJoinCampaignMutation,
   useUpdateCampaignMutation,
 } = campaignsApi;
