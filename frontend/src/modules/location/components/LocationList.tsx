@@ -6,13 +6,14 @@ import { Location } from '../types/location';
 interface LocationListProps {
   locations?: Location[];
   campaignId?: string;
+  className?: string;
   withAddButton?: boolean;
   onAdd?: () => void;
   onEdit?: (location: Location) => void;
   onDelete?: (location: Location) => void;
 }
 
-const LocationList = ({ locations, campaignId = '', withAddButton = false, onAdd, onEdit, onDelete }: LocationListProps) => {
+const LocationList = ({ locations, campaignId = '', className, withAddButton = false, onAdd, onEdit, onDelete }: LocationListProps) => {
   const navigate = useNavigate();
 
   const handleLocationClick = (locationId: string) => {
@@ -20,7 +21,7 @@ const LocationList = ({ locations, campaignId = '', withAddButton = false, onAdd
   };
 
   return (
-    <Paper>
+    <Paper className={className}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Локации кампании</h2>
         {withAddButton && (

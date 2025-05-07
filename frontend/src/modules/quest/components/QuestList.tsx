@@ -4,10 +4,11 @@ import TextBlock from 'components/ui/TextBlock';
 import { Quest } from '../types/quest';
 
 interface QuestListProps {
+  className?: string;
   quests?: Quest[];
 }
 
-const QuestList = ({ quests }: QuestListProps) => {
+const QuestList = ({ quests, className }: QuestListProps) => {
   const getStatusColor = (status: Quest['status']) => {
     switch (status) {
       case 'active':
@@ -22,7 +23,7 @@ const QuestList = ({ quests }: QuestListProps) => {
   };
 
   return (
-    <Paper>
+    <Paper className={className}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Квесты кампании</h2>
 

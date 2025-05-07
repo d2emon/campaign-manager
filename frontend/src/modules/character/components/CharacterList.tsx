@@ -4,6 +4,7 @@ import Paper from 'components/ui/Paper';
 import { Character } from '../types/character';
 interface CharacterListProps {
   characters?: Character[];
+  className?: string;
   withAddButton?: boolean;
   onAdd?: () => void;
   onDelete?: (character: Character) => void;
@@ -11,7 +12,7 @@ interface CharacterListProps {
   onGenerate?: () => void;
 }
 
-const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit, onGenerate }: CharacterListProps) => {
+const CharacterList = ({ characters, className, withAddButton, onAdd, onDelete, onEdit, onGenerate }: CharacterListProps) => {
   const navigate = useNavigate();
 
   const showCharacter = (character: Character) => {
@@ -19,7 +20,7 @@ const CharacterList = ({ characters, withAddButton, onAdd, onDelete, onEdit, onG
   }
 
   return (
-    <Paper>
+    <Paper className={className}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Персонажи кампании</h2>
         {withAddButton && (

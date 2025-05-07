@@ -2,12 +2,13 @@ import Paper from 'components/ui/Paper';
 import { Note } from '../types/note';
 
 interface NoteListProps {
+  className?: string;
   notes?: Note[];
   onNoteSelect?: (noteId: string) => void;
   selectedNoteId?: string;
 }
 
-const NoteList = ({ notes, onNoteSelect, selectedNoteId }: NoteListProps) => {
+const NoteList = ({ notes, className, onNoteSelect, selectedNoteId }: NoteListProps) => {
   const handleNoteSelect = (noteId: string) => {
     if (onNoteSelect) {
       onNoteSelect(noteId);
@@ -15,7 +16,7 @@ const NoteList = ({ notes, onNoteSelect, selectedNoteId }: NoteListProps) => {
   };
 
   return (
-    <Paper>
+    <Paper className={className}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Заметки</h2>
       </div>
