@@ -54,19 +54,17 @@ const EditCampaignPage = () => {
         isEdit: true,
       }}
       isLoading={isLoading}
-      isNotFound={!campaign}
+      isNotFound={isEditing && !campaign}
       notFoundMessage="Кампания не найдена"
       title={campaignId ? 'Редактирование кампании' : 'Создание новой кампании'}
       onBack={handleBack}
     >
-      {campaign && (
-        <CampaignForm
-          initialData={campaign}
-          isEditing={isEditing}
-          onSubmit={handleSubmit}
-          onCancel={handleBack}
-        />
-      )}
+      <CampaignForm
+        initialData={campaign}
+        isEditing={isEditing}
+        onSubmit={handleSubmit}
+        onCancel={handleBack}
+      />
     </DetailPage>
   );
 };

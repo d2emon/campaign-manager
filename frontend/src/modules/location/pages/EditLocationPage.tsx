@@ -61,7 +61,7 @@ const EditLocationPage = () => {
         isEdit: true,
       }}
       isLoading={isLoading}
-      isNotFound={!location}
+      isNotFound={isEditing && !location}
       notFoundMessage="Локация не найдена"
       title={locationId ? 'Редактирование локации' : 'Создание новой локации'}
       onBack={goToCampaign}

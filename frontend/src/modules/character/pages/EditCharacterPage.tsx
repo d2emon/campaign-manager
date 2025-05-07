@@ -61,19 +61,17 @@ const EditCharacterPage = () => {
         isEdit: true,
       }}
       isLoading={isLoading}
-      isNotFound={!character}
+      isNotFound={isEditing && !character}
       notFoundMessage="Персонаж не найден"
       title={characterId ? 'Редактирование персонажа' : 'Создание нового персонажа'}
       onBack={goToCampaign}
     >
-      {character && (
-        <CharacterForm
-          initialData={character}
-          isEditing={isEditing}
-          onSubmit={handleSubmit}
-          onCancel={goToCampaign}
-        />
-      )}
+      <CharacterForm
+        initialData={character}
+        isEditing={isEditing}
+        onSubmit={handleSubmit}
+        onCancel={goToCampaign}
+      />
     </DetailPage>
   );
 };
