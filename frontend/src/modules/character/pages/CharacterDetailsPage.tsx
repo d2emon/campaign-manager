@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
-import CharacterDetails from 'components/modules/Character/CharacterDetails';
 import useCampaign from 'modules/campaign/hooks/useCampaign';
+import CharacterDetails from '../components/CharacterDetails';
 import { useGetNPCQuery, useDeleteNPCMutation } from '../services/npcApi';
 
 const CharacterDetailsPage = () => {
