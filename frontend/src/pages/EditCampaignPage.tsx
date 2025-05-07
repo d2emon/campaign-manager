@@ -18,13 +18,18 @@ const EditCampaignPage = () => {
   const { id } = useParams<{ id: string }>();
   const user = useSelector(selectUser);
   const { refetch: refetchCampaigns } = useGetCampaignsQuery();
-  const { data: campaign, isLoading: isLoadingCampaign, refetch: refetchCampaign } = useGetCampaignQuery(`${id}`);
+  const { data: campaign, isLoading: isLoadingCampaign, refetch: refetchCampaign } = useGetCampaignQuery(`${id}`, {
+    skip: !id
+  });
+  
   const [createCampaign, { isLoading: isCreating }] = useCreateCampaignMutation();
   const [updateCampaign, { isLoading: isUpdating }] = useUpdateCampaignMutation();
   const isLoading = isLoadingCampaign || isCreating || isUpdating;
 
   useEffect(() => {
+    if (id) {
     refetchCampaign();
+    }
   }, [id, refetchCampaign]);
 
   const handleSubmit = async (data: Partial<Campaign>) => {

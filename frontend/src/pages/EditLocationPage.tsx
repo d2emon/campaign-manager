@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import LocationForm from 'components/modules/Location/LocationForm';
 import Paper from 'components/ui/Paper';
+import { useGetCampaignQuery, useGetCampaignsQuery } from 'services/campaignApi';
 import {
   useCreateLocationMutation,
   useGetLocationQuery,
@@ -15,19 +16,25 @@ const EditLocationPage = () => {
   const navigate = useNavigate();
   const { locationId='', campaignId='' } = useParams<{ locationId: string; campaignId: string }>();
   const user = useSelector(selectUser);
+  const { refetch: refetchCampaigns } = useGetCampaignsQuery();
+  const { refetch: refetchCampaign } = useGetCampaignQuery(`${campaignId}`, {
+    skip: !campaignId,
+  })
   const { data: location, isLoading: isLoadingLocation, refetch: refetchLocation } = useGetLocationQuery({
     campaignId,
     locationId,
+  }, {
+    skip: !campaignId || !locationId
   });
   const [createLocation, { isLoading: isCreating }] = useCreateLocationMutation();
   const [updateLocation, { isLoading: isUpdating }] = useUpdateLocationMutation();
   const isLoading = isLoadingLocation || isCreating || isUpdating;
 
   useEffect(() => {
-    if (locationId) {
+    if (campaignId && locationId) {
       refetchLocation();
     }
-  }, [locationId, refetchLocation]);
+  }, [campaignId, locationId, refetchLocation]);
 
   const handleSubmit = async (data: Partial<Location>) => {
     if (!user || !campaignId) return;
@@ -37,6 +44,10 @@ const EditLocationPage = () => {
         await updateLocation({ campaignId, locationId, data });
       } else {
         await createLocation({ campaignId, data });
+      }
+      refetchCampaigns();
+      if (campaignId) {
+        refetchCampaign();
       }
       navigate(`/campaigns/${campaignId}`);
     } catch (error) {

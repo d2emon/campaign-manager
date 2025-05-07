@@ -20,19 +20,24 @@ const EditCharacterPage = () => {
   const { id, characterId } = useParams<{ id: string, characterId: string }>();
   const user = useSelector(selectUser);
   const { refetch: refetchCampaigns } = useGetCampaignsQuery();
-  const { refetch: refetchCampaign } = useGetCampaignQuery(`${id}`);
+  const { refetch: refetchCampaign } = useGetCampaignQuery(`${id}`, {
+    skip: !id
+  });
   const { data: npc, isLoading: isLoadingNPC, refetch: refetchNPC } = useGetNPCQuery({
     campaignId: id || '',
     id: characterId || '',
+  }, {
+    skip: !id || !characterId
   });
   const [createNPC, { isLoading: isCreating }] = useCreateNPCMutation();
   const [updateNPC, { isLoading: isUpdating }] = useUpdateNPCMutation();
   const isLoading = isLoadingNPC || isCreating || isUpdating;
 
   useEffect(() => {
-    refetchCampaign();
-    refetchNPC();
-  }, [id, characterId, refetchCampaign, refetchNPC]);
+    if (id && characterId) {
+      refetchNPC();
+    }
+  }, [id, characterId, refetchNPC]);
 
   const handleSubmit = async (data: Partial<Character>) => {
     if (!user) return;
@@ -44,7 +49,9 @@ const EditCharacterPage = () => {
         await createNPC({ campaignId: id || '', data });
       }
       refetchCampaigns();
-      refetchCampaign();
+      if (id) {
+        refetchCampaign();
+      }
       navigate(`/campaigns/${id}`);
     } catch (error) {
       console.error('Error saving character:', error);
