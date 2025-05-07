@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
-import { Campaign } from 'types/campaign';
 import CampaignForm from '../components/CampaignForm';
 import useCampaign from '../hooks/useCampaign';
 import {
@@ -8,6 +7,7 @@ import {
   useCreateCampaignMutation,
   useUpdateCampaignMutation,
 } from '../services/campaignApi';
+import { Campaign } from '../types/campaign';
 
 const EditCampaignPage = () => {
   const navigate = useNavigate();

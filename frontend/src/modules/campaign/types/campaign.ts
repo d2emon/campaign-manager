@@ -1,4 +1,5 @@
-import { Character } from "./character";
+import { Character } from 'types/character';
+import { Location } from 'types/location';
 
 export interface Campaign {
   id: string;
@@ -14,7 +15,7 @@ export interface Campaign {
   maxPlayers: number;
   npcs?: Character[];
   players?: any[];
-  locations?: any[];
+  locations?: Location[];
   quests?: any[];
   notes?: any[];
   createdAt?: string;

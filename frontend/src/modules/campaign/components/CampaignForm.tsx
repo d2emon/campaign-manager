@@ -10,9 +10,9 @@ import CharacterList from 'modules/character/components/CharacterList';
 import { useDeleteNPCMutation } from 'modules/character/services/npcApi';
 import LocationList from 'modules/location/components/LocationList';
 import { useDeleteLocationMutation } from 'modules/location/services/locationApi';
-import { Campaign } from 'types/campaign';
 import { Character } from 'types/character';
 import { Location } from 'types/location';
+import { Campaign } from '../types/campaign';
 
 interface CampaignFormProps {
   initialData?: Partial<Campaign> | null;

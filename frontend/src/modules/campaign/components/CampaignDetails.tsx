@@ -10,7 +10,7 @@ import Spinner from 'components/ui/Spinner';
 import TextBlock from 'components/ui/TextBlock';
 import CharacterList from 'modules/character/components/CharacterList';
 import LocationList from 'modules/location/components/LocationList';
-import { Campaign } from 'types/campaign';
+import { Campaign } from '../types/campaign';
 
 interface CampaignDetailsProps {
   campaign: Campaign;

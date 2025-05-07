@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Campaign } from 'types/campaign';
+import { Campaign } from 'modules/campaign/types/campaign';
 import { Character } from 'types/character';
 import { Location } from 'types/location';
 
