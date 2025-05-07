@@ -7,7 +7,7 @@ import Field from 'components/ui/Field';
 import { Character } from 'types/character';
 
 interface CharacterFormProps {
-  initialData?: Partial<Character>;
+  initialData?: Partial<Character> | null;
   isEditing?: boolean;
   isLoading?: boolean;
   onSubmit: (data: Partial<Character>) => Promise<void>;

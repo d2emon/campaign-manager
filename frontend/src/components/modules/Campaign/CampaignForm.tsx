@@ -15,7 +15,7 @@ import CharacterList from './CharacterList';
 import LocationList from '../Location/LocationList';
 
 interface CampaignFormProps {
-  initialData?: Partial<Campaign>;
+  initialData?: Partial<Campaign> | null;
   characters?: Character[];
   isEditing?: boolean;
   isLoading?: boolean;

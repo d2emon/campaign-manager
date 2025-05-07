@@ -5,7 +5,7 @@ import Field from 'components/ui/Field';
 import { Location } from 'types/location';
 
 interface LocationFormProps {
-  initialData?: Location;
+  initialData?: Location | null;
   isEditing?: boolean;
   isLoading?: boolean;
   onSubmit: (data: Partial<Location>) => void;
@@ -20,7 +20,7 @@ const LocationForm = ({
   onCancel
 }: LocationFormProps) => {
   const { register, handleSubmit, reset } = useForm<Location>({
-    defaultValues: initialData
+    defaultValues: initialData || undefined
   });
 
   useEffect(() => {
