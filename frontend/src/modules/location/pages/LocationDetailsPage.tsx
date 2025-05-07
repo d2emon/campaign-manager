@@ -22,6 +22,7 @@ const LocationDetailsPage = () => {
   });
   const [deleteLocation] = useDeleteLocationMutation();
 
+  const backUrl = campaignId ? `/campaigns/${campaignId}` : '/dashboard';
   const campaign = (campaignId && !getCampaign.isLoading)
     ? getCampaign.data
     : null;
@@ -30,6 +31,10 @@ const LocationDetailsPage = () => {
     : null;
   const isNotFound = !campaign || !location;
   const isLoading = getCampaign.isLoading || getLocation.isLoading;
+
+  const handleBack = () => {
+    navigate(backUrl);
+  };
 
   const handleDelete = async () => {
     if (isNotFound || isLoading) {
@@ -42,7 +47,7 @@ const LocationDetailsPage = () => {
         locationId,
       });
       getCampaign.refetch();
-      navigate('/');
+      navigate(backUrl);
     } catch (error) {
       console.error('Error deleting location:', error);
     }
@@ -50,7 +55,6 @@ const LocationDetailsPage = () => {
 
   return (
     <DetailPage
-      backUrl={campaignId ? `/campaigns/${campaignId}` : '/dashboard'}
       breadcrumbs={{
         campaign: campaign,
         location: location,
@@ -58,6 +62,7 @@ const LocationDetailsPage = () => {
       isLoading={isLoading}
       isNotFound={isNotFound}
       notFoundMessage="Локация не найдена"
+      onBack={handleBack}
     >
       { location && (
         <LocationDetails

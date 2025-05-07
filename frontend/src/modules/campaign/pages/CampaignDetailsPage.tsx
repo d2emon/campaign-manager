@@ -17,12 +17,17 @@ const CampaignDetailsPage = () => {
   const [deleteCampaign] = useDeleteCampaignMutation();
   const [generateNPC] = useGenerateNPCMutation();
 
+  const backUrl = '/dashboard';
   const campaign = (campaignId && !getCampaign.isLoading)
     ? getCampaign.data
     : null;
   const isLoading = getCampaign.isLoading;
   const isNotFound = !campaign;
 
+  const handleBack = () => {
+    navigate(backUrl);
+  };
+  
   const handleDelete = async () => {
     if (isNotFound || isLoading) {
       return;
@@ -30,7 +35,7 @@ const CampaignDetailsPage = () => {
 
     try {
       await deleteCampaign(campaignId);
-      navigate('/dashboard');
+      navigate(backUrl);
     } catch (error) {
       console.error('Error deleting campaign:', error);
     }
@@ -51,7 +56,6 @@ const CampaignDetailsPage = () => {
 
   return (
     <DetailPage
-      backUrl="/dashboard"
       breadcrumbs={{
         campaign: campaign,
       }}
@@ -59,6 +63,7 @@ const CampaignDetailsPage = () => {
       isNotFound={isNotFound}
       notFoundMessage="Кампания не найдена"
       title={campaign?.title}
+      onBack={handleBack}
     >
       { campaign && (
         <CampaignDetails

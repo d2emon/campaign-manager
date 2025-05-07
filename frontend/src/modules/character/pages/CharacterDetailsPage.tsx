@@ -19,6 +19,7 @@ const CharacterDetailsPage = () => {
   });
   const [deleteNPC] = useDeleteNPCMutation();
 
+  const backUrl = campaignId ? `/campaigns/${campaignId}` : '/dashboard';
   const campaign = (campaignId && !getCampaign.isLoading)
     ? getCampaign.data
     : null;
@@ -27,6 +28,10 @@ const CharacterDetailsPage = () => {
     : null;
   const isLoading = getCampaign.isLoading || getNPC.isLoading;
   const isNotFound = !campaign || !character;
+
+  const handleBack = () => {
+    navigate(backUrl);
+  };
 
   const handleDelete = async () => {
     if (isNotFound || isLoading) {
@@ -39,7 +44,7 @@ const CharacterDetailsPage = () => {
         characterId,
       });
       getCampaign.refetch();
-      navigate('/');
+      navigate(backUrl);
     } catch (error) {
       console.error('Error deleting character:', error);
     }
@@ -47,7 +52,6 @@ const CharacterDetailsPage = () => {
 
   return (
     <DetailPage
-      backUrl={campaignId ? `/campaigns/${campaignId}` : '/dashboard'}
       breadcrumbs={{
         campaign: campaign,
         character: character,
@@ -55,6 +59,7 @@ const CharacterDetailsPage = () => {
       isLoading={isLoading}
       isNotFound={isNotFound}
       notFoundMessage="Персонаж не найден"
+      onBack={handleBack}
     >
       {character && (
         <CharacterDetails
