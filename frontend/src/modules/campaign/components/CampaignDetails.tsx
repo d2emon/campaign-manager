@@ -10,6 +10,7 @@ import Spinner from 'components/ui/Spinner';
 import TextBlock from 'components/ui/TextBlock';
 import CharacterList from 'modules/character/components/CharacterList';
 import LocationList from 'modules/location/components/LocationList';
+import NoteList from 'modules/note/components/NoteList';
 import QuestList from 'modules/quest/components/QuestList';
 import { Campaign } from '../types/campaign';
 
@@ -110,9 +111,9 @@ const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenera
         quests={campaign.quests || []}
       />
 
-      <div className="my-6 pt-6">
-        Заметки
-      </div>
+      <NoteList
+        notes={campaign.notes || []}
+      />
 
       <CharacterList
         characters={campaign.npcs}
