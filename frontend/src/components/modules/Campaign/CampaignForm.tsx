@@ -7,7 +7,7 @@ import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
 import Paper from 'components/ui/Paper';
 import { useDeleteNPCMutation } from 'modules/character/services/npcApi';
-import { useDeleteLocationMutation } from 'services/locationApi';
+import { useDeleteLocationMutation } from 'modules/location/services/locationApi';
 import { Campaign } from 'types/campaign';
 import { Character } from 'types/character';
 import { Location } from 'types/location';

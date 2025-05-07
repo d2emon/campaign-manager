@@ -7,7 +7,7 @@ import {
   useCreateLocationMutation,
   useGetLocationQuery,
   useUpdateLocationMutation,
-} from 'services/locationApi';
+} from 'modules/location/services/locationApi';
 import { selectUser } from 'store/auth';
 import { Location } from 'types/location';
 

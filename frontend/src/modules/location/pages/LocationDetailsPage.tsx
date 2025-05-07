@@ -5,7 +5,7 @@ import useCampaign from 'modules/campaign/hooks/useCampaign';
 import {
   useDeleteLocationMutation,
   useGetLocationQuery,
-} from 'services/locationApi';
+} from 'modules/location/services/locationApi';
 
 const LocationDetailsPage = () => {
   const navigate = useNavigate();
