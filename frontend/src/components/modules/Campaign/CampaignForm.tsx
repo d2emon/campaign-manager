@@ -97,7 +97,7 @@ const CampaignForm = ({
 
   const handleDeleteLocation = async (location: Location) => {
     if (window.confirm('Вы уверены, что хотите удалить эту локацию?')) {
-      await deleteLocation({ campaignId: initialData?.id || '', id: location.id });
+      await deleteLocation({ campaignId: initialData?.id || '', locationId: location.id });
       // Обновляем список локаций после удаления
       const updatedLocations = initialData?.locations?.filter(l => l.id !== location.id) || [];
       onSubmit({ ...initialData, locations: updatedLocations });
