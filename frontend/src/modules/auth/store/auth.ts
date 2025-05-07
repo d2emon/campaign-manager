@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
 import { RootState } from 'store';
-import { User } from 'types/user';
+import { User } from '../types/user';
 
 interface AuthState {
   accessToken: string | null;

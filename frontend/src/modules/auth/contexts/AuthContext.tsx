@@ -7,7 +7,6 @@ import {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { User } from 'types/user';
 import {
   login as loginApi,
   logout as logoutApi,
@@ -25,6 +24,7 @@ import {
   setCredentials,
   setIsLoadingAuth,
 } from '../store/auth';
+import { User } from '../types/user';
 
 interface AuthContextType {
   isLoadingAuth: boolean;
