@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Campaign } from 'types/campaign';
 import { Character } from 'types/character';
+import { Location } from 'types/location';
 
 interface BreadcrumbItem {
   path: string;
@@ -10,11 +11,19 @@ interface BreadcrumbItem {
 interface BreadcrumbsProps {
   campaign?: Campaign | null;
   character?: Character | null;
+  location?: Location | null;
+  isEdit?: boolean;
 }
 
-const Breadcrumbs = ({ campaign, character }: BreadcrumbsProps) => {
+const Breadcrumbs = ({ campaign, character, location, isEdit }: BreadcrumbsProps) => {
   const breadcrumbs: BreadcrumbItem[] = [];
 
+  console.log({
+    campaign,
+    character,
+    location,
+    isEdit,
+  });
   if (campaign) {
     breadcrumbs.push({
       path: `/campaigns/${campaign.id}`,
@@ -26,6 +35,19 @@ const Breadcrumbs = ({ campaign, character }: BreadcrumbsProps) => {
         label: character.name,
       });
     }
+    if (location) {
+      breadcrumbs.push({
+        path: `/campaigns/${campaign.id}/locations/${location.id}`,
+        label: location.name,
+      });
+    }
+  }
+
+  if (isEdit) {
+    breadcrumbs.push({
+      path: '',
+      label: 'Редактирование',
+    });
   }
 
   if (breadcrumbs.length === 0) {
