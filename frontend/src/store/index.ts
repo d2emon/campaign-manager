@@ -11,8 +11,11 @@ export const store = configureStore({
     [locationsApi.reducerPath]: locationsApi.reducer,
     [npcApi.reducerPath]: npcApi.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(campaignsApi.middleware, npcApi.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
+    campaignsApi.middleware,
+    npcApi.middleware,
+    locationsApi.middleware,
+  ),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,15 +1,16 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { Location } from 'types/location';
+import { baseQueryWithReauth } from './BaseQueryWithReauth';
 
 interface LocationCreateDTO {
-  name: string;
-  type: 'city' | 'dungeon' | 'forest' | 'tavern';
   campaignId: string;
+  data: Partial<Location>;
 }
 
 interface LocationUpdateDTO {
-  id: string;
-  data: Partial<LocationCreateDTO>;
+  locationId: string;
+  campaignId: string;
+  data: Partial<Location>;
 }
 
 const mapLocation = (location: any): Location => ({
@@ -25,33 +26,33 @@ const mapLocation = (location: any): Location => ({
 
 export const locationsApi = createApi({
   reducerPath: 'locationsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/' }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     createLocation: builder.mutation<Location, LocationCreateDTO>({
-      query: (data) => ({
-        url: `/api/v1/location/${data.campaignId}`,
+      query: ({ campaignId, data }) => ({
+        url: `/api/v1/location/${campaignId}`,
         method: 'POST',
         body: data,
       }),
       transformResponse: (response: any) => mapLocation(response),
     }),
-    getLocation: builder.query<Location, { campaignId: string; id: string }>({
-      query: ({ campaignId, id }) => ({
-        url: `/api/v1/location/${campaignId}/${id}`,
+    getLocation: builder.query<Location, { campaignId: string; locationId: string }>({
+      query: ({ campaignId, locationId }) => ({
+        url: `/api/v1/location/${campaignId}/${locationId}`,
       }),
       transformResponse: (response: any) => mapLocation(response),
     }),
     updateLocation: builder.mutation<Location, LocationUpdateDTO>({
-      query: ({ id, data }) => ({
-        url: `/api/v1/location/${data.campaignId}/${id}`,
+      query: ({ locationId, campaignId, data }) => ({
+        url: `/api/v1/location/${campaignId}/${locationId}`,
         method: 'PUT',
         body: data,
       }),
       transformResponse: (response: any) => mapLocation(response),
     }),
-    deleteLocation: builder.mutation<void, { campaignId: string; id: string }>({
-      query: ({ campaignId, id }) => ({
-        url: `/api/v1/location/${campaignId}/${id}`,
+    deleteLocation: builder.mutation<void, { campaignId: string; locationId: string }>({
+      query: ({ campaignId, locationId }) => ({
+        url: `/api/v1/location/${campaignId}/${locationId}`,
         method: 'DELETE',
       }),
     }),
