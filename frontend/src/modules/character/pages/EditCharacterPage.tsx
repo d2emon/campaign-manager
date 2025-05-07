@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
-import CharacterForm from 'components/modules/Character/CharacterForm';
 import useCampaign from 'modules/campaign/hooks/useCampaign';
 import { selectUser } from 'store/auth';
 import { Character } from 'types/character';
+import CharacterForm from '../components/CharacterForm';
 import {
   useCreateNPCMutation,
   useGetNPCQuery,
