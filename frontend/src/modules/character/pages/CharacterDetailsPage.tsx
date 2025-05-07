@@ -1,16 +1,20 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import CharacterDetails from 'components/modules/Character/CharacterDetails';
-import { useGetCampaignQuery } from 'services/campaignApi';
+import useCampaign from 'modules/campaign/hooks/useCampaign';
 import { useGetNPCQuery, useDeleteNPCMutation } from 'services/npcApi';
 
 const CharacterDetailsPage = () => {
   const navigate = useNavigate();
-  const { campaignId = '', characterId = '' } = useParams<{ campaignId: string; characterId: string }>();
+  const { characterId = '' } = useParams<{ characterId: string }>();
+  const {
+    campaign,
+    campaignId,
+    goToCampaign,
+    isLoadingCampaign,
+    reloadCampaign,
+  } = useCampaign();
 
-  const getCampaign = useGetCampaignQuery(campaignId, {
-    skip: !campaignId,
-  });
   const getNPC = useGetNPCQuery({
     campaignId,
     characterId,
@@ -19,19 +23,11 @@ const CharacterDetailsPage = () => {
   });
   const [deleteNPC] = useDeleteNPCMutation();
 
-  const backUrl = campaignId ? `/campaigns/${campaignId}` : '/dashboard';
-  const campaign = (campaignId && !getCampaign.isLoading)
-    ? getCampaign.data
-    : null;
   const character = (characterId && !getNPC.isLoading)
     ? getNPC.data
     : null;
-  const isLoading = getCampaign.isLoading || getNPC.isLoading;
+  const isLoading = isLoadingCampaign || getNPC.isLoading;
   const isNotFound = !campaign || !character;
-
-  const handleBack = () => {
-    navigate(backUrl);
-  };
 
   const handleDelete = async () => {
     if (isNotFound || isLoading) {
@@ -43,8 +39,8 @@ const CharacterDetailsPage = () => {
         campaignId,
         characterId,
       });
-      getCampaign.refetch();
-      navigate(backUrl);
+      reloadCampaign();
+      goToCampaign();
     } catch (error) {
       console.error('Error deleting character:', error);
     }
@@ -59,7 +55,7 @@ const CharacterDetailsPage = () => {
       isLoading={isLoading}
       isNotFound={isNotFound}
       notFoundMessage="Персонаж не найден"
-      onBack={handleBack}
+      onBack={goToCampaign}
     >
       {character && (
         <CharacterDetails

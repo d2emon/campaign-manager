@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import LocationForm from 'components/modules/Location/LocationForm';
-import { useGetCampaignQuery } from 'services/campaignApi';
+import useCampaign from 'modules/campaign/hooks/useCampaign';
 import {
   useCreateLocationMutation,
   useGetLocationQuery,
@@ -13,13 +13,16 @@ import { selectUser } from 'store/auth';
 import { Location } from 'types/location';
 
 const EditLocationPage = () => {
-  const navigate = useNavigate();
-  const { locationId = '', campaignId = '' } = useParams<{ locationId: string; campaignId: string }>();
+  const { locationId = '' } = useParams<{ locationId: string }>();
   const user = useSelector(selectUser);
+  const {
+    campaign,
+    campaignId,
+    goToCampaign,
+    isLoadingCampaign,
+    reloadCampaign,
+  } = useCampaign();
 
-  const getCampaign = useGetCampaignQuery(campaignId, {
-    skip: !campaignId,
-  })
   const getLocation = useGetLocationQuery({
     campaignId,
     locationId,
@@ -29,25 +32,17 @@ const EditLocationPage = () => {
   const [createLocation, { isLoading: isCreating }] = useCreateLocationMutation();
   const [updateLocation, { isLoading: isUpdating }] = useUpdateLocationMutation();
 
-  const backUrl = campaignId ? `/campaigns/${campaignId}` : '/dashboard';
-  const campaign = (campaignId && !getCampaign.isLoading)
-    ? getCampaign.data
-    : null;
   const location = (locationId && !getLocation.isLoading)
     ? getLocation.data
     : null;
   const isEditing = !!locationId;
-  const isLoading = getCampaign.isLoading || getLocation.isLoading || isCreating || isUpdating;
+  const isLoading = isLoadingCampaign || getLocation.isLoading || isCreating || isUpdating;
 
   useEffect(() => {
     if (campaignId && locationId) {
       getLocation.refetch();
     }
   }, [campaignId, locationId, getLocation.refetch]);
-
-  const handleBack = () => {
-    navigate(backUrl);
-  };
 
   const handleSubmit = async (data: Partial<Location>) => {
     if (!user || !campaignId) return;
@@ -58,10 +53,8 @@ const EditLocationPage = () => {
       } else {
         await createLocation({ campaignId, data });
       }
-      if (campaignId) {
-        getCampaign.refetch();
-      }
-      navigate(backUrl);
+      reloadCampaign();
+      goToCampaign();
     } catch (error) {
       console.error('Error saving location:', error);
     }
@@ -78,14 +71,14 @@ const EditLocationPage = () => {
       isNotFound={!location}
       notFoundMessage="Локация не найдена"
       title={locationId ? 'Редактирование локации' : 'Создание новой локации'}
-      onBack={handleBack}
+      onBack={goToCampaign}
     >
       {location && (
         <LocationForm
           initialData={location}
           isEditing={isEditing}
           onSubmit={handleSubmit}
-          onCancel={handleBack}
+          onCancel={goToCampaign}
         />
       )}
     </DetailPage>

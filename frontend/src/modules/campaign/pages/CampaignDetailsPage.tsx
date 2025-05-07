@@ -4,51 +4,48 @@ import CampaignDetails from 'components/modules/Campaign/CampaignDetails';
 import {
   useDeleteCampaignMutation,
   useGenerateNPCMutation,
-  useGetCampaignQuery,
 } from 'services/campaignApi';
+import useCampaign from '../hooks/useCampaign';
 
 const CampaignDetailsPage = () => {
   const navigate = useNavigate();
-  const { campaignId = '' } = useParams<{ campaignId: string }>();
+  const {
+    campaign,
+    campaignId,
+    isLoadingCampaign,
+    reloadCampaign,
+  } = useCampaign();
 
-  const getCampaign = useGetCampaignQuery(campaignId, {
-    skip: !campaignId,
-  });
   const [deleteCampaign] = useDeleteCampaignMutation();
   const [generateNPC] = useGenerateNPCMutation();
 
-  const backUrl = '/dashboard';
-  const campaign = (campaignId && !getCampaign.isLoading)
-    ? getCampaign.data
-    : null;
-  const isLoading = getCampaign.isLoading;
   const isNotFound = !campaign;
 
   const handleBack = () => {
-    navigate(backUrl);
+    navigate('/dashboard');
   };
   
   const handleDelete = async () => {
-    if (isNotFound || isLoading) {
+    if (isNotFound || isLoadingCampaign) {
       return;
     }
 
     try {
       await deleteCampaign(campaignId);
-      navigate(backUrl);
+      handleBack();
     } catch (error) {
       console.error('Error deleting campaign:', error);
     }
   };
 
   const handleGenerateNPC = async () => {
-    if (isNotFound || isLoading || !campaignId) {
+    if (isNotFound || isLoadingCampaign || !campaignId) {
       return;
     }
 
     try {
       await generateNPC(campaignId);
-      getCampaign.refetch();
+      reloadCampaign();
     } catch (error) {
       console.error('Error generating NPC:', error);
     }
@@ -59,7 +56,7 @@ const CampaignDetailsPage = () => {
       breadcrumbs={{
         campaign: campaign,
       }}
-      isLoading={isLoading}
+      isLoading={isLoadingCampaign}
       isNotFound={isNotFound}
       notFoundMessage="Кампания не найдена"
       title={campaign?.title}

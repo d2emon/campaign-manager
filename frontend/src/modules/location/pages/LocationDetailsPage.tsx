@@ -1,19 +1,23 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import LocationDetails from 'components/modules/Location/LocationDetails';
+import useCampaign from 'modules/campaign/hooks/useCampaign';
 import {
   useDeleteLocationMutation,
   useGetLocationQuery,
 } from 'services/locationApi';
-import { useGetCampaignQuery } from 'services/campaignApi';
 
 const LocationDetailsPage = () => {
   const navigate = useNavigate();
-  const { campaignId = '', locationId = '' } = useParams<{ campaignId: string; locationId: string }>();
+  const { locationId = '' } = useParams<{ locationId: string }>();
+  const {
+    campaign,
+    campaignId,
+    goToCampaign,
+    isLoadingCampaign,
+    reloadCampaign,
+  } = useCampaign();
   
-  const getCampaign = useGetCampaignQuery(campaignId, {
-    skip: !campaignId,
-  });
   const getLocation = useGetLocationQuery({
     campaignId,
     locationId,
@@ -22,19 +26,11 @@ const LocationDetailsPage = () => {
   });
   const [deleteLocation] = useDeleteLocationMutation();
 
-  const backUrl = campaignId ? `/campaigns/${campaignId}` : '/dashboard';
-  const campaign = (campaignId && !getCampaign.isLoading)
-    ? getCampaign.data
-    : null;
   const location = (locationId && !getLocation.isLoading)
     ? getLocation.data
     : null;
   const isNotFound = !campaign || !location;
-  const isLoading = getCampaign.isLoading || getLocation.isLoading;
-
-  const handleBack = () => {
-    navigate(backUrl);
-  };
+  const isLoading = isLoadingCampaign || getLocation.isLoading;
 
   const handleDelete = async () => {
     if (isNotFound || isLoading) {
@@ -46,8 +42,8 @@ const LocationDetailsPage = () => {
         campaignId,
         locationId,
       });
-      getCampaign.refetch();
-      navigate(backUrl);
+      reloadCampaign();
+      goToCampaign();
     } catch (error) {
       console.error('Error deleting location:', error);
     }
@@ -62,7 +58,7 @@ const LocationDetailsPage = () => {
       isLoading={isLoading}
       isNotFound={isNotFound}
       notFoundMessage="Локация не найдена"
-      onBack={handleBack}
+      onBack={goToCampaign}
     >
       { location && (
         <LocationDetails

@@ -1,12 +1,11 @@
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import CampaignForm from 'components/modules/Campaign/CampaignForm';
+import useCampaign from 'modules/campaign/hooks/useCampaign';
 import {
   CampaignCreateDTO,
   useCreateCampaignMutation,
-  useGetCampaignQuery,
   useUpdateCampaignMutation,
 } from 'services/campaignApi';
 import { selectUser } from 'store/auth';
@@ -14,30 +13,22 @@ import { Campaign } from 'types/campaign';
 
 const EditCampaignPage = () => {
   const navigate = useNavigate();
-  const { campaignId } = useParams<{ campaignId: string }>();
   const user = useSelector(selectUser);
+  const {
+    campaign,
+    campaignId,
+    isLoadingCampaign,
+    reloadCampaign,
+  } = useCampaign();
 
-  const getCampaign = useGetCampaignQuery(campaignId || '', {
-    skip: !campaignId
-  });
   const [createCampaign, { isLoading: isCreating }] = useCreateCampaignMutation();
   const [updateCampaign, { isLoading: isUpdating }] = useUpdateCampaignMutation();
 
-  const backUrl = '/dashboard';
-  const campaign = (campaignId && !getCampaign.isLoading)
-    ? getCampaign.data
-    : null;
   const isEditing = !!campaignId;
-  const isLoading = getCampaign.isLoading || isCreating || isUpdating;
-
-  useEffect(() => {
-    if (campaignId) {
-      getCampaign.refetch();
-    }
-  }, [campaignId, getCampaign.refetch]);
+  const isLoading = isLoadingCampaign || isCreating || isUpdating;
 
   const handleBack = () => {
-    navigate(backUrl);
+    navigate('/dashboard');
   };
 
   const handleSubmit = async (data: Partial<Campaign>) => {
@@ -49,7 +40,8 @@ const EditCampaignPage = () => {
       } else {
         await createCampaign(data as CampaignCreateDTO);
       }
-      navigate(backUrl);
+      reloadCampaign();
+      handleBack();
     } catch (error) {
       console.error('Error saving campaign:', error);
     }
