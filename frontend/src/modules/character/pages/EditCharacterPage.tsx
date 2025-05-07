@@ -1,8 +1,6 @@
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import useCampaign from 'modules/campaign/hooks/useCampaign';
-import { selectUser } from 'store/auth';
 import { Character } from 'types/character';
 import CharacterForm from '../components/CharacterForm';
 import {
@@ -13,7 +11,6 @@ import {
 
 const EditCharacterPage = () => {
   const { characterId = '' } = useParams<{ characterId: string }>();
-  const user = useSelector(selectUser);
   const {
     campaign,
     campaignId,
@@ -38,8 +35,6 @@ const EditCharacterPage = () => {
   const isLoading = isLoadingCampaign || getNPC.isLoading || isCreating || isUpdating;
 
   const handleSubmit = async (data: Partial<Character>) => {
-    if (!user) return;
-
     try {
       if (isEditing) {
         await updateNPC({ campaignId, id: characterId, data });

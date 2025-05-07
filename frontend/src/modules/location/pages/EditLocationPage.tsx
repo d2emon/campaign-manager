@@ -1,4 +1,3 @@
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import useCampaign from 'modules/campaign/hooks/useCampaign';
@@ -7,13 +6,11 @@ import {
   useGetLocationQuery,
   useUpdateLocationMutation,
 } from 'modules/location/services/locationApi';
-import { selectUser } from 'store/auth';
 import { Location } from 'types/location';
 import LocationForm from '../components/LocationForm';
 
 const EditLocationPage = () => {
   const { locationId = '' } = useParams<{ locationId: string }>();
-  const user = useSelector(selectUser);
   const {
     campaign,
     campaignId,
@@ -38,7 +35,7 @@ const EditLocationPage = () => {
   const isLoading = isLoadingCampaign || getLocation.isLoading || isCreating || isUpdating;
 
   const handleSubmit = async (data: Partial<Location>) => {
-    if (!user || !campaignId) return;
+    if (!campaignId) return;
 
     try {
       if (isEditing) {

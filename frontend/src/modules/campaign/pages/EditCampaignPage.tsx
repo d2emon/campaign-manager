@@ -1,7 +1,5 @@
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
-import { selectUser } from 'store/auth';
 import { Campaign } from 'types/campaign';
 import CampaignForm from '../components/CampaignForm';
 import useCampaign from '../hooks/useCampaign';
@@ -13,7 +11,6 @@ import {
 
 const EditCampaignPage = () => {
   const navigate = useNavigate();
-  const user = useSelector(selectUser);
   const {
     campaign,
     campaignId,
@@ -32,8 +29,6 @@ const EditCampaignPage = () => {
   };
 
   const handleSubmit = async (data: Partial<Campaign>) => {
-    if (!user) return;
-
     try {
       if (isEditing) {
         await updateCampaign({ campaignId, data });
