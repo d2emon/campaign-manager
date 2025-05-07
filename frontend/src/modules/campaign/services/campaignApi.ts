@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseQueryWithReauth } from 'services/BaseQueryWithReauth';
+import { mapNPC } from 'services/npcApi';
 import { Campaign } from 'types/campaign';
-import { baseQueryWithReauth } from './BaseQueryWithReauth';
-import { mapNPC } from './npcApi';
 
 export type CampaignCreateDTO = Omit<Campaign, 'id' | 'createdAt' | 'updatedAt'>;
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetCampaignQuery } from 'services/campaignApi';
+import { useGetCampaignQuery } from '../services/campaignApi';
 
 const useCampaign = () => {
   const navigate = useNavigate();

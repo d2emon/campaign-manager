@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useGetCampaignsQuery } from 'services/campaignApi';
+import { useGetCampaignsQuery } from 'modules/campaign/services/campaignApi';
 import { selectIsLoadingAuth, selectUser } from 'store/auth';
 import Paper from 'components/ui/Paper';
 

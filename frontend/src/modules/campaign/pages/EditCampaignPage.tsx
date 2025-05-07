@@ -2,14 +2,14 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import CampaignForm from 'components/modules/Campaign/CampaignForm';
-import useCampaign from 'modules/campaign/hooks/useCampaign';
+import { selectUser } from 'store/auth';
+import { Campaign } from 'types/campaign';
+import useCampaign from '../hooks/useCampaign';
 import {
   CampaignCreateDTO,
   useCreateCampaignMutation,
   useUpdateCampaignMutation,
-} from 'services/campaignApi';
-import { selectUser } from 'store/auth';
-import { Campaign } from 'types/campaign';
+} from '../services/campaignApi';
 
 const EditCampaignPage = () => {
   const navigate = useNavigate();
