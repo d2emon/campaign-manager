@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import Header from 'components/layout/Header';
 import { AuthProvider } from 'contexts/AuthContext';
 import LoginPage from 'modules/auth/pages/LoginPage';
+import RegisterPage from 'modules/auth/pages/RegisterPage';
 import CampaignDetailsPage from 'modules/campaign/pages/CampaignDetailsPage';
 import CampaignFormPage from 'modules/campaign/pages/EditCampaignPage';
 import JoinCampaignPage from 'modules/campaign/pages/JoinCampaignPage';
@@ -12,7 +13,6 @@ import LocationDetailsPage from 'modules/location/pages/LocationDetailsPage';
 import EditLocationPage from 'modules/location/pages/EditLocationPage';
 import DashboardPage from 'pages/DashboardPage';
 import PrivateRoute from 'pages/PrivateRoute';
-import RegisterPage from 'pages/RegisterPage';
 import { store } from 'store';
 
 const App = () => {

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import RegisterForm from 'modules/auth/components/RegisterForm';
 import Paper from 'components/ui/Paper';
 import { useAuth } from 'contexts/AuthContext';
+import RegisterForm from '../components/RegisterForm';
 
 const RegisterPage = () => {
   const { register } = useAuth();
