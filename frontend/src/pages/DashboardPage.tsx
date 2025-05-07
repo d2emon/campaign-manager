@@ -1,27 +1,10 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from 'modules/auth/contexts/AuthContext';
 import { useGetCampaignsQuery } from 'modules/campaign/services/campaignApi';
 import Paper from 'components/ui/Paper';
 
 const DashboardPage = () => {
-  const { isLoadingAuth, user } = useAuth();
   const navigate = useNavigate();
   const { data: campaigns, isLoading: isCampaignsLoading } = useGetCampaignsQuery();
-
-  useEffect(() => {
-    if (!isLoadingAuth && !user) {
-      navigate('/login');
-    }
-  }, [isLoadingAuth, user, navigate]);
-
-  if (isLoadingAuth) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
 
   return (
     <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
