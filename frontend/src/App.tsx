@@ -4,6 +4,7 @@ import Header from 'components/layout/Header';
 import { AuthProvider } from 'contexts/AuthContext';
 import CampaignDetailsPage from 'modules/campaign/pages/CampaignDetailsPage';
 import CharacterDetailsPage from 'modules/character/pages/CharacterDetailsPage';
+import LocationDetailsPage from 'modules/location/pages/LocationDetailsPage';
 import DashboardPage from 'pages/DashboardPage';
 import CampaignFormPage from 'pages/EditCampaignPage';
 import EditCharacterPage from 'pages/EditCharacterPage';
@@ -13,7 +14,6 @@ import LoginPage from 'pages/LoginPage';
 import PrivateRoute from 'pages/PrivateRoute';
 import RegisterPage from 'pages/RegisterPage';
 import { store } from 'store';
-import LocationDetailsPage from './pages/LocationDetailsPage';
 
 const App = () => {
   return (
