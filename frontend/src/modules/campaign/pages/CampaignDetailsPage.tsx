@@ -11,18 +11,20 @@ const CampaignDetailsPage = () => {
   const navigate = useNavigate();
   const { campaignId = '' } = useParams<{ campaignId: string }>();
 
-  const getCampaignQuery = useGetCampaignQuery(campaignId, {
+  const getCampaign = useGetCampaignQuery(campaignId, {
     skip: !campaignId,
   });
   const [deleteCampaign] = useDeleteCampaignMutation();
   const [generateNPC] = useGenerateNPCMutation();
 
-  const campaign = (campaignId && !getCampaignQuery.isLoading)
-    ? getCampaignQuery.data
+  const campaign = (campaignId && !getCampaign.isLoading)
+    ? getCampaign.data
     : null;
+  const isLoading = getCampaign.isLoading;
+  const isNotFound = !campaign;
 
   const handleDelete = async () => {
-    if (!campaignId) {
+    if (isNotFound || isLoading) {
       return;
     }
 
@@ -35,13 +37,13 @@ const CampaignDetailsPage = () => {
   };
 
   const handleGenerateNPC = async () => {
-    if (!campaignId) {
+    if (isNotFound || isLoading || !campaignId) {
       return;
     }
 
     try {
       await generateNPC(campaignId);
-      getCampaignQuery.refetch();
+      getCampaign.refetch();
     } catch (error) {
       console.error('Error generating NPC:', error);
     }
@@ -53,8 +55,8 @@ const CampaignDetailsPage = () => {
       breadcrumbs={{
         campaign: campaign,
       }}
-      isLoading={getCampaignQuery.isLoading}
-      isNotFound={!campaign}
+      isLoading={isLoading}
+      isNotFound={isNotFound}
       notFoundMessage="Кампания не найдена"
     >
       { campaign && (
