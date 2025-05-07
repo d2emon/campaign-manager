@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
-import { Location } from 'types/location';
+import { Location } from '../types/location';
 
 interface LocationFormProps {
   initialData?: Location | null;

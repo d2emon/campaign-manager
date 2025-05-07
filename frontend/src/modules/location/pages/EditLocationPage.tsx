@@ -6,8 +6,8 @@ import {
   useGetLocationQuery,
   useUpdateLocationMutation,
 } from 'modules/location/services/locationApi';
-import { Location } from 'types/location';
 import LocationForm from '../components/LocationForm';
+import { Location } from '../types/location';
 
 const EditLocationPage = () => {
   const { locationId = '' } = useParams<{ locationId: string }>();

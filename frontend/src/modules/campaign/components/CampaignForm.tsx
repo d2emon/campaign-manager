@@ -11,7 +11,7 @@ import { useDeleteNPCMutation } from 'modules/character/services/npcApi';
 import LocationList from 'modules/location/components/LocationList';
 import { useDeleteLocationMutation } from 'modules/location/services/locationApi';
 import { Character } from '@/modules/character/types/character';
-import { Location } from 'types/location';
+import { Location } from '@/modules/location/types/location';
 import { Campaign } from '../types/campaign';
 
 interface CampaignFormProps {

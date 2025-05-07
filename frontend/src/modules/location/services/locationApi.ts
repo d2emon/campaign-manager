@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import baseQueryWithReauth from 'modules/auth/services/baseQueryWithReauth';
-import { Location } from 'types/location';
+import { Location } from '../types/location';
 
 interface LocationCreateDTO {
   campaignId: string;

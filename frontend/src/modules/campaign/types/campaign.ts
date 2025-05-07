@@ -1,5 +1,5 @@
 import { Character } from '@/modules/character/types/character';
-import { Location } from 'types/location';
+import { Location } from '@/modules/location/types/location';
 
 export interface Campaign {
   id: string;

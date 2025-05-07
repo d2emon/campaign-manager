@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Button from 'components/ui/Button';
 import Paper from 'components/ui/Paper';
-import { Location } from 'types/location';
+import { Location } from '../types/location';
 
 interface LocationListProps {
   locations?: Location[];
