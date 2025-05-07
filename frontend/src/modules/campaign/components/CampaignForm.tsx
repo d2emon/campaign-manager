@@ -6,12 +6,12 @@ import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
 import Paper from 'components/ui/Paper';
+import CharacterList from 'modules/character/components/CharacterList';
 import { useDeleteNPCMutation } from 'modules/character/services/npcApi';
 import { useDeleteLocationMutation } from 'modules/location/services/locationApi';
 import { Campaign } from 'types/campaign';
 import { Character } from 'types/character';
 import { Location } from 'types/location';
-import CharacterList from '../../../components/modules/Campaign/CharacterList';
 import LocationList from '../../../components/modules/Location/LocationList';
 
 interface CampaignFormProps {
