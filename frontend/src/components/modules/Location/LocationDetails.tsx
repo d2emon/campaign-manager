@@ -3,7 +3,7 @@ import { Location } from 'types/location';
 
 interface LocationDetailsProps {
   location: Location;
-  isLoading: boolean;
+  isLoading?: boolean;
   onDelete: () => void;
   onEdit: () => void;
 }

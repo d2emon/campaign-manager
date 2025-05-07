@@ -8,7 +8,7 @@ import { Character } from 'types/character';
 
 interface CharacterDetailsProps {
   character: Character;
-  isLoading: boolean;
+  isLoading?: boolean;
   onDelete: () => void;
   onEdit: () => void;
 }
