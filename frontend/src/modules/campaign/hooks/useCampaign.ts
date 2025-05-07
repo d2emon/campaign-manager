@@ -25,7 +25,6 @@ const useCampaign = () => {
   };
 
   const loadCampaign = useCallback(async () => {
-    console.log('loading campaign');
     await refetch();
     setHasLoaded(true);
   }, [refetch]);
@@ -35,7 +34,6 @@ const useCampaign = () => {
   }, []);
 
   useEffect(() => {
-    console.log('check loading campaign', campaignId, hasLoaded);
     if (campaignId && !hasLoaded) {
       loadCampaign();
     }
