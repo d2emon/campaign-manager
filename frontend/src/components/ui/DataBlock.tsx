@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 interface DataBlockProps {
-  children: ReactNode;
+  children?: ReactNode;
   title?: string;
   className?: string;
 }
@@ -13,7 +13,9 @@ const DataBlock = ({ children, title, className = '' }: DataBlockProps) => {
         <h2 className="text-lg font-medium text-gray-900 mb-4">{title}</h2>
       )}
       <div className="text-gray-700">
-        {children}
+        <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {children}
+        </dl>
       </div>
     </div>
   );
