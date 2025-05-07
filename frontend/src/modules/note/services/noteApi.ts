@@ -1,58 +1,58 @@
+import { createApi } from '@reduxjs/toolkit/query/react';
+import baseQueryWithReauth from 'modules/auth/services/baseQueryWithReauth';
 import { Note } from '../types/note';
 
-const BASE_URL = '/api/notes';
+interface NoteCreateDTO {
+  campaignId: string;
+  data: Partial<Note>;
+}
 
-export const noteApi = {
-  async getNotes(campaignId: string): Promise<Note[]> {
-    const response = await fetch(`${BASE_URL}?campaign=${campaignId}`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch notes');
-    }
-    return response.json();
-  },
+interface NoteUpdateDTO {
+  noteId: string;
+  campaignId: string;
+  data: Partial<Note>;
+}
 
-  async getNote(noteId: string): Promise<Note> {
-    const response = await fetch(`${BASE_URL}/${noteId}`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch note');
-    }
-    return response.json();
-  },
+const mapNote = (note: any): Note => ({
+  id: note?.id,
+  title: note?.title,
+  content: note?.content,
+  campaign: note?.campaign,
+  createdAt: note?.createdAt,
+  updatedAt: note?.updatedAt,
+});
 
-  async createNote(note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>): Promise<Note> {
-    const response = await fetch(BASE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(note),
-    });
-    if (!response.ok) {
-      throw new Error('Failed to create note');
-    }
-    return response.json();
-  },
-
-  async updateNote(noteId: string, note: Partial<Note>): Promise<Note> {
-    const response = await fetch(`${BASE_URL}/${noteId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(note),
-    });
-    if (!response.ok) {
-      throw new Error('Failed to update note');
-    }
-    return response.json();
-  },
-
-  async deleteNote(noteId: string): Promise<void> {
-    const response = await fetch(`${BASE_URL}/${noteId}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) {
-      throw new Error('Failed to delete note');
-    }
-  }
-};
+export const notesApi = createApi({
+  reducerPath: 'notesApi',
+  baseQuery: baseQueryWithReauth,
+  endpoints: (builder) => ({
+    createNote: builder.mutation<Note, NoteCreateDTO>({
+      query: ({ campaignId, data }) => ({
+        url: `/api/v1/note/${campaignId}`,
+        method: 'POST',
+        body: data,
+      }),
+      transformResponse: (response: any) => mapNote(response),
+    }),
+    getNote: builder.query<Note, { campaignId: string; noteId: string }>({
+      query: ({ campaignId, noteId }) => ({
+        url: `/api/v1/note/${campaignId}/${noteId}`,
+      }),
+      transformResponse: (response: any) => mapNote(response),
+    }),
+    updateNote: builder.mutation<Note, NoteUpdateDTO>({
+      query: ({ noteId, campaignId, data }) => ({
+        url: `/api/v1/note/${campaignId}/${noteId}`,
+        method: 'PUT',
+        body: data,
+      }),
+      transformResponse: (response: any) => mapNote(response),
+    }),
+    deleteNote: builder.mutation<void, { campaignId: string; noteId: string }>({
+      query: ({ campaignId, noteId }) => ({
+        url: `/api/v1/note/${campaignId}/${noteId}`,
+        method: 'DELETE',
+      }),
+    }),
+  }),
+});
