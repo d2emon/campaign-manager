@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
-import LocationDetails from 'components/modules/Location/LocationDetails';
 import useCampaign from 'modules/campaign/hooks/useCampaign';
 import {
   useDeleteLocationMutation,
   useGetLocationQuery,
 } from 'modules/location/services/locationApi';
+import LocationDetails from '../components/LocationDetails';
 
 const LocationDetailsPage = () => {
   const navigate = useNavigate();
