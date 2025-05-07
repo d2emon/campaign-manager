@@ -10,8 +10,10 @@ import CharacterList from 'modules/character/components/CharacterList';
 import { useDeleteNPCMutation } from 'modules/character/services/npcApi';
 import LocationList from 'modules/location/components/LocationList';
 import { useDeleteLocationMutation } from 'modules/location/services/locationApi';
-import { Character } from '@/modules/character/types/character';
-import { Location } from '@/modules/location/types/location';
+import { Character } from 'modules/character/types/character';
+import { Location } from 'modules/location/types/location';
+import NoteList from 'modules/note/components/NoteList';
+import QuestList from 'modules/quest/components/QuestList';
 import { Campaign } from '../types/campaign';
 
 interface CampaignFormProps {
@@ -180,15 +182,6 @@ const CampaignForm = ({
 
       {isEditing && (
         <div className="my-6 pt-6">
-          <CharacterList
-            characters={initialData?.npcs || []}
-            withAddButton
-            onAdd={() => {
-              navigate(`/campaigns/${initialData?.id}/characters/new`);
-            }}
-            onEdit={handleEditCharacter}
-            onDelete={handleDeleteCharacter}
-          />
           <LocationList
             locations={initialData?.locations || []}
             campaignId={initialData?.id || ''}
@@ -198,6 +191,21 @@ const CampaignForm = ({
             }}
             onEdit={handleEditLocation}
             onDelete={handleDeleteLocation}
+          />
+          <QuestList
+            quests={initialData?.quests || []}
+          />
+          <NoteList
+            notes={initialData?.notes || []}
+          />
+          <CharacterList
+            characters={initialData?.npcs || []}
+            withAddButton
+            onAdd={() => {
+              navigate(`/campaigns/${initialData?.id}/characters/new`);
+            }}
+            onEdit={handleEditCharacter}
+            onDelete={handleDeleteCharacter}
           />
         </div>
       )}
