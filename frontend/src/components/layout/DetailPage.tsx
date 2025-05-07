@@ -57,9 +57,9 @@ const DetailPage = ({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {title && <h1 className="text-2xl font-bold text-gray-900 mb-6">{title}</h1>}
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {breadcrumbs && <Breadcrumbs {...breadcrumbs} />}
+        {title && <h1 className="text-2xl font-bold text-gray-900 mb-6">{title}</h1>}
         {children}
       </div>
     </div>
