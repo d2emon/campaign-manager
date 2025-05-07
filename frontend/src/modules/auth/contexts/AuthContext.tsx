@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { User } from 'types/user';
 import {
   login as loginApi,
   logout as logoutApi,
@@ -19,12 +20,15 @@ import {
   selectHasAccessToken,
   selectIsLoadingAuth,
   selectRefreshToken,
+  selectUser,
   setAuthError,
   setCredentials,
   setIsLoadingAuth,
 } from '../store/auth';
 
 interface AuthContextType {
+  isLoadingAuth: boolean;
+  user: User | null;
   login: (username: string, password: string) => Promise<boolean>;
   register: (user: RegisterDTO) => Promise<boolean>;
   logout: () => Promise<void>;
@@ -46,10 +50,11 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const hasAccessToken = useSelector(selectHasAccessToken);
   const isLoadingAuth = useSelector(selectIsLoadingAuth);
   const refreshToken = useSelector(selectRefreshToken);
-  const navigate = useNavigate();
+  const user = useSelector(selectUser);
 
   const handleTokenRefresh = useCallback(async () => {
     if (!hasAccessToken) {
@@ -152,9 +157,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <AuthContext.Provider
       value={{
+        isLoadingAuth,
         login,
-        register,
         logout,
+        register,
+        user,
       }}
     >
       {children}

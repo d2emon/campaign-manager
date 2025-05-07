@@ -1,23 +1,19 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { selectIsLoadingAuth, selectUser } from 'modules/auth/store/auth';
+import { useAuth } from 'modules/auth/contexts/AuthContext';
 import { useGetCampaignsQuery } from 'modules/campaign/services/campaignApi';
 import Paper from 'components/ui/Paper';
 
 const DashboardPage = () => {
-  const isLoadingAuth = useSelector(selectIsLoadingAuth);
+  const { isLoadingAuth, user } = useAuth();
   const navigate = useNavigate();
-  const user = useSelector(selectUser);
   const { data: campaigns, isLoading: isCampaignsLoading } = useGetCampaignsQuery();
 
   useEffect(() => {
-    if (!isLoadingAuth) {
-      if (!user) {
-        navigate('/login');
-      }
+    if (!isLoadingAuth && !user) {
+      navigate('/login');
     }
-  }, [isLoadingAuth, navigate, user]);
+  }, [isLoadingAuth, user, navigate]);
 
   if (isLoadingAuth) {
     return (

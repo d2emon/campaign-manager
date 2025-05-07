@@ -1,10 +1,8 @@
-import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
-import { selectIsLoadingAuth, selectUser } from 'modules/auth/store/auth';
+import { useAuth } from 'modules/auth/contexts/AuthContext';
 
 const PrivateRoute = () => {
-  const isLoadingAuth = useSelector(selectIsLoadingAuth);
-  const user = useSelector(selectUser);
+  const { isLoadingAuth, user } = useAuth();
 
   if (isLoadingAuth) {
     return (
