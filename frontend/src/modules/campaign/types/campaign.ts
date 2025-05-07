@@ -1,5 +1,6 @@
-import { Character } from '@/modules/character/types/character';
-import { Location } from '@/modules/location/types/location';
+import { Character } from 'modules/character/types/character';
+import { Location } from 'modules/location/types/location';
+import { Quest } from 'modules/quest/types/quest';
 
 export interface Campaign {
   id: string;
@@ -16,7 +17,7 @@ export interface Campaign {
   npcs?: Character[];
   players?: any[];
   locations?: Location[];
-  quests?: any[];
+  quests?: Quest[];
   notes?: any[];
   createdAt?: string;
   updatedAt?: string;
