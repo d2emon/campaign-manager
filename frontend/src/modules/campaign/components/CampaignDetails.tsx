@@ -1,10 +1,10 @@
-import { Copy } from 'react-feather';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Avatar from 'components/ui/Avatar';
 import Badge from 'components/ui/Badge';
 import CampaignItem from 'components/ui/CampaignItem';
 import DataBlock from 'components/ui/DataBlock';
 import DataItem from 'components/ui/DataItem';
+import DataItemLink from 'components/ui/DataItemLink';
 import DateItem from 'components/ui/DateItem';
 import Spinner from 'components/ui/Spinner';
 import TextBlock from 'components/ui/TextBlock';
@@ -35,10 +35,6 @@ const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenera
 
   const inviteUrl = `${window.location.origin}/campaigns/${campaign.id}/join?inviteCode=${campaign.inviteCode}`;
 
-  const copyInviteUrl = () => {
-    navigator.clipboard.writeText(inviteUrl);
-  };
-
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <CampaignItem
@@ -68,29 +64,15 @@ const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenera
         </TextBlock>
 
         <DataBlock title="Информация о кампании">
-          <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <DateItem label="Создана:" date={campaign.createdAt} />
-            <DateItem label="Последняя активность:" date={campaign.lastActive} />
-            <DataItem label="Мастер:">{campaign.gameMaster}</DataItem>
-            <DataItem label="Игроков">{campaign.players?.length}</DataItem>
-            <DataItem label="Ссылка для приглашения">
-              <div className="flex items-center gap-2">
-                <Link
-                  to={`/campaigns/${campaign.id}/join?inviteCode=${campaign.inviteCode}`}
-                  className="text-blue-500 hover:text-blue-600"
-                >
-                  {inviteUrl}
-                </Link>
-                <button
-                  onClick={copyInviteUrl}
-                  className="p-1 text-gray-500 hover:text-gray-700"
-                  title="Скопировать ссылку"
-                >
-                  <Copy size={18} />
-                </button>
-              </div>
-            </DataItem>
-          </dl>
+          <DateItem label="Создана:" date={campaign.createdAt} />
+          <DateItem label="Последняя активность:" date={campaign.lastActive} />
+          <DataItem label="Мастер:">{campaign.gameMaster}</DataItem>
+          <DataItem label="Игроков">{campaign.players?.length}</DataItem>
+          <DataItemLink
+            label="Ссылка для приглашения"
+            url={inviteUrl}
+            withCopyButton
+          />
         </DataBlock>
       </CampaignItem>
 
