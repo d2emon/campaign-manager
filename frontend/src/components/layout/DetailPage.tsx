@@ -1,6 +1,8 @@
 import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Campaign } from 'types/campaign';
+import { Character } from 'types/character';
+import { Location } from 'types/location';
 import Breadcrumbs from './Breadcrumbs';
 import Spinner from '../ui/Spinner';
 
@@ -8,6 +10,8 @@ interface DetailPageProps {
   backUrl?: string;
   breadcrumbs?: {
     campaign?: Campaign | null;
+    character?: Character | null;
+    location?: Location | null;
   };
   isNotFound?: boolean;
   isLoading?: boolean;
