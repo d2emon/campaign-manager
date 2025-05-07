@@ -41,9 +41,9 @@ export const npcApi = createApi({
         body: data,
       }),
     }),
-    getNPC: builder.query<Character | null, { campaignId: string, id: string }>({
-      query: ({ campaignId, id }) => ({
-        url: `/api/v1/npc/${campaignId}/${id}`,
+    getNPC: builder.query<Character | null, { campaignId: string, characterId: string }>({
+      query: ({ campaignId, characterId }) => ({
+        url: `/api/v1/npc/${campaignId}/${characterId}`,
       }),
       transformResponse: (response: any) => response ? mapNPC(response) : null,
     }),

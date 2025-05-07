@@ -25,7 +25,7 @@ const EditCharacterPage = () => {
   });
   const { data: npc, isLoading: isLoadingNPC, refetch: refetchNPC } = useGetNPCQuery({
     campaignId: id || '',
-    id: characterId || '',
+    characterId: characterId || '',
   }, {
     skip: !id || !characterId
   });
