@@ -8,6 +8,13 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  login as loginApi,
+  logout as logoutApi,
+  refreshToken as refreshTokenApi,
+  register as registerApi,
+  RegisterDTO,
+} from '../services/auth';
+import {
   removeCredentials,
   selectHasAccessToken,
   selectIsLoadingAuth,
@@ -15,14 +22,7 @@ import {
   setAuthError,
   setCredentials,
   setIsLoadingAuth,
-} from 'store/auth';
-import {
-  login as loginApi,
-  logout as logoutApi,
-  refreshToken as refreshTokenApi,
-  register as registerApi,
-  RegisterDTO,
-} from '../services/auth';
+} from '../store/auth';
 
 interface AuthContextType {
   login: (username: string, password: string) => Promise<boolean>;

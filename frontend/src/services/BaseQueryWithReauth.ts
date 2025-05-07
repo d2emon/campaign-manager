@@ -1,8 +1,8 @@
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { refreshToken } from 'modules/auth/services/auth';
+import { removeCredentials, setCredentials } from 'modules/auth/store/auth';
 import { RootState } from 'store';
-import { removeCredentials, setCredentials } from 'store/auth';
 import { API_URL } from './api';
 
 interface RefreshResultData {

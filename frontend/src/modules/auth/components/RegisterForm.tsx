@@ -6,7 +6,7 @@ import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
 import PasswordField from 'components/ui/PasswordField';
 import PasswordStrength from 'components/ui/PasswordStrength';
-import { selectAuthError } from 'store/auth';
+import { selectAuthError } from '../store/auth';
 
 interface RegisterFormProps {
   isLoading: boolean;
