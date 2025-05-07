@@ -5,9 +5,9 @@ import { AuthProvider } from 'contexts/AuthContext';
 import CampaignDetailsPage from 'modules/campaign/pages/CampaignDetailsPage';
 import CampaignFormPage from 'modules/campaign/pages/EditCampaignPage';
 import CharacterDetailsPage from 'modules/character/pages/CharacterDetailsPage';
+import EditCharacterPage from 'modules/character/pages/EditCharacterPage';
 import LocationDetailsPage from 'modules/location/pages/LocationDetailsPage';
 import DashboardPage from 'pages/DashboardPage';
-import EditCharacterPage from 'pages/EditCharacterPage';
 import JoinCampaignPage from 'pages/JoinCampaignPage';
 import EditLocationPage from 'pages/EditLocationPage';
 import LoginPage from 'pages/LoginPage';
@@ -31,8 +31,8 @@ const App = () => {
                 <Route path="/campaigns/new" element={<CampaignFormPage />} />
                 <Route path="/campaigns/:campaignId/edit" element={<CampaignFormPage />} />
                 <Route path="/campaigns/:campaignId" element={<CampaignDetailsPage />} />
-                <Route path="/campaigns/:id/characters/new" element={<EditCharacterPage />} />
-                <Route path="/campaigns/:id/characters/:characterId/edit" element={<EditCharacterPage />} />
+                <Route path="/campaigns/:campaignId/characters/new" element={<EditCharacterPage />} />
+                <Route path="/campaigns/:campaignId/characters/:characterId/edit" element={<EditCharacterPage />} />
                 <Route path="/campaigns/:campaignId/characters/:characterId" element={<CharacterDetailsPage />} />
                 <Route path="/campaigns/:campaignId/locations/new" element={<EditLocationPage />} />
                 <Route path="/campaigns/:campaignId/locations/:locationId/edit" element={<EditLocationPage />} />
