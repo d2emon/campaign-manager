@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import LoginForm from 'modules/auth/components/LoginForm';
 import Paper from 'components/ui/Paper';
 import { useAuth } from 'contexts/AuthContext';
+import LoginForm from '../components/LoginForm';
 
 const LoginPage = () => {
   const { login } = useAuth();
