@@ -3,7 +3,7 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { refreshToken } from 'modules/auth/services/auth';
 import { removeCredentials, setCredentials } from 'modules/auth/store/auth';
 import { RootState } from 'store';
-import { API_URL } from './api';
+import { API_URL } from '../../../services/api';
 
 interface RefreshResultData {
   accessToken: string;
@@ -21,7 +21,7 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-export const baseQueryWithReauth: BaseQueryFn<
+const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
@@ -49,3 +49,5 @@ export const baseQueryWithReauth: BaseQueryFn<
 
   return result;
 };
+
+export default baseQueryWithReauth;
