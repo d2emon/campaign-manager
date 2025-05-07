@@ -8,6 +8,7 @@ import DashboardPage from 'pages/DashboardPage';
 import CampaignFormPage from 'pages/EditCampaignPage';
 import EditCharacterPage from 'pages/EditCharacterPage';
 import JoinCampaignPage from 'pages/JoinCampaignPage';
+import EditLocationPage from 'pages/EditLocationPage';
 import LoginPage from 'pages/LoginPage';
 import PrivateRoute from 'pages/PrivateRoute';
 import RegisterPage from 'pages/RegisterPage';
@@ -32,6 +33,9 @@ const App = () => {
                 <Route path="/campaigns/:id/characters/new" element={<EditCharacterPage />} />
                 <Route path="/campaigns/:id/characters/:characterId/edit" element={<EditCharacterPage />} />
                 <Route path="/campaigns/:id/characters/:characterId" element={<CharacterDetailsPage />} />
+                <Route path="/campaigns/:campaignId/locations/new" element={<EditLocationPage />} />
+                <Route path="/campaigns/:campaignId/locations/:locationId/edit" element={<EditLocationPage />} />
+                <Route path="/campaigns/:campaignId/locations/:locationId" element={<EditLocationPage />} />
                 <Route path="/campaigns/:id/join" element={<JoinCampaignPage />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />
