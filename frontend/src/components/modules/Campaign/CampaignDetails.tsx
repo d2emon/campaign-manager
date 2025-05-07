@@ -14,13 +14,13 @@ import LocationList from '../Location/LocationList';
 
 interface CampaignDetailsProps {
   campaign: Campaign;
-  isLoading: boolean;
+  isLoading?: boolean;
   onDelete?: () => void;
   onEdit?: () => void;
   onGenerate?: () => void;
 }
 
-const CampaignDetails = ({ campaign, isLoading, onDelete, onEdit, onGenerate }: CampaignDetailsProps) => {
+const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenerate }: CampaignDetailsProps) => {
   const navigate = useNavigate();
 
   if (!campaign) {
