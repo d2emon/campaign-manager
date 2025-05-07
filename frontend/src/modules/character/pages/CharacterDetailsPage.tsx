@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import CharacterDetails from 'components/modules/Character/CharacterDetails';
-import { useGetCampaignQuery, useGetCampaignsQuery } from 'services/campaignApi';
+import { useGetCampaignQuery } from 'services/campaignApi';
 import { useGetNPCQuery, useDeleteNPCMutation } from 'services/npcApi';
 
 const CharacterDetailsPage = () => {
@@ -36,7 +36,7 @@ const CharacterDetailsPage = () => {
     try {
       await deleteNPC({
         campaignId,
-        id: characterId,
+        characterId,
       });
       getCampaign.refetch();
       navigate('/');

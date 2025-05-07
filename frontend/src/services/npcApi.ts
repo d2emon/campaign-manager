@@ -54,9 +54,9 @@ export const npcApi = createApi({
         body: data,
       }),
     }),
-    deleteNPC: builder.mutation<void, { campaignId: string, id: string }>({
-      query: ({ campaignId, id }) => ({
-        url: `/api/v1/npc/${campaignId}/${id}`,
+    deleteNPC: builder.mutation<void, { campaignId: string, characterId: string }>({
+      query: ({ campaignId, characterId }) => ({
+        url: `/api/v1/npc/${campaignId}/${characterId}`,
         method: 'DELETE',
       }),
     }),

@@ -84,7 +84,7 @@ const CampaignForm = ({
 
   const handleDeleteCharacter = async (character: Character) => {
     if (window.confirm('Вы уверены, что хотите удалить этого персонажа?')) {
-      await deleteNPC({ campaignId: initialData?.id || '', id: character.id });
+      await deleteNPC({ campaignId: initialData?.id || '', characterId: character.id });
       // Обновляем список персонажей после удаления
       const updatedCharacters = characters.filter(c => c.id !== character.id);
       onSubmit({ ...initialData, npcs: updatedCharacters });
