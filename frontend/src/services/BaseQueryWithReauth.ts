@@ -3,6 +3,7 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from 'store';
 import { removeCredentials, setCredentials } from 'store/auth';
 import { API_URL } from './api';
+import { refreshToken } from './auth';
 
 interface RefreshResultData {
   accessToken: string;
@@ -32,9 +33,9 @@ export const baseQueryWithReauth: BaseQueryFn<
     
     if (refreshTokenValue) {
       try {
-        const refreshResult = await baseQuery(args, api, extraOptions);
-        if (refreshResult?.data) {
-          const { accessToken, refreshToken } = refreshResult.data as RefreshResultData;
+        const refreshResult = await refreshToken(refreshTokenValue);
+        if (refreshResult) {
+          const { accessToken, refreshToken } = refreshResult as RefreshResultData;
           api.dispatch(setCredentials({ accessToken, refreshToken }));
 
           // Retry the initial query
