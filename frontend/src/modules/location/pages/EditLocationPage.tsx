@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
@@ -37,12 +36,6 @@ const EditLocationPage = () => {
     : null;
   const isEditing = !!locationId;
   const isLoading = isLoadingCampaign || getLocation.isLoading || isCreating || isUpdating;
-
-  useEffect(() => {
-    if (campaignId && locationId) {
-      getLocation.refetch();
-    }
-  }, [campaignId, locationId, getLocation.refetch]);
 
   const handleSubmit = async (data: Partial<Location>) => {
     if (!user || !campaignId) return;

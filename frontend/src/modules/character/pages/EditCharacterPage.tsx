@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
@@ -37,12 +36,6 @@ const EditCharacterPage = () => {
     : null;
   const isEditing = !!characterId;
   const isLoading = isLoadingCampaign || getNPC.isLoading || isCreating || isUpdating;
-
-  useEffect(() => {
-    if (campaignId && characterId) {
-      getNPC.refetch();
-    }
-  }, [campaignId, characterId, getNPC.refetch]);
 
   const handleSubmit = async (data: Partial<Character>) => {
     if (!user) return;
