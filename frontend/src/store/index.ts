@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { campaignsApi } from 'modules/campaign/services/campaignApi';
+import { npcApi } from 'modules/character/services/npcApi';
 import { locationsApi } from 'services/locationApi';
-import { npcApi } from 'services/npcApi';
 import authReducer from './auth';
 
 export const store = configureStore({

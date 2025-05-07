@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import CharacterDetails from 'components/modules/Character/CharacterDetails';
 import useCampaign from 'modules/campaign/hooks/useCampaign';
-import { useGetNPCQuery, useDeleteNPCMutation } from 'services/npcApi';
+import { useGetNPCQuery, useDeleteNPCMutation } from '../services/npcApi';
 
 const CharacterDetailsPage = () => {
   const navigate = useNavigate();

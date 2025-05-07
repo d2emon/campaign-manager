@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { Character } from 'types/character';
-import { baseQueryWithReauth } from './BaseQueryWithReauth';
+import { baseQueryWithReauth } from 'services/BaseQueryWithReauth';
 
 interface NPCCreateDTO {
   name?: string;
