@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 
 interface DataItemProps {
-  label: string;
-  children: ReactNode;
+  label?: string | ReactNode;
+  children?: ReactNode;
   className?: string;
 }
 
