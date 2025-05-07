@@ -11,8 +11,8 @@ import { useDeleteLocationMutation } from 'modules/location/services/locationApi
 import { Campaign } from 'types/campaign';
 import { Character } from 'types/character';
 import { Location } from 'types/location';
-import CharacterList from './CharacterList';
-import LocationList from '../Location/LocationList';
+import CharacterList from '../../../components/modules/Campaign/CharacterList';
+import LocationList from '../../../components/modules/Location/LocationList';
 
 interface CampaignFormProps {
   initialData?: Partial<Campaign> | null;
