@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
-import CampaignDetails from 'components/modules/Campaign/CampaignDetails';
+import CampaignDetails from '../components/CampaignDetails';
 import useCampaign from '../hooks/useCampaign';
 import {
   useDeleteCampaignMutation,

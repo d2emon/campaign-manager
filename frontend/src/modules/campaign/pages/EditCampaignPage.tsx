@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
-import CampaignForm from 'components/modules/Campaign/CampaignForm';
 import { selectUser } from 'store/auth';
 import { Campaign } from 'types/campaign';
+import CampaignForm from '../components/CampaignForm';
 import useCampaign from '../hooks/useCampaign';
 import {
   CampaignCreateDTO,
