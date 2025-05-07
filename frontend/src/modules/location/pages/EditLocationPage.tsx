@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
-import LocationForm from 'components/modules/Location/LocationForm';
 import useCampaign from 'modules/campaign/hooks/useCampaign';
 import {
   useCreateLocationMutation,
@@ -10,6 +9,7 @@ import {
 } from 'modules/location/services/locationApi';
 import { selectUser } from 'store/auth';
 import { Location } from 'types/location';
+import LocationForm from '../components/LocationForm';
 
 const EditLocationPage = () => {
   const { locationId = '' } = useParams<{ locationId: string }>();
