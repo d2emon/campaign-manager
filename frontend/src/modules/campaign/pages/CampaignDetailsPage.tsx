@@ -58,6 +58,7 @@ const CampaignDetailsPage = () => {
       isLoading={isLoading}
       isNotFound={isNotFound}
       notFoundMessage="Кампания не найдена"
+      title={campaign?.title}
     >
       { campaign && (
         <CampaignDetails
