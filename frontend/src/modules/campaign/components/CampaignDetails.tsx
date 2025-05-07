@@ -1,6 +1,5 @@
 import { Copy } from 'react-feather';
 import { Link, useNavigate } from 'react-router-dom';
-import LocationList from 'components/modules/Location/LocationList';
 import Avatar from 'components/ui/Avatar';
 import Badge from 'components/ui/Badge';
 import CampaignItem from 'components/ui/CampaignItem';
@@ -10,6 +9,7 @@ import DateItem from 'components/ui/DateItem';
 import Spinner from 'components/ui/Spinner';
 import TextBlock from 'components/ui/TextBlock';
 import CharacterList from 'modules/character/components/CharacterList';
+import LocationList from 'modules/location/components/LocationList';
 import { Campaign } from 'types/campaign';
 
 interface CampaignDetailsProps {
