@@ -6,7 +6,6 @@ import DataBlock from 'components/ui/DataBlock';
 import DataItem from 'components/ui/DataItem';
 import DataItemLink from 'components/ui/DataItemLink';
 import DateItem from 'components/ui/DateItem';
-import Spinner from 'components/ui/Spinner';
 import TextBlock from 'components/ui/TextBlock';
 import CharacterList from 'modules/character/components/CharacterList';
 import LocationList from 'modules/location/components/LocationList';
@@ -25,18 +24,10 @@ interface CampaignDetailsProps {
 const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenerate }: CampaignDetailsProps) => {
   const navigate = useNavigate();
 
-  if (!campaign) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Spinner size="lg" />
-      </div>
-    );
-  }
-
   const inviteUrl = `${window.location.origin}/campaigns/${campaign.id}/join?inviteCode=${campaign.inviteCode}`;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div>
       <CampaignItem
         className="mb-6"
         isLoading={isLoading}
