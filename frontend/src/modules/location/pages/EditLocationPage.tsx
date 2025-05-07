@@ -66,14 +66,12 @@ const EditLocationPage = () => {
       title={locationId ? 'Редактирование локации' : 'Создание новой локации'}
       onBack={goToCampaign}
     >
-      {location && (
-        <LocationForm
-          initialData={location}
-          isEditing={isEditing}
-          onSubmit={handleSubmit}
-          onCancel={goToCampaign}
-        />
-      )}
+      <LocationForm
+        initialData={location}
+        isEditing={isEditing}
+        onSubmit={handleSubmit}
+        onCancel={goToCampaign}
+      />
     </DetailPage>
   );
 };
