@@ -2,7 +2,7 @@ interface PaperProps {
   className?: string;
   title?: string;
   onClick?: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const Paper = ({ className, onClick, children, title }: PaperProps) => {
