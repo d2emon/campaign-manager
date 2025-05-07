@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import Header from 'components/layout/Header';
-import { AuthProvider } from 'contexts/AuthContext';
+import { AuthProvider } from 'modules/auth/contexts/AuthContext';
 import LoginPage from 'modules/auth/pages/LoginPage';
 import RegisterPage from 'modules/auth/pages/RegisterPage';
 import CampaignDetailsPage from 'modules/campaign/pages/CampaignDetailsPage';

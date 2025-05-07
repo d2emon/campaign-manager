@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Button from 'components/ui/Button';
-import { useAuth } from 'contexts/AuthContext';
+import { useAuth } from 'modules/auth/contexts/AuthContext';
 import { selectUser } from 'store/auth';
 
 const Header = ({ dark = false }: { dark?: boolean }) => {
