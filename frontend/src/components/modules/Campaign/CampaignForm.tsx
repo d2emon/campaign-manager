@@ -17,10 +17,10 @@ import LocationList from '../Location/LocationList';
 interface CampaignFormProps {
   initialData?: Partial<Campaign>;
   characters?: Character[];
-  isEditing: boolean;
-  isLoading: boolean;
+  isEditing?: boolean;
+  isLoading?: boolean;
   onSubmit: (data: Partial<Campaign>) => Promise<void>;
-  onCancel: () => void;
+  onCancel?: () => void;
 }
 
 const schema = yup.object({

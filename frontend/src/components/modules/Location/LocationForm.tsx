@@ -9,7 +9,7 @@ interface LocationFormProps {
   isEditing?: boolean;
   isLoading?: boolean;
   onSubmit: (data: Partial<Location>) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
 }
 
 const LocationForm = ({

@@ -8,10 +8,10 @@ import { Character } from 'types/character';
 
 interface CharacterFormProps {
   initialData?: Partial<Character>;
-  isEditing: boolean;
-  isLoading: boolean;
+  isEditing?: boolean;
+  isLoading?: boolean;
   onSubmit: (data: Partial<Character>) => Promise<void>;
-  onCancel: () => void;
+  onCancel?: () => void;
 }
 
 const schema = yup.object({
