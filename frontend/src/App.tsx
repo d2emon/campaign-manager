@@ -13,6 +13,7 @@ import LoginPage from 'pages/LoginPage';
 import PrivateRoute from 'pages/PrivateRoute';
 import RegisterPage from 'pages/RegisterPage';
 import { store } from 'store';
+import LocationDetailsPage from './pages/LocationDetailsPage';
 
 const App = () => {
   return (
@@ -35,7 +36,7 @@ const App = () => {
                 <Route path="/campaigns/:id/characters/:characterId" element={<CharacterDetailsPage />} />
                 <Route path="/campaigns/:campaignId/locations/new" element={<EditLocationPage />} />
                 <Route path="/campaigns/:campaignId/locations/:locationId/edit" element={<EditLocationPage />} />
-                <Route path="/campaigns/:campaignId/locations/:locationId" element={<EditLocationPage />} />
+                <Route path="/campaigns/:campaignId/locations/:locationId" element={<LocationDetailsPage />} />
                 <Route path="/campaigns/:id/join" element={<JoinCampaignPage />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />
