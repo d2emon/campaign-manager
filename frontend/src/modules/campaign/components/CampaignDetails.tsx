@@ -72,6 +72,7 @@ const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenera
       </div>
 
       <LocationList
+        className="my-6"
         campaignId={campaign.id}
         locations={campaign.locations || []}
         withAddButton
@@ -81,14 +82,17 @@ const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenera
       />
 
       <QuestList
+        className="my-6"
         quests={campaign.quests || []}
       />
 
       <NoteList
+        className="my-6"
         notes={campaign.notes || []}
       />
 
       <CharacterList
+        className="my-6"
         characters={campaign.npcs}
         withAddButton
         onAdd={() => {

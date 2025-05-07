@@ -183,6 +183,7 @@ const CampaignForm = ({
       {isEditing && (
         <div className="my-6 pt-6">
           <LocationList
+            className="my-6"
             locations={initialData?.locations || []}
             campaignId={initialData?.id || ''}
             withAddButton
@@ -192,13 +193,19 @@ const CampaignForm = ({
             onEdit={handleEditLocation}
             onDelete={handleDeleteLocation}
           />
+
           <QuestList
+            className="my-6"
             quests={initialData?.quests || []}
           />
+
           <NoteList
+            className="my-6"
             notes={initialData?.notes || []}
           />
+
           <CharacterList
+            className="my-6"
             characters={initialData?.npcs || []}
             withAddButton
             onAdd={() => {
