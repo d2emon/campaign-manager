@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Button from 'components/ui/Button';
 import Paper from 'components/ui/Paper';
-import { Character } from 'types/character';
+import { Character } from '../types/character';
 interface CharacterListProps {
   characters?: Character[];
   withAddButton?: boolean;

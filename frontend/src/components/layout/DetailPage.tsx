@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
+import Spinner from 'components/ui/Spinner';
 import { Campaign } from 'modules/campaign/types/campaign';
-import { Character } from 'types/character';
+import { Character } from 'modules/character/types/character';
 import { Location } from 'types/location';
 import Breadcrumbs from './Breadcrumbs';
-import Spinner from '../ui/Spinner';
 
 interface DetailPageProps {
   breadcrumbs?: {

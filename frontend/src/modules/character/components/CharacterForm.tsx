@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
-import { Character } from 'types/character';
+import { Character } from '../types/character';
 
 interface CharacterFormProps {
   initialData?: Partial<Character> | null;

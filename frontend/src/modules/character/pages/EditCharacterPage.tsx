@@ -1,13 +1,13 @@
 import { useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import useCampaign from 'modules/campaign/hooks/useCampaign';
-import { Character } from 'types/character';
 import CharacterForm from '../components/CharacterForm';
 import {
   useCreateNPCMutation,
   useGetNPCQuery,
   useUpdateNPCMutation,
 } from '../services/npcApi';
+import { Character } from '../types/character';
 
 const EditCharacterPage = () => {
   const { characterId = '' } = useParams<{ characterId: string }>();

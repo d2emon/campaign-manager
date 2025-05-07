@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Campaign } from 'modules/campaign/types/campaign';
-import { Character } from 'types/character';
+import { Character } from 'modules/character/types/character';
 import { Location } from 'types/location';
 
 interface BreadcrumbItem {

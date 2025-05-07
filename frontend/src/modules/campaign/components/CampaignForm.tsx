@@ -10,7 +10,7 @@ import CharacterList from 'modules/character/components/CharacterList';
 import { useDeleteNPCMutation } from 'modules/character/services/npcApi';
 import LocationList from 'modules/location/components/LocationList';
 import { useDeleteLocationMutation } from 'modules/location/services/locationApi';
-import { Character } from 'types/character';
+import { Character } from '@/modules/character/types/character';
 import { Location } from 'types/location';
 import { Campaign } from '../types/campaign';
 

@@ -4,7 +4,7 @@ import DataBlock from 'components/ui/DataBlock';
 import DataItem from 'components/ui/DataItem';
 import Spinner from 'components/ui/Spinner';
 import TextBlock from 'components/ui/TextBlock';
-import { Character } from 'types/character';
+import { Character } from '../types/character';
 
 interface CharacterDetailsProps {
   character: Character;

@@ -1,4 +1,4 @@
-import { Character } from 'types/character';
+import { Character } from '@/modules/character/types/character';
 import { Location } from 'types/location';
 
 export interface Campaign {
