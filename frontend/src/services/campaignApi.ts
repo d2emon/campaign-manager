@@ -6,7 +6,7 @@ import { mapNPC } from './npcApi';
 export type CampaignCreateDTO = Omit<Campaign, 'id' | 'createdAt' | 'updatedAt'>;
 
 export interface CampaignUpdateDTO {
-  id: string;
+  campaignId: string;
   data: Partial<Campaign>;
 }
 
@@ -55,10 +55,10 @@ export const campaignsApi = createApi({
       transformResponse: (response: any) => response ? mapCampaign(response) : null,
     }),
     updateCampaign: builder.mutation<Campaign, CampaignUpdateDTO>({
-      query: (data) => ({
-        url: `/api/v1/campaigns/${data.id}`,
+      query: ({ campaignId, data }) => ({
+        url: `/api/v1/campaigns/${campaignId}`,
         method: 'PUT',
-        body: data.data,
+        body: data,
       }),
     }),
     deleteCampaign: builder.mutation<void, string>({
