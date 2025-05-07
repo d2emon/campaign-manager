@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
+import Paper from 'components/ui/Paper';
 import { useDeleteLocationMutation } from 'services/locationApi';
 import { useDeleteNPCMutation } from 'services/npcApi';
 import { Campaign } from 'types/campaign';
@@ -105,7 +106,7 @@ const CampaignForm = ({
   };
 
   return (
-    <>
+    <Paper>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <Field
           id="title"
@@ -200,7 +201,7 @@ const CampaignForm = ({
           />
         </div>
       )}
-    </>
+    </Paper>
   );
 };
 
