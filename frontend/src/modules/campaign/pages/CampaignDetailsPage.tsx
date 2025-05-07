@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import CampaignDetails from 'components/modules/Campaign/CampaignDetails';
 import {
