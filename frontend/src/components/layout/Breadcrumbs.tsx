@@ -18,12 +18,6 @@ interface BreadcrumbsProps {
 const Breadcrumbs = ({ campaign, character, location, isEdit }: BreadcrumbsProps) => {
   const breadcrumbs: BreadcrumbItem[] = [];
 
-  console.log({
-    campaign,
-    character,
-    location,
-    isEdit,
-  });
   if (campaign) {
     breadcrumbs.push({
       path: `/campaigns/${campaign.id}`,
