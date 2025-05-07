@@ -5,7 +5,7 @@ import Spinner from './Spinner';
 interface CampaignItemProps {
   className?: string;
   isLoading?: boolean;
-  title: string;
+  title?: string;
   onEdit?: () => void;
   onDelete?: () => void;
   children: React.ReactNode;
@@ -19,7 +19,7 @@ const CampaignItem = ({ className, title, onEdit, onDelete, children, isLoading 
   return (
     <Paper className={className}>
       <div className="flex justify-between items-start mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+        { title && <h1 className="text-2xl font-bold text-gray-900">{title}</h1> }
         <div className="flex space-x-4">
           <Button variant="primary" onClick={onEdit}>
             Редактировать
