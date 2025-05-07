@@ -23,6 +23,7 @@ const EditCampaignPage = () => {
   const [createCampaign, { isLoading: isCreating }] = useCreateCampaignMutation();
   const [updateCampaign, { isLoading: isUpdating }] = useUpdateCampaignMutation();
 
+  const backUrl = '/dashboard';
   const campaign = (campaignId && !getCampaign.isLoading)
     ? getCampaign.data
     : null;
@@ -33,7 +34,11 @@ const EditCampaignPage = () => {
     if (campaignId) {
       getCampaign.refetch();
     }
-  }, [campaignId, getCampaign]);
+  }, [campaignId, getCampaign.refetch]);
+
+  const handleBack = () => {
+    navigate(backUrl);
+  };
 
   const handleSubmit = async (data: Partial<Campaign>) => {
     if (!user) return;
@@ -44,7 +49,7 @@ const EditCampaignPage = () => {
       } else {
         await createCampaign(data as CampaignCreateDTO);
       }
-      navigate('/dashboard');
+      navigate(backUrl);
     } catch (error) {
       console.error('Error saving campaign:', error);
     }
@@ -52,22 +57,22 @@ const EditCampaignPage = () => {
 
   return (
     <DetailPage
-      backUrl="/dashboard"
       breadcrumbs={{
-        campaign: campaign,
+        campaign,
+        isEdit: true,
       }}
       isLoading={isLoading}
       isNotFound={!campaign}
       notFoundMessage="Кампания не найдена"
       title={campaignId ? 'Редактирование кампании' : 'Создание новой кампании'}
+      onBack={handleBack}
     >
       {campaign && (
         <CampaignForm
           initialData={campaign}
           isEditing={isEditing}
-          isLoading={isLoading}
           onSubmit={handleSubmit}
-          onCancel={() => navigate('/dashboard')}
+          onCancel={handleBack}
         />
       )}
     </DetailPage>
