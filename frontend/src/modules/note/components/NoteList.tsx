@@ -7,7 +7,7 @@ interface NoteListProps {
   selectedNoteId?: string;
 }
 
-export const NoteList = ({ notes, onNoteSelect, selectedNoteId }: NoteListProps) => {
+const NoteList = ({ notes, onNoteSelect, selectedNoteId }: NoteListProps) => {
   const handleNoteSelect = (noteId: string) => {
     if (onNoteSelect) {
       onNoteSelect(noteId);
@@ -41,3 +41,5 @@ export const NoteList = ({ notes, onNoteSelect, selectedNoteId }: NoteListProps)
     </Paper>
   );
 };
+
+export default NoteList;
