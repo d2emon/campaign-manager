@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Campaign } from 'types/campaign';
 import { Character } from 'types/character';
 import { Location } from 'types/location';
@@ -7,30 +6,29 @@ import Breadcrumbs from './Breadcrumbs';
 import Spinner from '../ui/Spinner';
 
 interface DetailPageProps {
-  backUrl?: string;
   breadcrumbs?: {
     campaign?: Campaign | null;
     character?: Character | null;
     location?: Location | null;
+    isEdit?: boolean;
   };
   isNotFound?: boolean;
   isLoading?: boolean;
   title?: string;
   notFoundMessage?: string;
+  onBack?: () => void;
   children?: ReactNode;
 }
 
 const DetailPage = ({
-  backUrl = '/',
   breadcrumbs,
   isNotFound = false,
   isLoading = false,
   notFoundMessage = 'Элемент не найден',
   title,
+  onBack,
   children,
 }: DetailPageProps) => {
-  const navigate = useNavigate();
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -45,7 +43,7 @@ const DetailPage = ({
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900">{notFoundMessage}</h1>
           <button
-            onClick={() => navigate(backUrl)}
+            onClick={onBack}
             className="mt-4 px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-600 transition"
           >
             Вернуться назад
