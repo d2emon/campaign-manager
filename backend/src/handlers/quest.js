@@ -3,11 +3,12 @@ import Quest from '../models/quest.js';
 
 export const createQuest = async (req, res, next) => {
   try {
-    const { name, race, role } = req.body;
+    const { title, description, reward, status } = req.body;
     const item = await Quest.create({
-      name,
-      race,
-      role,
+      title,
+      description,
+      reward,
+      status,
       campaign: req.params.campaignId,
     });
 
