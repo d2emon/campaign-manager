@@ -2,10 +2,17 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
+import {
+  Box,
+  Button,
+  Card,
+  Group,
+  NativeSelect,
+  Switch,
+  Textarea,
+  TextInput,
+} from '@mantine/core';
 import * as yup from 'yup';
-import Button from 'components/ui/Button';
-import Field from 'components/ui/Field';
-import Paper from 'components/ui/Paper';
 import CharacterList from 'modules/character/components/CharacterList';
 import { useDeleteNPCMutation } from 'modules/character/services/npcApi';
 import LocationList from 'modules/location/components/LocationList';
@@ -30,10 +37,11 @@ interface CampaignFormProps {
 }
 
 const schema = yup.object({
-  title: yup
+  coverImage: yup
     .string()
-    .required('Название обязательно')
-    .min(3, 'Минимум 3 символа'),
+    .url('Неверный URL')
+    .optional()
+    .default(''),
   description: yup
     .string()
     .required('Описание обязательно')
@@ -41,18 +49,25 @@ const schema = yup.object({
   gameSystem: yup
     .string()
     .required('Выберите игровую систему'),
-  maxPlayers: yup
-    .number()
-    .min(1, 'Минимум 1 игрок')
-    .max(10, 'Максимум 10 игроков')
-    .required('Укажите максимальное количество игроков'),
+  genre: yup
+    .string()
+    .required('Выберите жанр'),
+  isPublic: yup
+    .boolean()
+    .default(true),
+  title: yup
+    .string()
+    .required('Название обязательно')
+    .min(3, 'Минимум 3 символа'),
 });
 
 type CampaignFormData = {
-  title: string;
+  coverImage: string;
   description: string;
   gameSystem: string;
-  maxPlayers: number;
+  genre: string;
+  isPublic: boolean;
+  title: string;
 };
 
 const CampaignForm = ({ 
@@ -70,9 +85,9 @@ const CampaignForm = ({
   const [deleteNote] = useDeleteNoteMutation();
 
   const {
-    register,
     handleSubmit,
-    setValue,
+    register,
+    reset,
     formState: { errors },
   } = useForm<CampaignFormData>({
     resolver: yupResolver(schema),
@@ -80,12 +95,9 @@ const CampaignForm = ({
 
   useEffect(() => {
     if (initialData) {
-      setValue('title', initialData.title || '');
-      setValue('description', initialData.description || '');
-      setValue('gameSystem', initialData.gameSystem || '');
-      setValue('maxPlayers', initialData.maxPlayers || 4);
+      reset(initialData);
     }
-  }, [initialData, setValue]);
+  }, [initialData, reset]);
 
   const handleEditCharacter = (character: Character) => {
     navigate(`/campaigns/${initialData?.id}/characters/${character.id}/edit`);
@@ -140,80 +152,89 @@ const CampaignForm = ({
   };
   
   return (
-    <Paper>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <Field
-          id="title"
-          error={errors.title}
-          inputProps={register('title')}
-          label="Название кампании"
-        />
+    <Box>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Card className="space-y-6">
+          <TextInput
+            id="title"
+            error={errors.title?.message}
+            label="Название кампании"
+            {...register('title')}
+          />
 
-        <Field
-          id="description"
-          error={errors.description}
-          inputProps={register('description')}
-          label="Описание"
-          placeholder="Опишите вашу кампанию..."
-          type="textarea"
-        />
+          <TextInput
+            id="coverImage"
+            error={errors.coverImage?.message}
+            label="Изображение кампании"
+            {...register('coverImage')}
+          />
 
-        <div className="mb-6">
-          <label
-            htmlFor="gameSystem"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Игровая система
-          </label>
-          <select
+          <Textarea
+            id="description"
+            error={errors.description?.message}
+            label="Описание"
+            placeholder="Опишите вашу кампанию..."
+            rows={4}
+            {...register('description')}
+          />
+
+          <NativeSelect
             id="gameSystem"
-            {...register('gameSystem')}
-            className="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-          >
-            <option value="">Выберите систему</option>
-            <option value="dnd5e">Dungeons & Dragons 5e</option>
-            <option value="pathfinder2e">Pathfinder 2e</option>
-            <option value="call-of-cthulhu">Call of Cthulhu</option>
-            <option value="warhammer">Warhammer Fantasy</option>
-            <option value="other">Другая система</option>
-          </select>
-          {errors.gameSystem && (
-            <div className="mt-2 text-red-600">
-              {errors.gameSystem.message}
-            </div>
-          )}
-        </div>
+            error={errors.gameSystem?.message}
+            label="Игровая система"
+            data={[
+              { value: '', label: 'Выберите систему' },
+              { value: 'dnd5e', label: 'Dungeons & Dragons 5e' },
+              { value: 'pathfinder2e', label: 'Pathfinder 2e' },
+              { value: 'call-of-cthulhu', label: 'Call of Cthulhu' },
+              { value: 'warhammer', label: 'Warhammer Fantasy' },
+              { value: 'other', label: 'Другая система' },
+            ]}
+            { ...register('gameSystem') }
+          />
 
-        <Field
-          id="maxPlayers"
-          error={errors.maxPlayers}
-          inputProps={register('maxPlayers', { valueAsNumber: true })}
-          label="Максимум игроков"
-          type="number"
-          min={1}
-          max={20}
-        />
+          <NativeSelect
+            id="genre"
+            error={errors.genre?.message}
+            label="Жанр"
+            data={[
+              { value: '', label: 'Выберите жанр' },
+              { value: 'fantasy', label: 'Фэнтези' },
+              { value: 'sci-fi', label: 'Научная фантастика' },
+              { value: 'horror', label: 'Ужасы' },
+              { value: 'steampunk', label: 'Стимпанк' },
+              { value: 'custom', label: 'Другой' },
+            ]}
+            { ...register('genre') }
+          />
 
-        <div className="flex justify-end space-x-4">
-          <Button
-            type="button"
-            onClick={onCancel}
-            variant="secondary"
-          >
-            Отмена
-          </Button>
-          <Button
-            type="submit"
-            disabled={isLoading}
-            variant="primary"
-          >
-            {isLoading ? 'Сохранение...' : isEditing ? 'Сохранить' : 'Создать'}
-          </Button>
-        </div>
+          <Switch
+            id="isPublic"
+            label="Публичная"
+            {...register('isPublic')}
+          />
+
+          <Group justify="flex-end">
+            <Button
+              type="button"
+              onClick={onCancel}
+              variant="secondary"
+            >
+              Отмена
+            </Button>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              variant="primary"
+            >
+              {isLoading ? 'Сохранение...' : isEditing ? 'Сохранить' : 'Создать'}
+            </Button>
+          </Group>
+        </Card>
       </form>
 
       {isEditing && (
-        <div className="my-6 pt-6">
+        <Box className="my-6 pt-6">
           <LocationList
             className="my-6"
             locations={initialData?.locations || []}
@@ -260,9 +281,9 @@ const CampaignForm = ({
             onEdit={handleEditCharacter}
             onDelete={handleDeleteCharacter}
           />
-        </div>
+        </Box>
       )}
-    </Paper>
+    </Box>
   );
 };
 

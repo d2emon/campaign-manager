@@ -2,6 +2,7 @@
 module.exports = {
     content: [
         "./src/**/*.{js,jsx,ts,tsx}",  // Где искать классы Tailwind
+        "./node_modules/@mantine/core/**/*.{js,ts,jsx,tsx}", // Где искать классы Mantine
     ],
     theme: {
         extend: {
