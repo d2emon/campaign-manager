@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import Button from 'components/ui/Button';
 import Paper from 'components/ui/Paper';
 import { Note } from '../types/note';
@@ -10,8 +11,6 @@ interface NoteListProps {
   onAdd?: () => void;
   onEdit?: (note: Note) => void;
   onDelete?: (note: Note) => void;
-  onNoteSelect?: (campaignId: string, noteId: string) => void;
-  selectedNoteId?: string;
 }
 
 const NoteList = ({
@@ -22,12 +21,11 @@ const NoteList = ({
   onAdd,
   onEdit,
   onDelete,
-  onNoteSelect,
 }: NoteListProps) => {
-  const handleNoteSelect = (noteId: string) => {
-    if (onNoteSelect) {
-      onNoteSelect(campaignId, noteId);
-    }
+  const navigate = useNavigate();
+
+  const handleNoteClick = (noteId: string) => {
+    navigate(`/campaigns/${campaignId}/notes/${noteId}`);
   };
 
   return (
@@ -48,12 +46,12 @@ const NoteList = ({
       </div>
 
       {notes && notes.length > 0 ? (
-        <div className="flex items-center space-x-2">
+        <div className="space-y-4">
           {notes.map((note) => (
             <Paper
               key={note.id}
-              // selected={selectedNoteId === note.id} 
-              onClick={() => handleNoteSelect(note.id)}
+              className="hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => handleNoteClick(note.id)}
               title={note.title}
             >
               <div className="flex items-center space-x-2">
