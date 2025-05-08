@@ -56,3 +56,10 @@ export const notesApi = createApi({
     }),
   }),
 });
+
+export const {
+  useCreateNoteMutation,
+  useGetNoteQuery,
+  useUpdateNoteMutation,
+  useDeleteNoteMutation,
+} = notesApi;
