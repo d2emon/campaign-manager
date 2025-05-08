@@ -12,6 +12,7 @@ import EditCharacterPage from 'modules/character/pages/EditCharacterPage';
 import LocationDetailsPage from 'modules/location/pages/LocationDetailsPage';
 import EditLocationPage from 'modules/location/pages/EditLocationPage';
 import EditNotePage from 'modules/note/pages/EditNotePage';
+import NoteDetailsPage from 'modules/note/pages/NoteDetailsPage';
 import EditQuestPage from 'modules/quest/pages/EditQuestPage';
 import QuestDetailsPage from 'modules/quest/pages/QuestDetailsPage';
 import DashboardPage from 'pages/DashboardPage';
@@ -42,6 +43,7 @@ const App = () => {
                 <Route path="/campaigns/:campaignId/locations/:locationId" element={<LocationDetailsPage />} />
                 <Route path="/campaigns/:campaignId/notes/new" element={<EditNotePage />} />
                 <Route path="/campaigns/:campaignId/notes/:noteId/edit" element={<EditNotePage />} />
+                <Route path="/campaigns/:campaignId/notes/:noteId" element={<NoteDetailsPage />} />
                 <Route path="/campaigns/:campaignId/quests/new" element={<EditQuestPage />} />
                 <Route path="/campaigns/:campaignId/quests/:questId/edit" element={<EditQuestPage />} />
                 <Route path="/campaigns/:campaignId/quests/:questId" element={<QuestDetailsPage />} />
