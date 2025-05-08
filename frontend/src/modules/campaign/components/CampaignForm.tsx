@@ -13,6 +13,8 @@ import { useDeleteLocationMutation } from 'modules/location/services/locationApi
 import { Character } from 'modules/character/types/character';
 import { Location } from 'modules/location/types/location';
 import NoteList from 'modules/note/components/NoteList';
+import { useDeleteNoteMutation } from 'modules/note/services/noteApi';
+import { Note } from 'modules/note/types/note';
 import QuestList from 'modules/quest/components/QuestList';
 import { useDeleteQuestMutation } from 'modules/quest/services/questApi';
 import { Quest } from 'modules/quest/types/quest';
@@ -65,6 +67,7 @@ const CampaignForm = ({
   const [deleteNPC] = useDeleteNPCMutation();
   const [deleteLocation] = useDeleteLocationMutation();
   const [deleteQuest] = useDeleteQuestMutation();
+  const [deleteNote] = useDeleteNoteMutation();
 
   const {
     register,
@@ -123,6 +126,19 @@ const CampaignForm = ({
     }
   };
 
+  const handleEditNote = (note: Note) => {
+    navigate(`/campaigns/${initialData?.id}/notes/${note.id}/edit`);
+  };
+
+  const handleDeleteNote = async (note: Note) => {
+    if (window.confirm('Вы уверены, что хотите удалить эту заметку?')) {
+      await deleteNote({ campaignId: initialData?.id || '', noteId: note.id });
+      // Обновляем список заметок после удаления
+      const updatedNotes = initialData?.notes?.filter(n => n.id !== note.id) || [];
+      onSubmit({ ...initialData, notes: updatedNotes });
+    }
+  };
+  
   return (
     <Paper>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -225,6 +241,13 @@ const CampaignForm = ({
           <NoteList
             className="my-6"
             notes={initialData?.notes || []}
+            campaignId={initialData?.id || ''}
+            withAddButton
+            onAdd={() => {
+              navigate(`/campaigns/${initialData?.id}/notes/new`);
+            }}
+            onEdit={handleEditNote}
+            onDelete={handleDeleteNote}
           />
 
           <CharacterList

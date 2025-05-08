@@ -94,6 +94,11 @@ const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenera
       <NoteList
         className="my-6"
         notes={campaign.notes || []}
+        campaignId={campaign.id}
+        withAddButton 
+        onAdd={() => {
+          navigate(`/campaigns/${campaign.id}/notes/new`);
+        }}
       />
 
       <CharacterList
