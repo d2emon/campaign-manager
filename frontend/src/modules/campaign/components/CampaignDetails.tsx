@@ -1,12 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+import { Badge, Box, Group, Text } from '@mantine/core';
 import Avatar from 'components/ui/Avatar';
-import Badge from 'components/ui/Badge';
-import CampaignItem from 'components/ui/CampaignItem';
+  import CampaignItem from 'components/ui/CampaignItem';
 import DataBlock from 'components/ui/DataBlock';
 import DataItem from 'components/ui/DataItem';
 import DataItemLink from 'components/ui/DataItemLink';
 import DateItem from 'components/ui/DateItem';
-import TextBlock from 'components/ui/TextBlock';
 import CharacterList from 'modules/character/components/CharacterList';
 import LocationList from 'modules/location/components/LocationList';
 import NoteList from 'modules/note/components/NoteList';
@@ -27,32 +26,34 @@ const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenera
   const inviteUrl = `${window.location.origin}/campaigns/${campaign.id}/join?inviteCode=${campaign.inviteCode}`;
 
   return (
-    <div>
+    <Box>
       <CampaignItem
         className="mb-6"
         isLoading={isLoading}
         title={campaign.title}
+        withDelete={!!onDelete}
+        withEdit={!!onEdit}
         onDelete={onDelete}
         onEdit={onEdit}
       >
-        <div className="mb-6">
-          { campaign.genre && <Badge variant="primary">{campaign.genre}</Badge> }
-          { campaign.gameSystem && <Badge variant="primary">{campaign.gameSystem}</Badge> }
-          { campaign.isPublic && <Badge variant="primary">Публичная</Badge> }
-        </div>
+        <Group mt="md" mb="md">
+          { campaign.genre && <Badge>{campaign.genre}</Badge> }
+          { campaign.gameSystem && <Badge>{campaign.gameSystem}</Badge> }
+          { campaign.isPublic && <Badge>Публичная</Badge> }
+        </Group>
 
-        <div className="mb-6">
+        <Group mt="md" mb="md">
           <Avatar
             src={campaign.coverImage}
             alt={campaign.title}
             className="w-full object-cover"
             size="xxl"
           />
-        </div>
+        </Group>
 
-        <TextBlock>
+        <Text>
           {campaign.description}
-        </TextBlock>
+        </Text>
 
         <DataBlock title="Информация о кампании">
           <DateItem label="Создана:" date={campaign.createdAt} />
@@ -110,7 +111,7 @@ const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenera
         }}
         onGenerate={onGenerate}
       />
-    </div>
+    </Box>
   );
 };
 
