@@ -1,38 +1,63 @@
-import Button from './Button';
-import Paper from './Paper';
-import Spinner from './Spinner';
+import {
+  Button,
+  Card,
+  Center,
+  Group,
+  Loader,
+  Title,
+} from '@mantine/core';
 
 interface CampaignItemProps {
   className?: string;
   isLoading?: boolean;
   title?: string;
+  withDelete?: boolean;
+  withEdit?: boolean;
   onEdit?: () => void;
   onDelete?: () => void;
   children: React.ReactNode;
 }
 
-const CampaignItem = ({ className, title, onEdit, onDelete, children, isLoading }: CampaignItemProps) => {
+const CampaignItem = ({
+  className,
+  isLoading,
+  title,
+  withDelete,
+  withEdit,
+  onEdit,
+  onDelete,
+  children,
+}: CampaignItemProps) => {
   if (isLoading) {
-    return <Spinner size="lg" />;
+    return (
+      <Card className={className}>
+        <Center>
+          <Loader />
+        </Center>
+      </Card>
+    );
   }
 
   return (
-    <Paper className={className}>
-      <div className="flex justify-between items-start mb-6">
-        { title && <h1 className="text-2xl font-bold text-gray-900">{title}</h1> }
-        <div className="flex space-x-4">
-          <Button variant="primary" onClick={onEdit}>
-            Редактировать
-          </Button>
-          <Button variant="danger" onClick={onDelete}>
-            Удалить
-          </Button>
-        </div>
-      </div>
-
+    <Card className={className}>
+      <Group justify="space-between">
+        <Title order={2}>{title}</Title>
+        <Group>
+          {withEdit && (
+            <Button variant="primary" onClick={onEdit}>
+              Редактировать
+            </Button>
+          )}
+          {withDelete && (
+            <Button variant="danger" onClick={onDelete}>
+              Удалить
+            </Button>
+          )}
+        </Group>
+      </Group>
 
       {children}
-    </Paper>
+    </Card>
   );
 };
 
