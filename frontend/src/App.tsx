@@ -14,6 +14,7 @@ import EditLocationPage from 'modules/location/pages/EditLocationPage';
 import DashboardPage from 'pages/DashboardPage';
 import PrivateRoute from 'pages/PrivateRoute';
 import { store } from 'store';
+import EditQuestPage from './modules/quest/pages/EditQuestPage';
 
 const App = () => {
   return (
@@ -37,6 +38,8 @@ const App = () => {
                 <Route path="/campaigns/:campaignId/locations/new" element={<EditLocationPage />} />
                 <Route path="/campaigns/:campaignId/locations/:locationId/edit" element={<EditLocationPage />} />
                 <Route path="/campaigns/:campaignId/locations/:locationId" element={<LocationDetailsPage />} />
+                <Route path="/campaigns/:campaignId/quests/new" element={<EditQuestPage />} />
+                <Route path="/campaigns/:campaignId/quests/:questId/edit" element={<EditQuestPage />} />
                 <Route path="/campaigns/:campaignId/join" element={<JoinCampaignPage />} />
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />
