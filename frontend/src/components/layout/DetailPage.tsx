@@ -3,6 +3,8 @@ import Spinner from 'components/ui/Spinner';
 import { Campaign } from 'modules/campaign/types/campaign';
 import { Character } from 'modules/character/types/character';
 import { Location } from 'modules/location/types/location';
+import { Note } from 'modules/note/types/note';
+import { Quest } from 'modules/quest/types/quest';
 import Breadcrumbs from './Breadcrumbs';
 
 interface DetailPageProps {
@@ -10,6 +12,8 @@ interface DetailPageProps {
     campaign?: Campaign | null;
     character?: Character | null;
     location?: Location | null;
+    quest?: Quest | null;
+    note?: Note | null;
     isEdit?: boolean;
   };
   isNotFound?: boolean;
