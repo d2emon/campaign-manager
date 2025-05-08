@@ -20,6 +20,7 @@ export const store = configureStore({
     npcApi.middleware,
     locationsApi.middleware,
     questsApi.middleware,
+    notesApi.middleware,
   ),
 });
 
