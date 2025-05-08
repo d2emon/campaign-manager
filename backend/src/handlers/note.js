@@ -3,11 +3,10 @@ import Note from '../models/note.js';
 
 export const createNote = async (req, res, next) => {
   try {
-    const { name, race, role } = req.body;
+    const { content, category } = req.body;
     const item = await Note.create({
-      name,
-      race,
-      role,
+      content,
+      category,
       campaign: req.params.campaignId,
     });
 
