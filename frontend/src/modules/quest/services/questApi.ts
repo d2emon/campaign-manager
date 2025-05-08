@@ -59,3 +59,10 @@ export const questsApi = createApi({
     }),
   }),
 });
+
+export const {
+  useCreateQuestMutation,
+  useGetQuestQuery,
+  useUpdateQuestMutation,
+  useDeleteQuestMutation,
+} = questsApi;
