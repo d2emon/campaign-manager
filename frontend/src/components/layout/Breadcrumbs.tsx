@@ -54,7 +54,7 @@ const Breadcrumbs = ({
     }
     if (note) {
       breadcrumbs.push({
-        path: `/campaigns/${campaign.id}/notes/${note.id}`,
+        path: `/campaigns/${campaign.id}/notes/${note.slug}`,
         label: note.title,
       });
     }
