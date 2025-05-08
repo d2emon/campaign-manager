@@ -34,6 +34,10 @@ const CharacterDetailsPage = () => {
       return;
     }
 
+    if (!window.confirm('Вы уверены, что хотите удалить этого персонажа?')) {
+      return;
+    }
+
     try {
       await deleteNPC({
         campaignId,

@@ -30,6 +30,10 @@ const CampaignDetailsPage = () => {
       return;
     }
 
+    if (!window.confirm('Вы уверены, что хотите удалить эту кампанию?')) {
+      return;
+    }
+
     try {
       await deleteCampaign(campaignId);
       handleBack();

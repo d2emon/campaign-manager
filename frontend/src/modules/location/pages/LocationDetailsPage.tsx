@@ -37,6 +37,10 @@ const LocationDetailsPage = () => {
       return;
     }
 
+    if (!window.confirm('Вы уверены, что хотите удалить эту локацию?')) {
+      return;
+    }
+
     try {
       await deleteLocation({
         campaignId,
