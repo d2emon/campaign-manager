@@ -11,7 +11,7 @@ const DataItem = ({ label, children, className = '' }: DataItemProps) => {
   return (
     <Box className={`${className}`}>
       <Text className="text-sm font-medium text-gray-500">{label}</Text>
-      <Text className="mt-1 text-sm text-gray-900">{children}</Text>
+      <Box className="mt-1 text-sm text-gray-900">{children}</Box>
     </Box>
   );
 };
