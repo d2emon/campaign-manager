@@ -1,17 +1,32 @@
+import Button from 'components/ui/Button';
 import Paper from 'components/ui/Paper';
 import { Note } from '../types/note';
 
 interface NoteListProps {
-  className?: string;
   notes?: Note[];
-  onNoteSelect?: (noteId: string) => void;
+  campaignId?: string;
+  className?: string;
+  withAddButton?: boolean;
+  onAdd?: () => void;
+  onEdit?: (note: Note) => void;
+  onDelete?: (note: Note) => void;
+  onNoteSelect?: (campaignId: string, noteId: string) => void;
   selectedNoteId?: string;
 }
 
-const NoteList = ({ notes, className, onNoteSelect, selectedNoteId }: NoteListProps) => {
+const NoteList = ({
+  notes,
+  campaignId = '',
+  className,
+  withAddButton = false,
+  onAdd,
+  onEdit,
+  onDelete,
+  onNoteSelect,
+}: NoteListProps) => {
   const handleNoteSelect = (noteId: string) => {
     if (onNoteSelect) {
-      onNoteSelect(noteId);
+      onNoteSelect(campaignId, noteId);
     }
   };
 
@@ -19,6 +34,17 @@ const NoteList = ({ notes, className, onNoteSelect, selectedNoteId }: NoteListPr
     <Paper className={className}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Заметки</h2>
+        {withAddButton && (
+          <div className="flex items-center space-x-2">
+            <Button
+              type="button"
+              variant="primary"
+              onClick={onAdd}
+            >
+              Добавить заметку
+            </Button>
+          </div>
+        )}
       </div>
 
       {notes && notes.length > 0 ? (
@@ -29,7 +55,26 @@ const NoteList = ({ notes, className, onNoteSelect, selectedNoteId }: NoteListPr
               // selected={selectedNoteId === note.id} 
               onClick={() => handleNoteSelect(note.id)}
               title={note.title}
-            />
+            >
+              <div className="flex items-center space-x-2">
+                { onEdit && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => onEdit(note)}
+                  >
+                    Редактировать
+                  </Button>
+                )}
+                { onDelete && (
+                  <Button
+                    variant="danger"
+                    onClick={() => onDelete(note)}
+                  >
+                    Удалить
+                  </Button>
+                )}
+              </div>
+            </Paper>
           ))}
         </div>
       ) : (
