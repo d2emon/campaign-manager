@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { Campaign } from 'modules/campaign/types/campaign';
 import { Character } from 'modules/character/types/character';
 import { Location } from 'modules/location/types/location';
+import { Note } from 'modules/note/types/note';
+import { Quest } from 'modules/quest/types/quest';
 
 interface BreadcrumbItem {
   path: string;
@@ -12,10 +14,19 @@ interface BreadcrumbsProps {
   campaign?: Campaign | null;
   character?: Character | null;
   location?: Location | null;
+  quest?: Quest | null;
+  note?: Note | null;
   isEdit?: boolean;
 }
 
-const Breadcrumbs = ({ campaign, character, location, isEdit }: BreadcrumbsProps) => {
+const Breadcrumbs = ({
+  campaign,
+  character,
+  location,
+  quest,
+  note,
+  isEdit,
+}: BreadcrumbsProps) => {
   const breadcrumbs: BreadcrumbItem[] = [];
 
   if (campaign) {
@@ -33,6 +44,18 @@ const Breadcrumbs = ({ campaign, character, location, isEdit }: BreadcrumbsProps
       breadcrumbs.push({
         path: `/campaigns/${campaign.id}/locations/${location.id}`,
         label: location.name,
+      });
+    }
+    if (quest) {
+      breadcrumbs.push({
+        path: `/campaigns/${campaign.id}/quests/${quest.id}`,
+        label: quest.title,
+      });
+    }
+    if (note) {
+      breadcrumbs.push({
+        path: `/campaigns/${campaign.id}/notes/${note.id}`,
+        label: note.title,
       });
     }
   }
