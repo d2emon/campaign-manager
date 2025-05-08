@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
         "./src/**/*.{js,jsx,ts,tsx}",  // Где искать классы Tailwind
@@ -5,7 +6,19 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                primary: "#3b82f6",  // Синий (как в Bootstrap)
+                primary: {
+                    DEFAULT: '#3B82F6',
+                    50: '#EBF2FF',
+                    100: '#D7E6FF',
+                    200: '#B0CDFF',
+                    300: '#89B4FF',
+                    400: '#629BFF',
+                    500: '#3B82F6',
+                    600: '#0B61FF',
+                    700: '#0047D3',
+                    800: '#00349C',
+                    900: '#002165',
+                },
                 dark: "#1e293b",     // Тёмный фон
                 parchment: "#f5f5dc", // Пергаментный цвет для RPG-стиля
             },
