@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
+    "@mantine/core": "^8.0.0",
+    "@mantine/hooks": "^8.0.0",
     "@reduxjs/toolkit": "^2.7.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",

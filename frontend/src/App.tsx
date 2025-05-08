@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { MantineProvider } from '@mantine/core';
 import Header from 'components/layout/Header';
 import { AuthProvider } from 'modules/auth/contexts/AuthContext';
 import LoginPage from 'modules/auth/pages/LoginPage';
@@ -19,42 +20,46 @@ import DashboardPage from 'pages/DashboardPage';
 import PrivateRoute from 'pages/PrivateRoute';
 import { store } from 'store';
 
+import '@mantine/core/styles.css';
+
 const App = () => {
   return (
-    <Provider store={store}>
-      <Router>
-        <AuthProvider>
-          <div className="min-h-screen bg-gray-50">
-            <Header />
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route element={<PrivateRoute />}>
-                <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/campaigns/new" element={<CampaignFormPage />} />
-                <Route path="/campaigns/:campaignId/edit" element={<CampaignFormPage />} />
-                <Route path="/campaigns/:campaignId" element={<CampaignDetailsPage />} />
-                <Route path="/campaigns/:campaignId/characters/new" element={<EditCharacterPage />} />
-                <Route path="/campaigns/:campaignId/characters/:characterId/edit" element={<EditCharacterPage />} />
-                <Route path="/campaigns/:campaignId/characters/:characterId" element={<CharacterDetailsPage />} />
-                <Route path="/campaigns/:campaignId/locations/new" element={<EditLocationPage />} />
-                <Route path="/campaigns/:campaignId/locations/:locationId/edit" element={<EditLocationPage />} />
-                <Route path="/campaigns/:campaignId/locations/:locationId" element={<LocationDetailsPage />} />
-                <Route path="/campaigns/:campaignId/notes/new" element={<EditNotePage />} />
-                <Route path="/campaigns/:campaignId/notes/:noteId/edit" element={<EditNotePage />} />
-                <Route path="/campaigns/:campaignId/notes/:noteId" element={<NoteDetailsPage />} />
-                <Route path="/campaigns/:campaignId/quests/new" element={<EditQuestPage />} />
-                <Route path="/campaigns/:campaignId/quests/:questId/edit" element={<EditQuestPage />} />
-                <Route path="/campaigns/:campaignId/quests/:questId" element={<QuestDetailsPage />} />
-                <Route path="/campaigns/:campaignId/join" element={<JoinCampaignPage />} />
-              </Route>
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </div>
-        </AuthProvider>
-      </Router>
-    </Provider>
+    <MantineProvider>
+      <Provider store={store}>
+        <Router>
+          <AuthProvider>
+            <div className="min-h-screen bg-gray-50">
+              <Header />
+              <Routes>
+                <Route path="/" element={<Navigate to="/dashboard" />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route element={<PrivateRoute />}>
+                  <Route path="/dashboard" element={<DashboardPage />} />
+                  <Route path="/campaigns/new" element={<CampaignFormPage />} />
+                  <Route path="/campaigns/:campaignId/edit" element={<CampaignFormPage />} />
+                  <Route path="/campaigns/:campaignId" element={<CampaignDetailsPage />} />
+                  <Route path="/campaigns/:campaignId/characters/new" element={<EditCharacterPage />} />
+                  <Route path="/campaigns/:campaignId/characters/:characterId/edit" element={<EditCharacterPage />} />
+                  <Route path="/campaigns/:campaignId/characters/:characterId" element={<CharacterDetailsPage />} />
+                  <Route path="/campaigns/:campaignId/locations/new" element={<EditLocationPage />} />
+                  <Route path="/campaigns/:campaignId/locations/:locationId/edit" element={<EditLocationPage />} />
+                  <Route path="/campaigns/:campaignId/locations/:locationId" element={<LocationDetailsPage />} />
+                  <Route path="/campaigns/:campaignId/notes/new" element={<EditNotePage />} />
+                  <Route path="/campaigns/:campaignId/notes/:noteId/edit" element={<EditNotePage />} />
+                  <Route path="/campaigns/:campaignId/notes/:noteId" element={<NoteDetailsPage />} />
+                  <Route path="/campaigns/:campaignId/quests/new" element={<EditQuestPage />} />
+                  <Route path="/campaigns/:campaignId/quests/:questId/edit" element={<EditQuestPage />} />
+                  <Route path="/campaigns/:campaignId/quests/:questId" element={<QuestDetailsPage />} />
+                  <Route path="/campaigns/:campaignId/join" element={<JoinCampaignPage />} />
+                </Route>
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </div>
+          </AuthProvider>
+        </Router>
+      </Provider>
+    </MantineProvider>
   );
 };
 
