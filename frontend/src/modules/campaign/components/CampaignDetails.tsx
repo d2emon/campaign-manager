@@ -84,6 +84,11 @@ const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenera
       <QuestList
         className="my-6"
         quests={campaign.quests || []}
+        campaignId={campaign.id}
+        withAddButton
+        onAdd={() => {
+          navigate(`/campaigns/${campaign.id}/quests/new`);
+        }}
       />
 
       <NoteList

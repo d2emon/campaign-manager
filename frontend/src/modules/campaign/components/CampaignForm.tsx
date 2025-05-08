@@ -14,6 +14,8 @@ import { Character } from 'modules/character/types/character';
 import { Location } from 'modules/location/types/location';
 import NoteList from 'modules/note/components/NoteList';
 import QuestList from 'modules/quest/components/QuestList';
+import { useDeleteQuestMutation } from 'modules/quest/services/questApi';
+import { Quest } from 'modules/quest/types/quest';
 import { Campaign } from '../types/campaign';
 
 interface CampaignFormProps {
@@ -62,6 +64,7 @@ const CampaignForm = ({
   const navigate = useNavigate();
   const [deleteNPC] = useDeleteNPCMutation();
   const [deleteLocation] = useDeleteLocationMutation();
+  const [deleteQuest] = useDeleteQuestMutation();
 
   const {
     register,
@@ -104,6 +107,19 @@ const CampaignForm = ({
       // Обновляем список локаций после удаления
       const updatedLocations = initialData?.locations?.filter(l => l.id !== location.id) || [];
       onSubmit({ ...initialData, locations: updatedLocations });
+    }
+  };
+
+  const handleEditQuest = (quest: Quest) => {
+    navigate(`/campaigns/${initialData?.id}/quests/${quest.id}/edit`);
+  };
+
+  const handleDeleteQuest = async (quest: Quest) => {
+    if (window.confirm('Вы уверены, что хотите удалить этот квест?')) {
+      await deleteQuest({ campaignId: initialData?.id || '', questId: quest.id });
+      // Обновляем список квестов после удаления
+      const updatedQuests = initialData?.quests?.filter(q => q.id !== quest.id) || [];
+      onSubmit({ ...initialData, quests: updatedQuests });
     }
   };
 
@@ -197,6 +213,13 @@ const CampaignForm = ({
           <QuestList
             className="my-6"
             quests={initialData?.quests || []}
+            campaignId={initialData?.id || ''}
+            withAddButton
+            onAdd={() => {
+              navigate(`/campaigns/${initialData?.id}/quests/new`);
+            }}
+            onEdit={handleEditQuest}
+            onDelete={handleDeleteQuest}
           />
 
           <NoteList
