@@ -55,13 +55,7 @@ const QuestForm = ({
     formState: { errors },
   } = useForm<QuestFormData>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      title: '',
-      description: '',
-      reward: '',
-      status: 'active',
-      ...initialData,
-    },
+    defaultValues: initialData || undefined,
   });
 
   useEffect(() => {
@@ -70,13 +64,9 @@ const QuestForm = ({
     }
   }, [initialData, reset]);
 
-  const onSubmitHandler = handleSubmit(async (data) => {
-    await onSubmit(data);
-  });
-
   return (
     <Paper>
-      <form onSubmit={onSubmitHandler} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Field
           id="title"
           error={errors.title}
