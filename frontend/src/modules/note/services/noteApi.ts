@@ -14,7 +14,7 @@ interface NoteUpdateDTO {
 }
 
 const mapNote = (note: any): Note => ({
-  id: note?.id,
+  slug: note?.slug,
   title: note?.title,
   content: note?.content,
   campaign: note?.campaign,
