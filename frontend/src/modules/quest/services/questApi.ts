@@ -21,6 +21,7 @@ const mapQuest = (quest: any): Quest => ({
   status: quest?.status,
   rewards: quest?.rewards,
   steps: quest?.steps,
+  isPublic: quest?.isPublic,
   createdAt: quest?.createdAt,
   updatedAt: quest?.updatedAt,
 });

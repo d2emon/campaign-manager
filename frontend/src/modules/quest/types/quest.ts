@@ -12,6 +12,7 @@ export interface Quest {
     description: string;
     isCompleted: boolean;
   }[];
+  isPublic: boolean;
   createdAt: string;
   updatedAt: string;
 }
