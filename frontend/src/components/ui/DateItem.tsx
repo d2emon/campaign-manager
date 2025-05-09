@@ -24,7 +24,7 @@ const DateItem = ({
       : new Date(date).toLocaleDateString(undefined, format);
   }, [date, format]);
 
-  return <Text className={className}>{formattedDate}</Text>;
+  return <Text className={className} size="sm">{formattedDate}</Text>;
 };
 
 export default DateItem;

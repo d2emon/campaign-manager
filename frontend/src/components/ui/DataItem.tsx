@@ -10,8 +10,8 @@ interface DataItemProps {
 const DataItem = ({ label, children, className = '' }: DataItemProps) => {
   return (
     <Group className={`${className}`}>
-      <Text className="text-sm font-medium text-gray-500">{label}</Text>
-      <Box className="mt-1 text-sm text-gray-900">{children}</Box>
+      <Text size="sm" className="text-gray-500">{label}</Text>
+      <Box className="text-gray-900">{children}</Box>
     </Group>
   );
 };
