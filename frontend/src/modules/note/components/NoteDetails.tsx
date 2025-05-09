@@ -2,6 +2,7 @@ import {  Badge, Box, Card, Group, Text } from '@mantine/core';
 import CampaignItem from 'components/ui/CampaignItem';
 import DateItem from 'components/ui/DateItem';
 import { Note } from '../types/note';
+import NoteCategory from './NoteCategory';
 
 interface NoteDetailsProps {
   note: Note;
@@ -16,21 +17,6 @@ const NoteDetails = ({
   onDelete,
   onEdit
 }: NoteDetailsProps) => {
-  const getCategory = (category?: string) => {
-    switch (category) {
-      case 'plot':
-        return <Badge variant="primary">Сюжет</Badge>;
-      case 'npc':
-        return <Badge variant="primary">Персонажи</Badge>;
-      case 'location':
-        return <Badge variant="primary">Локации</Badge>;
-      case 'lore':
-        return <Badge variant="primary">Лоре</Badge>;
-      default:
-        return null;
-    }
-  };
-
   return (
     <CampaignItem
       isLoading={isLoading}
@@ -42,19 +28,17 @@ const NoteDetails = ({
       onDelete={onDelete}
     >
       <Group justify="space-between">
-        <Box>
-          <Group>
-            {getCategory(note.category)}
-            {note.tags?.map((tag) => (
-              <Badge
-                key={tag}
-                variant="primary"
-              >
-                {tag}
-              </Badge>
-            ))}
-          </Group>
-        </Box>
+        <Group>
+          <NoteCategory category={note.category} />
+          {note.tags?.map((tag) => (
+            <Badge
+              key={tag}
+              variant="primary"
+            >
+              {tag}
+            </Badge>
+          ))}
+        </Group>
 
         <Group mt="md" mb="md" justify="flex-end" gap="md">
           {note.createdAt && (
