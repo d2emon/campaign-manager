@@ -84,8 +84,10 @@ const NoteForm = ({
   useEffect(() => {
     if (initialData) {
       reset(initialData);
+    } else {
+      setValue('tags', []);
     }
-  }, [initialData, reset]);
+  }, [initialData, reset, setValue]);
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
