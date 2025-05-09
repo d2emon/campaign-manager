@@ -3,10 +3,29 @@ import Note from '../models/note.js';
 
 export const createNote = async (req, res, next) => {
   try {
-    const { content, category } = req.body;
+    const data = req.body;
+
+    if (!data.slug) {
+      return res.status(400).json({
+        error: 'Идентификатор обязателен для заполнения',
+      })
+    }
+
+    const hasSlug = await Note.countDocuments({ slug: data.slug });
+    if (hasSlug) {
+      return res.status(400).json({
+        error: 'Идентификатор уже существует',
+      })
+    }
+
+    if (!data.title) {
+      return res.status(400).json({
+        error: 'Заголовок обязателен для заполнения',
+      })
+    }
+
     const item = await Note.create({
-      content,
-      category,
+      ...data,
       campaign: req.params.campaignId,
     });
 
@@ -26,14 +45,12 @@ export const createNote = async (req, res, next) => {
 export const getNote = async (req, res, next) => {
   try {
     const item = await Note.findOne({
-      _id: req.params.id,
+      slug: req.params.id,
       campaign: req.params.campaignId,
     }).populate('campaign');
     
     if (!item) {
-      return res.status(404).json({
-        error: 'Персонаж не найден или неверный код',
-      });
+      return res.status(404).json({ error: 'Заметка не найдена' });
     }
       
     return res.json(item);
@@ -44,17 +61,13 @@ export const getNote = async (req, res, next) => {
 
 export const updateNote = async (req, res, next) => {
   try {
-    const { name, race, role } = req.body;
+    const data = req.body;
     const item = await Note.updateOne(
       {
-        _id: req.params.id,
+        slug: req.params.id,
         campaign: req.params.campaignId,
       },
-      {
-        name,
-        race,
-        role,
-      },
+      data,
     );
     return res.json(item);
   } catch (error) {
@@ -65,7 +78,7 @@ export const updateNote = async (req, res, next) => {
 export const removeNote = async (req, res, next) => {
   try {
     await Note.deleteOne({
-      _id: req.params.id,
+      slug: req.params.id,
       campaign: req.params.campaignId,
     });
     return res.json({
