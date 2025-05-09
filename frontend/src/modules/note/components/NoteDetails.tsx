@@ -1,9 +1,6 @@
-import { Box, Group, Stack, Text } from '@mantine/core';
+import { Group, Text } from '@mantine/core';
 import Badge from 'components/ui/Badge';
 import CampaignItem from 'components/ui/CampaignItem';
-import DataBlock from 'components/ui/DataBlock';
-import DataItem from 'components/ui/DataItem';
-import DateItem from 'components/ui/DateItem';
 import { Note } from '../types/note';
 
 interface NoteDetailsProps {
@@ -36,7 +33,10 @@ const NoteDetails = ({
 
   return (
     <CampaignItem
+      createdAt={note.createdAt}
+      updatedAt={note.updatedAt}
       isLoading={isLoading}
+      isPrivate={true}
       title={note.title}
       withEdit
       withDelete
@@ -45,20 +45,15 @@ const NoteDetails = ({
     >
       <Group>
         {getCategory(note.category)}
-        {!note.isPublic && <Badge variant="danger">Скрытая</Badge>}
         {note.tags?.map((tag) => (
-          <Badge variant="primary">{tag}</Badge>
+          <Badge
+            key={tag}
+            variant="primary"
+          >
+            {tag}
+          </Badge>
         ))}
       </Group>
-
-      <Box>
-        <DataItem label="Создана:">
-          <DateItem date={note.createdAt} />
-        </DataItem>
-        <DataItem label="Обновлена:">
-          <DateItem date={note.updatedAt} />
-        </DataItem>
-      </Box>
 
       <Text>
         {note.content}
