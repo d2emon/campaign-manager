@@ -1,15 +1,24 @@
-import Badge from 'components/ui/Badge';
-import Button from 'components/ui/Button';
-import Paper from 'components/ui/Paper';
+import { useNavigate } from 'react-router-dom';
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  Group,
+  SimpleGrid,
+  Title,
+} from '@mantine/core';
 import TextBlock from 'components/ui/TextBlock';
 import { Quest } from '../types/quest';
-import { useNavigate } from 'react-router-dom';
+import { Plus } from 'react-feather';
 
 interface QuestListProps {
   className?: string;
   quests?: Quest[];
   campaignId?: string;
   withAddButton?: boolean;
+  withEditButton?: boolean;
+  withDeleteButton?: boolean;
   onAdd?: () => void;
   onEdit?: (quest: Quest) => void;
   onDelete?: (quest: Quest) => void;
@@ -20,6 +29,8 @@ const QuestList = ({
   quests,
   campaignId,
   withAddButton = false,
+  withEditButton = false,
+  withDeleteButton = false,
   onAdd,
   onEdit,
   onDelete,
@@ -43,27 +54,44 @@ const QuestList = ({
     navigate(`/campaigns/${campaignId}/quests/${questId}`);
   };
 
+  const createEditHandler = (quest: Quest) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (onEdit) {
+      onEdit(quest);
+    }
+  };
+
+  const createDeleteHandler = (quest: Quest) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); 
+    e.stopPropagation();
+
+    if (onDelete) {
+      onDelete(quest);
+    }
+  };
+
   return (
-    <Paper className={className}>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Квесты кампании</h2>
+    <Box className={className}>
+      <Group justify="space-between" mb="md">
+        <Title order={2}>Квесты кампании</Title>
         {withAddButton && (
-          <div className="flex items-center space-x-2">
-            <Button
-              type="button"
-              variant="primary"
-              onClick={onAdd}
-            >
-              Добавить квест
-            </Button>
-          </div>
+          <Button
+            type="button"
+            variant="primary"
+            leftSection={<Plus size={16} />}
+            onClick={onAdd}
+          >
+            Добавить квест
+          </Button>
         )}
-      </div>
+      </Group>
         
       {quests && quests.length > 0 ? (
-        <div className="space-y-4">
+        <SimpleGrid cols={2}>
           {quests.map((quest) => (
-            <Paper
+            <Card
               key={quest.slug}
               className="hover:shadow-md transition-shadow cursor-pointer"
               onClick={() => handleQuestClick(quest.slug)}
@@ -82,18 +110,18 @@ const QuestList = ({
                   </h3>  
                 </div>
                 <div className="flex items-center space-x-2">
-                  {onEdit && (
+                  {withEditButton && (
                     <Button
                       variant="secondary"
-                      onClick={() => onEdit(quest)}
+                      onClick={createEditHandler(quest)}
                     >
                       Редактировать
                     </Button>
                   )}
-                  {onDelete && (
+                  {withDeleteButton && (
                     <Button
                       variant="danger"
-                      onClick={() => onDelete(quest)}
+                      onClick={createDeleteHandler(quest)}
                     >
                       Удалить
                     </Button>
@@ -133,15 +161,15 @@ const QuestList = ({
                   </div>
                 </div>
               )}
-            </Paper>
+            </Card>
           ))}
-        </div>
+        </SimpleGrid>
       ): (
         <div className="text-center text-gray-500 py-4">
           В этой кампании пока нет квестов
         </div>
       )}
-    </Paper>
+    </Box>
   );
 };
 
