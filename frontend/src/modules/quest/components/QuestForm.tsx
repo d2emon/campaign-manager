@@ -1,13 +1,25 @@
 import { useEffect } from 'react';
+import { AlertCircle } from 'react-feather';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  Group,
+  NativeSelect,
+  Switch,
+  Textarea,
+  TextInput,
+} from '@mantine/core';
 import * as yup from 'yup';
-import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
-import Paper from 'components/ui/Paper';
+import slugify from 'helpers/slugify';
 import { Quest } from '../types/quest';
 
 interface QuestFormProps {
+  error?: string;
   initialData?: Partial<Quest> | null;
   isEditing?: boolean;
   isLoading?: boolean;
@@ -16,6 +28,10 @@ interface QuestFormProps {
 }
 
 const schema = yup.object({
+  slug: yup
+    .string()
+    .required('Идентификатор обязателен')
+    .matches(/^[a-z0-9-]+$/, 'Идентификатор может содержать только латинские буквы, цифры и дефисы'),
   title: yup
     .string()
     .required('Название квеста обязательно')
@@ -32,16 +48,22 @@ const schema = yup.object({
     .string()
     .required('Статус обязателен')
     .oneOf(['active', 'completed', 'failed'] as const, 'Некорректный статус'),
+  isPublic: yup
+    .boolean()
+    .default(false),
 });
 
 type QuestFormData = {
+  slug: string;
   title: string;
   description: string;
   reward: string;
   status: 'active' | 'completed' | 'failed';
+  isPublic: boolean;
 };
 
 const QuestForm = ({
+  error,
   initialData,
   isEditing = false,
   isLoading = false,
@@ -52,6 +74,8 @@ const QuestForm = ({
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<QuestFormData>({
     resolver: yupResolver(schema),
@@ -64,64 +88,98 @@ const QuestForm = ({
     }
   }, [initialData, reset]);
 
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'title') {
+        if (value.title) {
+          setValue('slug', slugify(value.title as string));
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [setValue, watch]);
+
   return (
-    <Paper>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <Field
-          id="title"
-          error={errors.title}
-          inputProps={register('title')}
-          label="Название квеста"
-        />
+    <Box>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Card className="space-y-6">
+          { error && (
+            <Alert
+              color="red"
+              icon={<AlertCircle />}
+              title="Ошибка"
+            >
+              {error}
+            </Alert>
+          )}
+          <TextInput
+            id="title"
+            error={errors.title?.message}
+            label="Название квеста"
+            {...register('title')}
+          />
 
-        <Field
-          id="description"
-          error={errors.description}
-          inputProps={register('description')}
-          label="Описание"
-          type="textarea"
-          rows={4}
-        />
+          <TextInput
+            id="slug"
+            error={errors.slug?.message}
+            label="Идентификатор"
+            {...register('slug')}
+          />
 
-        <Field
-          id="reward"
-          error={errors.reward}
-          inputProps={register('reward')}
-          label="Награда"
-        />
+          <Textarea
+            id="description"
+            error={errors.description?.message}
+            label="Описание"
+            {...register('description')}
+            rows={4}
+          />
 
-        <Field
-          id="status"
-          error={errors.status}
-          inputProps={register('status')}
-          label="Статус"
-          placeholder="Выберите статус"
-          type="select"
-          options={[
-            { value: 'active', label: 'Активен' },
-            { value: 'completed', label: 'Завершен' },
-            { value: 'failed', label: 'Провален' },
-          ]}
-        />
+          <NativeSelect
+            id="status"
+            error={errors.status?.message}
+            label="Статус"
+            {...register('status')}
+            data={[
+              { value: '', label: 'Выберите статус' },
+              { value: 'active', label: 'Активен' },
+              { value: 'completed', label: 'Завершен' },
+              { value: 'failed', label: 'Провален' },
+            ]}
+          />
 
-        <div className="flex justify-end space-x-4">
-          <Button
-            type="button"
-            onClick={onCancel}
-            variant="secondary"
-          >
-            Отмена
-          </Button>
-          <Button
-            type="submit"
-            disabled={isLoading}
-            variant="primary"
-          >
-            {isLoading ? 'Сохранение...' : isEditing ? 'Сохранить' : 'Создать'}
-          </Button>
-        </div>
+          <Switch
+            id="isPublic"
+            label="Доступен игрокам"
+            {...register('isPublic')}
+          />
+
+          <Field
+            id="reward"
+            error={errors.reward}
+            inputProps={register('reward')}
+            label="Награда"
+          />
+
+          <Group justify="flex-end">
+            <Button
+              type="button"
+              onClick={onCancel}
+              variant="secondary"
+            >
+              Отмена
+            </Button>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              variant="primary"
+            >
+              {isLoading ? 'Сохранение...' : isEditing ? 'Сохранить' : 'Создать'}
+            </Button>
+          </Group>
+        </Card>
       </form>
-    </Paper>
+    </Box>
   );
 };
 
