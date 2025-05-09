@@ -126,14 +126,14 @@ const CampaignForm = ({
   };
 
   const handleEditQuest = (quest: Quest) => {
-    navigate(`/campaigns/${initialData?.id}/quests/${quest.id}/edit`);
+    navigate(`/campaigns/${initialData?.id}/quests/${quest.slug}/edit`);
   };
 
   const handleDeleteQuest = async (quest: Quest) => {
     if (window.confirm('Вы уверены, что хотите удалить этот квест?')) {
-      await deleteQuest({ campaignId: initialData?.id || '', questId: quest.id });
+      await deleteQuest({ campaignId: initialData?.id || '', questId: quest.slug });
       // Обновляем список квестов после удаления
-      const updatedQuests = initialData?.quests?.filter(q => q.id !== quest.id) || [];
+      const updatedQuests = initialData?.quests?.filter(q => q.slug !== quest.slug) || [];
       onSubmit({ ...initialData, quests: updatedQuests });
     }
   };

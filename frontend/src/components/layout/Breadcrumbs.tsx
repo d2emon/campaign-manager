@@ -48,7 +48,7 @@ const Breadcrumbs = ({
     }
     if (quest) {
       breadcrumbs.push({
-        path: `/campaigns/${campaign.id}/quests/${quest.id}`,
+        path: `/campaigns/${campaign.id}/quests/${quest.slug}`,
         label: quest.title,
       });
     }

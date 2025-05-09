@@ -37,9 +37,11 @@ const QuestDetails = ({
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold mb-2">{quest.title}</h1>
-          <div className="text-sm text-gray-500">
-            Статус: <span className="font-medium">{getStatusLabel(quest.status)}</span>
-          </div>
+          {quest.status && (
+            <div className="text-sm text-gray-500">
+              Статус: <span className="font-medium">{getStatusLabel(quest.status)}</span>
+            </div>
+          )}
         </div>
 
         <div>

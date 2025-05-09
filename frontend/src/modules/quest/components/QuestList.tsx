@@ -64,19 +64,21 @@ const QuestList = ({
         <div className="space-y-4">
           {quests.map((quest) => (
             <Paper
-              key={quest.id}
+              key={quest.slug}
               className="hover:shadow-md transition-shadow cursor-pointer"
-              onClick={() => handleQuestClick(quest.id)}
+              onClick={() => handleQuestClick(quest.slug)}
             >
               <div className="flex justify-between items-center mb-1">
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">
                     {quest.title}
-                    <Badge
-                      variant={getStatusColor(quest.status)}
-                    >
-                      {quest.status.charAt(0).toUpperCase() + quest.status.slice(1)}
-                    </Badge>
+                    {quest.status && (
+                      <Badge
+                        variant={getStatusColor(quest.status)}
+                      >
+                        {quest.status.charAt(0).toUpperCase() + quest.status.slice(1)}
+                      </Badge>
+                    )}
                   </h3>  
                 </div>
                 <div className="flex items-center space-x-2">
@@ -103,7 +105,7 @@ const QuestList = ({
                 {quest.description}
               </TextBlock>
 
-              {quest.rewards.length > 0 && (
+              {quest.rewards && quest.rewards.length > 0 && (
                 <div className="mb-1">
                   <div className="flex flex-wrap gap-2">
                     Rewards:
@@ -121,7 +123,7 @@ const QuestList = ({
                 </div>
               )}
 
-              {quest.steps.length > 0 && (
+              {quest.steps && quest.steps.length > 0 && (
                 <div>
                   <div className="flex flex-wrap gap-2">
                     Progress:
