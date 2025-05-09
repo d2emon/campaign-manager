@@ -15,6 +15,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import * as yup from 'yup';
+import slugify from 'helpers/slugify';
 import { Note } from '../types/note';
 
 interface NoteFormProps {
@@ -29,7 +30,8 @@ interface NoteFormProps {
 const schema = yup.object({
   slug: yup
     .string()
-    .required('Идентификатор обязателен'),
+    .required('Идентификатор обязателен')
+    .matches(/^[a-z0-9-]+$/, 'Идентификатор может содержать только латинские буквы, цифры и дефисы'),
   title: yup
     .string()
     .required('Название обязательно'),
@@ -72,6 +74,7 @@ const NoteForm = ({
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<NoteFormData>({
     resolver: yupResolver(schema),
@@ -83,6 +86,18 @@ const NoteForm = ({
       reset(initialData);
     }
   }, [initialData, reset]);
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === 'title') {
+        if (value.title) {
+          setValue('slug', slugify(value.title as string));
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [setValue, watch]);
 
   return (
     <Box>
