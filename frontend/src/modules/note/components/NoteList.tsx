@@ -49,9 +49,9 @@ const NoteList = ({
         <div className="space-y-4">
           {notes.map((note) => (
             <Paper
-              key={note.id}
+              key={note.slug}
               className="hover:shadow-md transition-shadow cursor-pointer"
-              onClick={() => handleNoteClick(note.id)}
+              onClick={() => handleNoteClick(note.slug)}
               title={note.title}
             >
               <div className="flex items-center space-x-2">

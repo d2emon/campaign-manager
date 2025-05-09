@@ -1,18 +1,20 @@
 import mongoose from 'mongoose';
 
 const NoteSchema = new mongoose.Schema({
-  content: { type: String, required: true },
-  category: {
-    type: String,
-    enum: ['plot', 'npc', 'location', 'lore'],
-    default: 'plot',
-  },
+  slug: { type: String, required: true, unique: true },
   campaign: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Campaign', 
     required: true 
   },
-
+  title: { type: String, required: true },
+  content: { type: String },
+  category: {
+    type: String,
+    enum: ['plot', 'npc', 'location', 'lore'],
+    default: 'plot',
+  },
+  tags: { type: [String] },
   isPublic: { type: Boolean, default: false },
 }, {
   timestamps: true,
@@ -25,5 +27,7 @@ const NoteSchema = new mongoose.Schema({
     virtuals: true,
   },
 });
+
+NoteSchema.index({ slug: 1 }, { unique: true });
 
 export default mongoose.model('Note', NoteSchema);

@@ -139,14 +139,14 @@ const CampaignForm = ({
   };
 
   const handleEditNote = (note: Note) => {
-    navigate(`/campaigns/${initialData?.id}/notes/${note.id}/edit`);
+    navigate(`/campaigns/${initialData?.id}/notes/${note.slug}/edit`);
   };
 
   const handleDeleteNote = async (note: Note) => {
     if (window.confirm('Вы уверены, что хотите удалить эту заметку?')) {
-      await deleteNote({ campaignId: initialData?.id || '', noteId: note.id });
+      await deleteNote({ campaignId: initialData?.id || '', noteId: note.slug });
       // Обновляем список заметок после удаления
-      const updatedNotes = initialData?.notes?.filter(n => n.id !== note.id) || [];
+      const updatedNotes = initialData?.notes?.filter(n => n.slug !== note.slug) || [];
       onSubmit({ ...initialData, notes: updatedNotes });
     }
   };

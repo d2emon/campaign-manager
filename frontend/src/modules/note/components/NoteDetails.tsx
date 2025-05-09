@@ -31,7 +31,7 @@ const NoteDetails = ({
     >
       <div className="mb-6">
         {note.category && <Badge variant="primary">{note.category}</Badge>}
-        {note.isPrivate && <Badge variant="primary">Личная</Badge>}
+        {note.isPublic && <Badge variant="primary">Публичная</Badge>}
       </div>
 
       <TextBlock>

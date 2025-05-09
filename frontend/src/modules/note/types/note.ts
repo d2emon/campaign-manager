@@ -1,11 +1,11 @@
 export interface Note {
-  id: string;
+  slug: string;
   title: string;
-  content: string;
+  content?: string;
   category?: string;
   campaign: string;
   tags?: string[];
-  isPrivate?: boolean;
+  isPublic?: boolean;
   createdAt: string;
   updatedAt: string;
 }

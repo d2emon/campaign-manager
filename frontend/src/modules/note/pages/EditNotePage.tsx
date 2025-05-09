@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import DetailPage from 'components/layout/DetailPage';
 import useCampaign from 'modules/campaign/hooks/useCampaign';
 import NoteForm from '../components/NoteForm';
 import {
+  NoteErrorResponse,
   useCreateNoteMutation,
   useGetNoteQuery,
   useUpdateNoteMutation,
@@ -11,6 +13,7 @@ import { Note } from '../types/note';
 
 const EditNotePage = () => {
   const { noteId = '' } = useParams<{ noteId: string }>();
+  const [ error, setError ] = useState<string | undefined>(undefined);
   const {
     campaign,
     campaignId,
@@ -26,17 +29,25 @@ const EditNotePage = () => {
     skip: !campaignId || !noteId,
   });
 
-  const [createNote, { isLoading: isCreating }] = useCreateNoteMutation();
-  const [updateNote, { isLoading: isUpdating }] = useUpdateNoteMutation();
+  const [createNote, {
+    isSuccess: isCreateSuccess,
+    error: createError,
+  }] = useCreateNoteMutation();
+  const [updateNote, {
+    isSuccess: isUpdateSuccess,
+    error: updateError,
+  }] = useUpdateNoteMutation();
 
   const note = (noteId && !getNote.isLoading)
     ? getNote.data
     : null;
   const isEditing = !!noteId;
-  const isLoading = isLoadingCampaign || getNote.isLoading || isCreating || isUpdating;
+  const isLoading = isLoadingCampaign || getNote.isLoading;
 
   const handleSubmit = async (data: Partial<Note>) => {
     if (!campaignId) return;
+
+    setError(undefined);
 
     try {
       if (isEditing) {
@@ -51,13 +62,36 @@ const EditNotePage = () => {
           data,
         });
       }
-      reloadCampaign();
-      goToCampaign();
     } catch (error) {
       console.error('Error saving note:', error);
+      setError(`${error}`);
     }
   };
 
+  useEffect(() => {
+    if (isCreateSuccess || isUpdateSuccess) {
+      reloadCampaign();
+      goToCampaign();
+    }
+  }, [
+    goToCampaign,
+    isCreateSuccess,
+    isUpdateSuccess,
+    reloadCampaign,
+  ]);
+
+  useEffect(() => {
+    if (createError) {
+      setError((createError as NoteErrorResponse)?.data?.error)  
+    }
+  }, [createError]);
+
+  useEffect(() => {
+    if (updateError) {
+      setError((updateError as NoteErrorResponse)?.data?.error);  
+    }
+  }, [updateError]);
+  
   return (
     <DetailPage
       breadcrumbs={{
@@ -72,6 +106,7 @@ const EditNotePage = () => {
       onBack={goToCampaign}
     >
       <NoteForm
+        error={error}
         initialData={note}
         isEditing={isEditing}
         isLoading={isLoading}
