@@ -1,21 +1,18 @@
 import { ReactNode } from 'react';
 import {
   Badge,
+  Box,
   Button,
   Card,
   Center,
   Group,
   Loader,
-  Stack,
   Title,
 } from '@mantine/core';
-import DataItem from './DataItem';
-import DateItem from './DateItem';
+import { Edit, Trash } from 'react-feather';
 
 interface CampaignItemProps {
   className?: string;
-  createdAt?: string;
-  updatedAt?: string;
   isLoading?: boolean;
   isPrivate?: boolean;
   title?: ReactNode;
@@ -28,8 +25,6 @@ interface CampaignItemProps {
 
 const CampaignItem = ({
   className,
-  createdAt,
-  updatedAt,
   isLoading,
   isPrivate,
   title,
@@ -50,43 +45,44 @@ const CampaignItem = ({
   }
 
   return (
-    <Card className={className}>
+    <Box className={className}>
       <Group justify="space-between">
-        <Group>
-          <Title order={2}>{title}</Title>
-          {isPrivate && <Badge variant="danger">Скрытый блок</Badge>}
+        <Group align="center">
+          <Title order={2} style={{ marginBottom: 0 }}>{title}</Title>
+          {isPrivate && (
+            <Badge color="red" size="sm">
+              Скрытый блок
+            </Badge>
+          )}
         </Group>
-        <Group>
+        <Group gap="xs">
           {withEdit && (
-            <Button variant="default" onClick={onEdit}>
+            <Button 
+              variant="default"
+              size="sm"
+              leftSection={<Edit size={16} />}
+              onClick={onEdit}
+            >
               Редактировать
             </Button>
           )}
           {withDelete && (
-            <Button  color="red" onClick={onDelete}>
+            <Button
+              color="red"
+              size="sm" 
+              leftSection={<Trash size={16} />}
+              onClick={onDelete}
+            >
               Удалить
             </Button>
           )}
         </Group>
       </Group>
 
-      <Group justify="flex-end">
-        <Stack>
-          {createdAt && (
-            <DataItem label="Создана:">
-              <DateItem date={createdAt} />
-            </DataItem>
-          )}
-          {updatedAt && (
-            <DataItem label="Обновлена:">
-              <DateItem date={updatedAt} />
-            </DataItem>
-          )}
-        </Stack>
-      </Group>
-
-      {children}
-    </Card>
+      <Card mt="md">
+        {children}
+      </Card>
+    </Box>
   );
 };
 
