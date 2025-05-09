@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import DataItem from './DataItem';
-
+import { Text } from '@mantine/core';
+ 
 interface DateItemProps {
   label?: string;
   date?: string | Date;
@@ -9,7 +9,6 @@ interface DateItemProps {
 }
 
 const DateItem = ({ 
-  label = '',
   date = '',
   className = '',
   format = { 
@@ -25,14 +24,7 @@ const DateItem = ({
       : new Date(date).toLocaleDateString(undefined, format);
   }, [date, format]);
 
-  return (
-    <DataItem
-      className={className}
-      label={label}
-    >
-      {formattedDate}
-    </DataItem>
-  );
+  return <Text className={className}>{formattedDate}</Text>;
 };
 
 export default DateItem;
