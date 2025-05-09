@@ -1,17 +1,17 @@
 export interface Quest {
-  id: string;
+  slug: string;
+  campaign: string;
   title: string;
-  description: string;
-  status: 'active' | 'completed' | 'failed';
-  rewards: {
+  description?: string;
+  status?: 'active' | 'completed' | 'failed';
+  rewards?: {
     name: string;
     quantity: number;
   }[];
-  steps: {
+  steps?: {
     description: string;
     isCompleted: boolean;
   }[];
-  campaign: string;
   createdAt: string;
   updatedAt: string;
 }
