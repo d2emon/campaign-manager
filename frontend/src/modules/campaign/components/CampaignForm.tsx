@@ -264,6 +264,8 @@ const CampaignForm = ({
             notes={initialData?.notes || []}
             campaignId={initialData?.id || ''}
             withAddButton
+            withEditButton
+            withDeleteButton
             onAdd={() => {
               navigate(`/campaigns/${initialData?.id}/notes/new`);
             }}
