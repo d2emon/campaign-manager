@@ -1,6 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import Button from 'components/ui/Button';
-import Paper from 'components/ui/Paper';
+import {
+  Box,
+  Button,
+  Card,
+  Group,
+  SimpleGrid,
+  Title,
+} from '@mantine/core';
 import { Note } from '../types/note';
 
 interface NoteListProps {
@@ -8,6 +14,8 @@ interface NoteListProps {
   campaignId?: string;
   className?: string;
   withAddButton?: boolean;
+  withEditButton?: boolean;
+  withDeleteButton?: boolean;
   onAdd?: () => void;
   onEdit?: (note: Note) => void;
   onDelete?: (note: Note) => void;
@@ -18,6 +26,8 @@ const NoteList = ({
   campaignId = '',
   className,
   withAddButton = false,
+  withEditButton = false,
+  withDeleteButton = false,
   onAdd,
   onEdit,
   onDelete,
@@ -28,61 +38,82 @@ const NoteList = ({
     navigate(`/campaigns/${campaignId}/notes/${noteId}`);
   };
 
+  const createEditHandler = (note: Note) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (onEdit) {
+      console.log('handleEdit', note);
+      onEdit(note);
+    }
+  };
+
+  const createDeleteHandler = (note: Note) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (onDelete) {
+      onDelete(note);
+    }
+  };
+
   return (
-    <Paper className={className}>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Заметки</h2>
-        {withAddButton && (
-          <div className="flex items-center space-x-2">
+    <Box className={className}>
+      <Group justify="space-between" mb="md">
+        <Title order={2}>Заметки</Title>
+        <Group align="center">
+          {withAddButton && (
             <Button
               type="button"
               variant="primary"
               onClick={onAdd}
             >
-              Добавить заметку
+              Добавить
             </Button>
-          </div>
-        )}
-      </div>
+          )}
+        </Group>
+      </Group>
 
       {notes && notes.length > 0 ? (
-        <div className="space-y-4">
+        <SimpleGrid cols={2}>
           {notes.map((note) => (
-            <Paper
+            <Card
               key={note.slug}
               className="hover:shadow-md transition-shadow cursor-pointer"
               onClick={() => handleNoteClick(note.slug)}
-              title={note.title}
             >
-              <div className="flex items-center space-x-2">
-                { onEdit && (
-                  <Button
-                    variant="secondary"
-                    onClick={() => onEdit(note)}
-                  >
-                    Редактировать
-                  </Button>
-                )}
-                { onDelete && (
-                  <Button
-                    variant="danger"
-                    onClick={() => onDelete(note)}
-                  >
-                    Удалить
-                  </Button>
-                )}
-              </div>
-            </Paper>
+              <Group justify="space-between">
+                <Title order={3}>{note.title}</Title>
+                <Group align="center">
+                  { withEditButton && (
+                    <Button
+                      variant="default"
+                      onClick={createEditHandler(note)}
+                    >
+                      Редактировать
+                    </Button>
+                  )}
+                  { withDeleteButton && (
+                    <Button
+                      color="red"
+                      onClick={createDeleteHandler(note)}
+                    >
+                      Удалить
+                    </Button>
+                  )}
+                </Group>
+              </Group>
+            </Card>
           ))}
-        </div>
+        </SimpleGrid>
       ) : (
-        <div className="p-8 text-center">
+        <Box className="p-8 text-center">
           <p className="text-gray-600">
             Заметки не найдены
           </p>
-        </div>
+        </Box>
       )}
-    </Paper>
+    </Box>
   );
 };
 
