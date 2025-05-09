@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import { Plus } from 'react-feather';
 import {
+  Badge,
   Box,
   Button,
   Card,
@@ -8,6 +10,7 @@ import {
   Title,
 } from '@mantine/core';
 import { Note } from '../types/note';
+import NoteCategory from './NoteCategory';
 
 interface NoteListProps {
   notes?: Note[];
@@ -66,6 +69,7 @@ const NoteList = ({
             <Button
               type="button"
               variant="primary"
+              leftSection={<Plus size={16} />}
               onClick={onAdd}
             >
               Добавить
@@ -82,8 +86,15 @@ const NoteList = ({
               className="hover:shadow-md transition-shadow cursor-pointer"
               onClick={() => handleNoteClick(note.slug)}
             >
-              <Group justify="space-between">
-                <Title order={3}>{note.title}</Title>
+              <Group justify="space-between" mb="md">
+                <Group align="center">
+                  <Title order={3}>{note.title}</Title>
+                  {!note.isPublic && (
+                    <Badge color="red" size="sm">
+                      Скрытый блок
+                    </Badge>
+                  )}
+                </Group>
                 <Group align="center">
                   { withEditButton && (
                     <Button
@@ -102,6 +113,17 @@ const NoteList = ({
                     </Button>
                   )}
                 </Group>
+              </Group>
+              <Group>
+                <NoteCategory category={note.category} />
+                {note.tags?.map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant="primary"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
               </Group>
             </Card>
           ))}
