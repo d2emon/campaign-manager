@@ -14,13 +14,13 @@ interface QuestUpdateDTO {
 }
 
 const mapQuest = (quest: any): Quest => ({
-  id: quest?.id,
+  slug: quest?.slug,
+  campaign: quest?.campaign,
   title: quest?.title,
   description: quest?.description,
   status: quest?.status,
   rewards: quest?.rewards,
   steps: quest?.steps,
-  campaign: quest?.campaign,
   createdAt: quest?.createdAt,
   updatedAt: quest?.updatedAt,
 });
