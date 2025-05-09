@@ -56,8 +56,12 @@ const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenera
         </Text>
 
         <DataBlock title="Информация о кампании">
-          <DateItem label="Создана:" date={campaign.createdAt} />
-          <DateItem label="Последняя активность:" date={campaign.lastActive} />
+          <DataItem label="Создана:">
+            <DateItem date={campaign.createdAt} />
+          </DataItem>
+          <DataItem label="Последняя активность:">
+            <DateItem date={campaign.lastActive} />
+          </DataItem>
           <DataItem label="Мастер:">{campaign.gameMaster}</DataItem>
           <DataItem label="Игроков">{campaign.players?.length}</DataItem>
           <DataItemLink
