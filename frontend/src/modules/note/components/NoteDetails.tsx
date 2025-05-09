@@ -20,12 +20,12 @@ const NoteDetails = ({
   onDelete,
   onEdit
 }: NoteDetailsProps) => {
-  const navigate = useNavigate();
-
   return (
     <CampaignItem
       isLoading={isLoading}
       title={note.title}
+      withEdit
+      withDelete
       onEdit={onEdit}
       onDelete={onDelete}
     >
