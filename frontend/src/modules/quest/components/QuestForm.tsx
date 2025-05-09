@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AlertCircle } from 'react-feather';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,12 +9,14 @@ import {
   Card,
   Group,
   NativeSelect,
+  NumberInput,
+  Stack,
   Switch,
   Textarea,
   TextInput,
+  Title,
 } from '@mantine/core';
 import * as yup from 'yup';
-import Field from 'components/ui/Field';
 import slugify from 'helpers/slugify';
 import { Quest } from '../types/quest';
 
@@ -40,10 +42,14 @@ const schema = yup.object({
     .string()
     .required('Описание квеста обязательно')
     .min(10, 'Минимум 10 символов'),
-  reward: yup
-    .string()
+  rewards: yup
+    .array()
+    .of(yup.object({
+      name: yup.string().required('Название награды обязательно'),
+      quantity: yup.number().required('Количество награды обязательно'),
+    }))
     .optional()
-    .default(''),
+    .default([]),
   status: yup
     .string()
     .required('Статус обязателен')
@@ -57,7 +63,7 @@ type QuestFormData = {
   slug: string;
   title: string;
   description: string;
-  reward: string;
+  rewards: { name: string; quantity: number }[];
   status: 'active' | 'completed' | 'failed';
   isPublic: boolean;
 };
@@ -74,6 +80,7 @@ const QuestForm = ({
     register,
     handleSubmit,
     reset,
+    getValues,
     setValue,
     watch,
     formState: { errors },
@@ -81,12 +88,15 @@ const QuestForm = ({
     resolver: yupResolver(schema),
     defaultValues: initialData || undefined,
   });
+  const [rewards, setRewards] = useState<{ name: string; quantity: number }[]>([]);
 
   useEffect(() => {
     if (initialData) {
       reset(initialData);
-    }
-  }, [initialData, reset]);
+    } else {
+      setValue('rewards', []);
+    } 
+  }, [initialData, reset, setValue]);
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
@@ -94,6 +104,9 @@ const QuestForm = ({
         if (value.title) {
           setValue('slug', slugify(value.title as string));
         }
+      }
+      if (name === 'rewards') {
+        setRewards(value.rewards as { name: string; quantity: number }[] || []);
       }
     });
 
@@ -153,13 +166,57 @@ const QuestForm = ({
             label="Доступен игрокам"
             {...register('isPublic')}
           />
+          <Stack className="space-y-4">
+            <Group justify="space-between">
+              <Title order={3}>Награды</Title>
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={() => {
+                  setValue('rewards', [...rewards, { name: '', quantity: 1 }]);
+                }}
+              >
+                Добавить награду
+              </Button>
+            </Group>
 
-          <Field
-            id="reward"
-            error={errors.reward}
-            inputProps={register('reward')}
-            label="Награда"
-          />
+            {rewards?.map((reward, index) => (
+              <Group key={index} justify="space-between">
+                <TextInput
+                  className="flex-1"
+                  label="Название"
+                  error={errors.rewards?.[index]?.name?.message}
+                  {...register(`rewards.${index}.name`)}
+                />
+                <NumberInput
+                  className="w-24"
+                  label="Количество"
+                  error={errors.rewards?.[index]?.quantity?.message}
+                  {...register(`rewards.${index}.quantity`)}
+                  min={1}
+                  max={1000000}
+                  onChange={(value) => {
+                    setValue(`rewards.${index}.quantity`, Number(value));
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="subtle"
+                  color="red"
+                  onClick={() => {
+                    const rewards = getValues('rewards');
+                    setValue(
+                      'rewards',
+                      rewards.filter((_, i) => i !== index)
+                    );
+                  }}
+                >
+                  Удалить
+                </Button>
+              </Group>
+            ))}
+          </Stack>
 
           <Group justify="flex-end">
             <Button
