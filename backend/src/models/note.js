@@ -20,7 +20,6 @@ const NoteSchema = new mongoose.Schema({
   timestamps: true,
   toJSON: {
     transform: function(doc, ret) {
-      ret.id = ret._id;
       delete ret._id;
       return ret;
     },

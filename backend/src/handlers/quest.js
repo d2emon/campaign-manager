@@ -3,12 +3,29 @@ import Quest from '../models/quest.js';
 
 export const createQuest = async (req, res, next) => {
   try {
-    const { title, description, reward, status } = req.body;
+    const data = req.body;
+
+    if (!data.slug) {
+      return res.status(400).json({
+        error: 'Идентификатор обязателен для заполнения',
+      })
+    }
+
+    const hasSlug = await Quest.countDocuments({ slug: data.slug });
+    if (hasSlug) {
+      return res.status(400).json({
+        error: 'Идентификатор уже существует',
+      })
+    }
+
+    if (!data.title) {
+      return res.status(400).json({
+        error: 'Заголовок обязателен для заполнения',
+      })
+    }
+ 
     const item = await Quest.create({
-      title,
-      description,
-      reward,
-      status,
+      ...data,
       campaign: req.params.campaignId,
     });
 
@@ -28,7 +45,7 @@ export const createQuest = async (req, res, next) => {
 export const getQuest = async (req, res, next) => {
   try {
     const item = await Quest.findOne({
-      _id: req.params.id,
+      slug: req.params.id,
       campaign: req.params.campaignId,
     }).populate('campaign');
     
@@ -46,17 +63,13 @@ export const getQuest = async (req, res, next) => {
 
 export const updateQuest = async (req, res, next) => {
   try {
-    const { name, race, role } = req.body;
+    const data = req.body;
     const item = await Quest.updateOne(
       {
-        _id: req.params.id,
+        slug: req.params.id,
         campaign: req.params.campaignId,
       },
-      {
-        name,
-        race,
-        role,
-      },
+      data,
     );
     return res.json(item);
   } catch (error) {
@@ -67,7 +80,7 @@ export const updateQuest = async (req, res, next) => {
 export const removeQuest = async (req, res, next) => {
   try {
     await Quest.deleteOne({
-      _id: req.params.id,
+      slug: req.params.id,
       campaign: req.params.campaignId,
     });
     return res.json({

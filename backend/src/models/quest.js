@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
 
 const QuestSchema = new mongoose.Schema({
+  slug: { type: String, required: true, unique: true },
+  campaign: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Campaign', 
+    required: true 
+  },
   title: { type: String, required: true },
   status: {
     type: String,
@@ -15,21 +21,18 @@ const QuestSchema = new mongoose.Schema({
     description: { type: String, required: true },
     isCompleted: { type: Boolean, default: false },
   }],
-  campaign: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Campaign', 
-    required: true 
-  },
+  isPublic: { type: Boolean, default: false },
 }, {
   timestamps: true,
   toJSON: {
     transform: function(doc, ret) {
-      ret.id = ret._id;
       delete ret._id;
       return ret;
     },
     virtuals: true,
   },
 });
+
+QuestSchema.index({ slug: 1 }, { unique: true });
 
 export default mongoose.model('Quest', QuestSchema);
