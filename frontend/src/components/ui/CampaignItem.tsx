@@ -44,12 +44,12 @@ const CampaignItem = ({
         <Title order={2}>{title}</Title>
         <Group>
           {withEdit && (
-            <Button variant="primary" onClick={onEdit}>
+            <Button variant="default" onClick={onEdit}>
               Редактировать
             </Button>
           )}
           {withDelete && (
-            <Button variant="danger" onClick={onDelete}>
+            <Button  color="red" onClick={onDelete}>
               Удалить
             </Button>
           )}
