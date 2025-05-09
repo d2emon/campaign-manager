@@ -132,6 +132,7 @@ const NoteForm = ({
             id="category"
             error={errors.category?.message}
             label="Категория"
+            {...register('category')}
             data={[
               { value: '', label: 'Выберите категорию' },
               { value: 'plot', label: 'Сюжет' },
@@ -139,7 +140,6 @@ const NoteForm = ({
               { value: 'location', label: 'Локации' },
               { value: 'lore', label: 'Лор' },
             ]}
-            {...register('category')}
           />
 
           <TagsInput
