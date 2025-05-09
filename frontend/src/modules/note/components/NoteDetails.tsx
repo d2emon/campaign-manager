@@ -1,4 +1,4 @@
-import {  Badge, Box, Card, Group, Text } from '@mantine/core';
+import { Badge, Group, Text } from '@mantine/core';
 import CampaignItem from 'components/ui/CampaignItem';
 import DateItem from 'components/ui/DateItem';
 import { Note } from '../types/note';
