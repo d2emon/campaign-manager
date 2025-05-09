@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Box, Text } from '@mantine/core';
+import { Box, Group, Text } from '@mantine/core';
 
 interface DataItemProps {
   label?: string | ReactNode;
@@ -9,10 +9,10 @@ interface DataItemProps {
 
 const DataItem = ({ label, children, className = '' }: DataItemProps) => {
   return (
-    <Box className={`${className}`}>
+    <Group className={`${className}`}>
       <Text className="text-sm font-medium text-gray-500">{label}</Text>
       <Box className="mt-1 text-sm text-gray-900">{children}</Box>
-    </Box>
+    </Group>
   );
 };
 
