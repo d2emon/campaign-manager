@@ -1,6 +1,6 @@
-import { Group, Text } from '@mantine/core';
-import Badge from 'components/ui/Badge';
+import {  Badge, Box, Card, Group, Text } from '@mantine/core';
 import CampaignItem from 'components/ui/CampaignItem';
+import DateItem from 'components/ui/DateItem';
 import { Note } from '../types/note';
 
 interface NoteDetailsProps {
@@ -33,8 +33,6 @@ const NoteDetails = ({
 
   return (
     <CampaignItem
-      createdAt={note.createdAt}
-      updatedAt={note.updatedAt}
       isLoading={isLoading}
       isPrivate={true}
       title={note.title}
@@ -43,21 +41,40 @@ const NoteDetails = ({
       onEdit={onEdit}
       onDelete={onDelete}
     >
-      <Group>
-        {getCategory(note.category)}
-        {note.tags?.map((tag) => (
-          <Badge
-            key={tag}
-            variant="primary"
-          >
-            {tag}
-          </Badge>
-        ))}
+      <Group justify="space-between">
+        <Box>
+          <Group>
+            {getCategory(note.category)}
+            {note.tags?.map((tag) => (
+              <Badge
+                key={tag}
+                variant="primary"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </Group>
+        </Box>
+
+        <Group mt="md" mb="md" justify="flex-end" gap="md">
+          {note.createdAt && (
+            <Text size="sm" c="dimmed">
+              Создано: <DateItem date={note.createdAt} format={{ year: 'numeric', month: 'short', day: 'numeric' }} />
+            </Text>
+          )}
+          {note.updatedAt && note.updatedAt !== note.createdAt && (
+            <Text size="sm" c="dimmed">
+              Обновлено: <DateItem date={note.updatedAt} format={{ year: 'numeric', month: 'short', day: 'numeric' }} />
+            </Text>
+          )}
+        </Group>
       </Group>
 
-      <Text>
-        {note.content}
-      </Text>
+      <Group>
+        <Text>
+          {note.content}
+        </Text>
+      </Group>
     </CampaignItem>
   );
 };
