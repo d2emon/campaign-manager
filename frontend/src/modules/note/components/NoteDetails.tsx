@@ -1,10 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import { Box, Group, Stack, Text } from '@mantine/core';
 import Badge from 'components/ui/Badge';
 import CampaignItem from 'components/ui/CampaignItem';
 import DataBlock from 'components/ui/DataBlock';
 import DataItem from 'components/ui/DataItem';
 import DateItem from 'components/ui/DateItem';
-import TextBlock from 'components/ui/TextBlock';
 import { Note } from '../types/note';
 
 interface NoteDetailsProps {
@@ -20,6 +19,21 @@ const NoteDetails = ({
   onDelete,
   onEdit
 }: NoteDetailsProps) => {
+  const getCategory = (category?: string) => {
+    switch (category) {
+      case 'plot':
+        return <Badge variant="primary">Сюжет</Badge>;
+      case 'npc':
+        return <Badge variant="primary">Персонажи</Badge>;
+      case 'location':
+        return <Badge variant="primary">Локации</Badge>;
+      case 'lore':
+        return <Badge variant="primary">Лоре</Badge>;
+      default:
+        return null;
+    }
+  };
+
   return (
     <CampaignItem
       isLoading={isLoading}
@@ -29,20 +43,26 @@ const NoteDetails = ({
       onEdit={onEdit}
       onDelete={onDelete}
     >
-      <div className="mb-6">
-        {note.category && <Badge variant="primary">{note.category}</Badge>}
-        {note.isPublic && <Badge variant="primary">Публичная</Badge>}
-      </div>
+      <Group>
+        {getCategory(note.category)}
+        {!note.isPublic && <Badge variant="danger">Скрытая</Badge>}
+        {note.tags?.map((tag) => (
+          <Badge variant="primary">{tag}</Badge>
+        ))}
+      </Group>
 
-      <TextBlock>
+      <Box>
+        <DataItem label="Создана:">
+          <DateItem date={note.createdAt} />
+        </DataItem>
+        <DataItem label="Обновлена:">
+          <DateItem date={note.updatedAt} />
+        </DataItem>
+      </Box>
+
+      <Text>
         {note.content}
-      </TextBlock>
-
-      <DataBlock title="Информация о заметке">
-        <DateItem label="Создана:" date={note.createdAt} />
-        <DateItem label="Обновлена:" date={note.updatedAt} />
-        <DataItem label="Категория:">{note.category}</DataItem>
-      </DataBlock>
+      </Text>
     </CampaignItem>
   );
 };
