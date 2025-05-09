@@ -2,6 +2,10 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import baseQueryWithReauth from 'modules/auth/services/baseQueryWithReauth';
 import { Note } from '../types/note';
 
+export interface NoteErrorResponse {
+  data?: { error?: string };
+};
+
 interface NoteCreateDTO {
   campaignId: string;
   data: Partial<Note>;
