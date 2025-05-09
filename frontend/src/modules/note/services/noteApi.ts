@@ -21,7 +21,10 @@ const mapNote = (note: any): Note => ({
   slug: note?.slug,
   title: note?.title,
   content: note?.content,
+  category: note?.category,
   campaign: note?.campaign,
+  tags: note?.tags,
+  isPublic: note?.isPublic,
   createdAt: note?.createdAt,
   updatedAt: note?.updatedAt,
 });
