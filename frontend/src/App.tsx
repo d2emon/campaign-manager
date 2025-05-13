@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { MantineProvider } from '@mantine/core';
-import Header from 'components/layout/Header';
+import Layout from 'components/layout/Layout';
 import { AuthProvider } from 'modules/auth/contexts/AuthContext';
 import LoginPage from 'modules/auth/pages/LoginPage';
 import RegisterPage from 'modules/auth/pages/RegisterPage';
@@ -28,8 +28,7 @@ const App = () => {
       <Provider store={store}>
         <Router>
           <AuthProvider>
-            <div className="min-h-screen bg-gray-50">
-              <Header />
+            <Layout>
               <Routes>
                 <Route path="/" element={<Navigate to="/dashboard" />} />
                 <Route path="/login" element={<LoginPage />} />
@@ -55,7 +54,7 @@ const App = () => {
                 </Route>
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
-            </div>
+            </Layout>
           </AuthProvider>
         </Router>
       </Provider>
