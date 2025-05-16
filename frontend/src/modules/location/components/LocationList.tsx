@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import Button from 'components/ui/Button';
 import Paper from 'components/ui/Paper';
+import Wall from 'components/ui/Wall';
 import { Location } from '../types/location';
+import LocationCard from './LocationCard';
 
 interface LocationListProps {
   locations?: Location[];
@@ -16,8 +18,8 @@ interface LocationListProps {
 const LocationList = ({ locations, campaignId = '', className, withAddButton = false, onAdd, onEdit, onDelete }: LocationListProps) => {
   const navigate = useNavigate();
 
-  const handleLocationClick = (locationId: string) => {
-    navigate(`/campaigns/${campaignId}/locations/${locationId}`);
+  const handleLocationClick = (location: Location) => {
+    navigate(`/campaigns/${campaignId}/locations/${location.id}`);
   };
 
   return (
@@ -36,55 +38,20 @@ const LocationList = ({ locations, campaignId = '', className, withAddButton = f
           </div>
         )}
       </div>
-      {locations && locations.length > 0 ? (
-        <div className="space-y-4">
-          {locations.map((location) => (
-            <Paper
-              key={location.id}
-              className="hover:shadow-md transition-shadow cursor-pointer"
-              onClick={() => handleLocationClick(location.id)}
-            >
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {location.name}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    {location.type}
-                  </p>
-                </div>
-                <div className="flex items-center space-x-2">
-                  {onEdit && (
-                    <Button
-                      variant="secondary"
-                      onClick={() => onEdit(location)}
-                    >
-                      Редактировать
-                    </Button>
-                  )}
-                  {onDelete && (
-                    <Button
-                      variant="danger"
-                      onClick={() => onDelete(location)}
-                    >
-                      Удалить
-                    </Button>
-                  )}
-                </div>
-              </div>
-              <div className="mt-2">
-                <p className="text-sm text-gray-600">
-                  {location.type}
-                </p>
-              </div>
-            </Paper>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center text-gray-500 py-4">
-          В этой кампании пока нет локаций
-        </div>
-      )}
+      <Wall
+        empty="В этой кампании пока нет локаций"
+        items={locations && locations.map((location) => (
+          <LocationCard
+            key={location.id}
+            location={location}
+            onClick={handleLocationClick}
+            withDeleteButton={!!onDelete}
+            onDelete={onDelete}
+            withEditButton={!!onEdit}
+            onEdit={onEdit}
+          />
+        ))}
+      />
     </Paper>
   );
 };
