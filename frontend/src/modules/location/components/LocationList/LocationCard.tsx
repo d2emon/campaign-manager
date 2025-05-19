@@ -1,5 +1,6 @@
-import { Button, Card } from '@mantine/core';
+import { Badge, Button, Card, Group, Text, Title } from '@mantine/core';
 import { Location } from '../../types/location';
+import LocationType from '../LocationType';
 
 interface LocationCardProps {
   location?: Location;  
@@ -54,16 +55,19 @@ const LocationCard = ({
       className={`hover:shadow-md transition-shadow cursor-pointer ${className}`}
       onClick={handleClick(location)}
     >
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">
-            {location.name}
-          </h3>
-          <p className="text-sm text-gray-600">
-            {location.type}
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
+      <Group justify="space-between" mb="md">
+        <Group align="center">
+          <div>
+            <LocationType type={location.type} />
+            <Title order={4}>{location.name}</Title>
+          </div>
+          {!location.isPublic && (
+            <Badge color="red" size="sm">
+              Скрытый блок
+            </Badge>
+          )}
+        </Group>
+        <Group align="center">
           {withEditButton && (
             <Button
               variant="default"
@@ -80,13 +84,23 @@ const LocationCard = ({
               Удалить
             </Button>
           )}
+        </Group>
+      </Group>
+      <Group>
+        <div className="mt-2">
+          <p className="text-sm text-gray-600">
+            {location.type}
+          </p>
         </div>
-      </div>
-      <div className="mt-2">
-        <p className="text-sm text-gray-600">
-          {location.type}
-        </p>
-      </div>
+        {location.tags?.map((tag) => (
+          <Badge
+            key={tag}
+            variant="primary"
+          >
+            {tag}
+          </Badge>
+        ))}
+      </Group>
     </Card>
   );
 };
