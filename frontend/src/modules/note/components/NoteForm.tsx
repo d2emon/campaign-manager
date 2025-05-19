@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { AlertCircle } from 'react-feather';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Alert,
@@ -8,12 +8,13 @@ import {
   Button,
   Card,
   Group,
+  Input,
   NativeSelect,
   Switch,
   TagsInput,
-  Textarea,
   TextInput,
 } from '@mantine/core';
+import MDEditor from '@uiw/react-md-editor';
 import * as yup from 'yup';
 import slugify from 'helpers/slugify';
 import { Note } from '../types/note';
@@ -70,9 +71,11 @@ const NoteForm = ({
   onCancel,
 }: NoteFormProps) => {
   const {
+    control,
     register,
     handleSubmit,
     reset,
+    getValues,
     setValue,
     watch,
     formState: { errors },
@@ -156,12 +159,21 @@ const NoteForm = ({
             {...register('isPublic')}
           />
 
-          <Textarea
-            id="content"
-            error={errors.content?.message}
-            label="Содержание"
-            {...register('content')}
-            rows={4}
+          <Controller
+            name="content"
+            control={control}
+            render={({ field, fieldState}) => (
+              <Input.Wrapper
+                label="Содержание"
+                error={fieldState.error?.message}
+              >
+                <MDEditor
+                  value={field.value}
+                  onChange={field.onChange}
+                  height={300}
+                />
+              </Input.Wrapper>
+            )}
           />
 
           <Group justify="flex-end">
