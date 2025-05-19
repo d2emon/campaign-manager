@@ -2,6 +2,10 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import baseQueryWithReauth from 'modules/auth/services/baseQueryWithReauth';
 import { Location } from '../types/location';
 
+export interface LocationErrorResponse {
+  data?: { error?: string };
+};
+
 interface LocationCreateDTO {
   campaignId: string;
   data: Partial<Location>;
