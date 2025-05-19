@@ -105,14 +105,16 @@ const CampaignItem = ({
 
           <Group mt="md" mb="md" justify="flex-end" gap="md">
             {createdAt && (
-              <Text size="sm" c="dimmed">
-                Создано: <DateItem date={createdAt} format={{ year: 'numeric', month: 'short', day: 'numeric' }} />
-              </Text>
+              <div>
+                <Text size="sm" c="dimmed">Создано:</Text>
+                <DateItem date={createdAt} format={{ year: 'numeric', month: 'short', day: 'numeric' }} />
+              </div>
             )}
             {updatedAt && updatedAt !== createdAt && (
-              <Text size="sm" c="dimmed">
-                Обновлено: <DateItem date={updatedAt} format={{ year: 'numeric', month: 'short', day: 'numeric' }} />
-              </Text>
+              <div>
+                <Text size="sm" c="dimmed">Обновлено:</Text>
+                <DateItem date={updatedAt} format={{ year: 'numeric', month: 'short', day: 'numeric' }} />
+              </div>
             )}
           </Group>
         </Group>
