@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { Edit, Trash } from 'react-feather';
 import {
   Badge,
   Box,
@@ -7,15 +8,20 @@ import {
   Center,
   Group,
   Loader,
+  Text,
   Title,
 } from '@mantine/core';
-import { Edit, Trash } from 'react-feather';
+import DateItem from './DateItem';
 
 interface CampaignItemProps {
   className?: string;
+  createdAt?: string;
+  headSection?: ReactNode;
   isLoading?: boolean;
   isPrivate?: boolean;
+  tags?: string[];
   title?: ReactNode;
+  updatedAt?: string;
   withDelete?: boolean;
   withEdit?: boolean;
   onEdit?: () => void;
@@ -25,9 +31,13 @@ interface CampaignItemProps {
 
 const CampaignItem = ({
   className,
+  createdAt,
+  headSection,
   isLoading,
   isPrivate,
+  tags,
   title,
+  updatedAt,
   withDelete,
   withEdit,
   onEdit,
@@ -80,6 +90,33 @@ const CampaignItem = ({
       </Group>
 
       <Card mt="md">
+        <Group justify="space-between">
+          <Group>
+            {headSection}
+            {tags?.map((tag) => (
+              <Badge
+                key={tag}
+                variant="primary"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </Group>
+
+          <Group mt="md" mb="md" justify="flex-end" gap="md">
+            {createdAt && (
+              <Text size="sm" c="dimmed">
+                Создано: <DateItem date={createdAt} format={{ year: 'numeric', month: 'short', day: 'numeric' }} />
+              </Text>
+            )}
+            {updatedAt && updatedAt !== createdAt && (
+              <Text size="sm" c="dimmed">
+                Обновлено: <DateItem date={updatedAt} format={{ year: 'numeric', month: 'short', day: 'numeric' }} />
+              </Text>
+            )}
+          </Group>
+        </Group>
+
         {children}
       </Card>
     </Box>
