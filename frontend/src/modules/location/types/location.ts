@@ -8,7 +8,8 @@ export interface Marker {
 export interface Location {
   id: string;
   name: string;
-  type: 'city' | 'dungeon' | 'forest' | 'tavern';
+  slug?: string;
+  type: string;
   mapImage?: string;
   markers?: Marker[];
   campaign: string;
