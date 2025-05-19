@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { Card } from '@mantine/core';
 import { useGetCampaignsQuery } from 'modules/campaign/services/campaignApi';
-import Paper from 'components/ui/Paper';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const DashboardPage = () => {
       <div className="px-4 py-6 sm:px-0">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Кампании */}
-          <Paper>
+          <Card>
             <h3 className="text-lg font-medium text-gray-900">Мои кампании</h3>
             <div className="mt-4">
               <button
@@ -36,7 +36,7 @@ const DashboardPage = () => {
             ) : (
               <div className="mt-4">
                 {campaigns.map((campaign) => (
-                  <Paper
+                  <Card
                     key={campaign.id}
                     className="hover:shadow-md transition cursor-pointer mb-4"
                     onClick={() => navigate(`/campaigns/${campaign.id}`)}
@@ -68,14 +68,14 @@ const DashboardPage = () => {
                         </button>
                       </div>
                     </div>
-                  </Paper>
+                  </Card>
                 ))}
               </div>
             )}
-          </Paper>
+          </Card>
 
           {/* Персонажи */}
-          <Paper>
+          <Card>
             <h3 className="text-lg font-medium text-gray-900">Мои персонажи</h3>
             <div className="mt-4">
               <button
@@ -85,10 +85,10 @@ const DashboardPage = () => {
                 Создать персонажа
               </button>
             </div>
-          </Paper>
+          </Card>
 
           {/* Настройки */}
-          <Paper>
+          <Card>
             <h3 className="text-lg font-medium text-gray-900">Настройки</h3>
             <div className="mt-4">
               <button
@@ -98,7 +98,7 @@ const DashboardPage = () => {
                 Редактировать профиль
               </button>
             </div>
-          </Paper>
+          </Card>
         </div>
       </div>
     </main>

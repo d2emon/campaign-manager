@@ -1,5 +1,4 @@
-import Button from 'components/ui/Button';
-import Paper from 'components/ui/Paper';
+import { Button, Card } from '@mantine/core';
 import { Location } from '../../types/location';
 
 interface LocationCardProps {
@@ -42,16 +41,16 @@ const LocationCard = ({
 
   if (!location) {
     return (
-      <Paper
+      <Card
         className={`hover:shadow-md transition-shadow cursor-pointer ${className}`}
       >
         &nbsp;
-      </Paper>
+      </Card>
     );
   }
 
   return (
-    <Paper
+    <Card
       className={`hover:shadow-md transition-shadow cursor-pointer ${className}`}
       onClick={handleClick(location)}
     >
@@ -67,7 +66,7 @@ const LocationCard = ({
         <div className="flex items-center space-x-2">
           {withEditButton && (
             <Button
-              variant="secondary"
+              variant="default"
               onClick={handleEdit(location)}
             >
               Редактировать
@@ -75,7 +74,7 @@ const LocationCard = ({
           )}
           {withDeleteButton && (
             <Button
-              variant="danger"
+              color="red"
               onClick={handleDelete(location)}
             >
               Удалить
@@ -88,7 +87,7 @@ const LocationCard = ({
           {location.type}
         </p>
       </div>
-    </Paper>
+    </Card>
   );
 };
 

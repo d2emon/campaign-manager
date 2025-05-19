@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Card, Title } from '@mantine/core';
 import DetailPage from 'components/layout/DetailPage';
 import Button from 'components/ui/Button';
 import ButtonBlock from 'components/ui/ButtonBlock';
 import ErrorBlock from 'components/ui/ErrorBlock';
-import Paper from 'components/ui/Paper';
 import { useJoinCampaignMutation } from 'modules/campaign/services/campaignApi';
 import useCampaign from '../hooks/useCampaign';
 
@@ -50,10 +50,11 @@ const JoinCampaignPage = () => {
       notFoundMessage="Кампания не найдена"
       onBack={goToCampaign}
     >
-      <Paper
+      <Card
         className="max-w-lg mx-auto"
-        title={`Присоединиться к кампании "${campaign?.title}"`}
       >
+        <Title order={2}>Присоединиться к кампании "{campaign?.title}"</Title>
+
         <ErrorBlock message={error} />
 
         <p className="my-4">
@@ -74,7 +75,7 @@ const JoinCampaignPage = () => {
             Присоединиться
           </Button>
         </ButtonBlock>
-      </Paper>
+      </Card>
     </DetailPage>
   );
 };

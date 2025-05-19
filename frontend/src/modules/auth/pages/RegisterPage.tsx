@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Paper from 'components/ui/Paper';
+import { Card } from '@mantine/core';
 import RegisterForm from '../components/RegisterForm';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -40,12 +40,12 @@ const RegisterPage = () => {
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <Paper>
+          <Card>
             <RegisterForm
               isLoading={isLoading}
               onSubmit={onSubmit}
             />
-          </Paper>
+          </Card>
         </div>
       </div>
     </div>

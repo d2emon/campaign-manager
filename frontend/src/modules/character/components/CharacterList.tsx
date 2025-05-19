@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { Card } from '@mantine/core';
 import Button from 'components/ui/Button';
-import Paper from 'components/ui/Paper';
 import { Character } from '../types/character';
 interface CharacterListProps {
   characters?: Character[];
@@ -20,7 +20,7 @@ const CharacterList = ({ characters, className, withAddButton, onAdd, onDelete, 
   }
 
   return (
-    <Paper className={className}>
+    <Card className={className}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Персонажи кампании</h2>
         {withAddButton && (
@@ -46,7 +46,7 @@ const CharacterList = ({ characters, className, withAddButton, onAdd, onDelete, 
       { characters && characters.length > 0 ? (
         <div className="space-y-4">
           {characters.map((character) => (
-            <Paper
+            <Card
               key={character.id}
               className="hover:shadow-md transition-shadow cursor-pointer"
               onClick={() => showCharacter(character)}
@@ -96,7 +96,7 @@ const CharacterList = ({ characters, className, withAddButton, onAdd, onDelete, 
                   </p>
                 )}
               </div>
-            </Paper>
+            </Card>
           ))}
         </div>
       ) : (
@@ -104,7 +104,7 @@ const CharacterList = ({ characters, className, withAddButton, onAdd, onDelete, 
           В этой кампании пока нет персонажей
         </div>
       )}
-    </Paper>
+    </Card>
   );
 };
 
