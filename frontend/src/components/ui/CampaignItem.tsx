@@ -119,7 +119,9 @@ const CampaignItem = ({
           </Group>
         </Group>
 
-        {children}
+        <Box>
+          {children}
+        </Box>
       </Card>
     </Box>
   );
