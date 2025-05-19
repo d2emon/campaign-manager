@@ -1,6 +1,6 @@
 import Button from 'components/ui/Button';
 import Paper from 'components/ui/Paper';
-import { Location } from '../types/location';
+import { Location } from '../../types/location';
 
 interface LocationCardProps {
   location?: Location;  

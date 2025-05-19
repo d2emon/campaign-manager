@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import Button from 'components/ui/Button';
-import Paper from 'components/ui/Paper';
+import { Plus } from 'react-feather';
+import { Box, Button, Group, Title } from '@mantine/core';
 import Wall from 'components/ui/Wall';
-import { Location } from '../types/location';
 import LocationCard from './LocationCard';
+import { Location } from '../../types/location';
 
 interface LocationListProps {
   locations?: Location[];
@@ -23,21 +23,22 @@ const LocationList = ({ locations, campaignId = '', className, withAddButton = f
   };
 
   return (
-    <Paper className={className}>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Локации кампании</h2>
+    <Box className={className}>
+      <Group justify="space-between" mb="md">
+        <Title order={3}>Локации кампании</Title>
         {withAddButton && (
           <div className="flex items-center space-x-2">
             <Button
               type="button"
               variant="primary"
+              leftSection={<Plus size={16} />}
               onClick={onAdd}
             >
               Добавить локацию
             </Button>
           </div>
         )}
-      </div>
+      </Group>
       <Wall
         empty="В этой кампании пока нет локаций"
         items={locations && locations.map((location) => (
@@ -52,7 +53,7 @@ const LocationList = ({ locations, campaignId = '', className, withAddButton = f
           />
         ))}
       />
-    </Paper>
+    </Box>
   );
 };
 
