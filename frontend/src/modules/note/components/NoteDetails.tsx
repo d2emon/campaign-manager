@@ -1,7 +1,7 @@
-import { Group, Text } from '@mantine/core';
 import CampaignItem from 'components/ui/CampaignItem';
-import { Note } from '../types/note';
+import MarkdownText from 'components/ui/Markdown';
 import NoteCategory from './NoteCategory';
+import { Note } from '../types/note';
 
 interface NoteDetailsProps {
   note: Note;
@@ -30,11 +30,9 @@ const NoteDetails = ({
       onEdit={onEdit}
       onDelete={onDelete}
     >
-      <Group>
-        <Text>
-          {note.content}
-        </Text>
-      </Group>
+      <MarkdownText>
+        {note.content}
+      </MarkdownText>
     </CampaignItem>
   );
 };
