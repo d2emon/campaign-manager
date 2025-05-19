@@ -3,11 +3,30 @@ import Location from '../models/location.js';
 
 export const createLocation = async (req, res, next) => {
   try {
-    const { name, race, role } = req.body;
+    const data = req.body;
+
+    if (!data.slug) {
+      return res.status(400).json({
+        error: 'Идентификатор обязателен для заполнения',
+      })
+    }
+
+    const hasSlug = await Location.countDocuments({ slug: data.slug });
+
+    if (hasSlug) {
+      return res.status(400).json({
+        error: 'Идентификатор уже существует',
+      })
+    }
+
+    if (!data.name) {
+      return res.status(400).json({
+        error: 'Название обязательно для заполнения',
+      })
+    }
+
     const item = await Location.create({
-      name,
-      race,
-      role,
+      ...data,
       campaign: req.params.campaignId,
     });
 
@@ -27,14 +46,12 @@ export const createLocation = async (req, res, next) => {
 export const getLocation = async (req, res, next) => {
   try {
     const item = await Location.findOne({
-      _id: req.params.id,
+      slug: req.params.id,
       campaign: req.params.campaignId,
     }).populate('campaign');
     
     if (!item) {
-      return res.status(404).json({
-        error: 'Персонаж не найден или неверный код',
-      });
+      return res.status(404).json({ error: 'Локация не найдена' });
     }
       
     return res.json(item);
@@ -45,17 +62,13 @@ export const getLocation = async (req, res, next) => {
 
 export const updateLocation = async (req, res, next) => {
   try {
-    const { name, race, role } = req.body;
+    const data = req.body;
     const item = await Location.updateOne(
       {
-        _id: req.params.id,
+        slug: req.params.id,
         campaign: req.params.campaignId,
       },
-      {
-        name,
-        race,
-        role,
-      },
+      data,
     );
     return res.json(item);
   } catch (error) {
@@ -66,7 +79,7 @@ export const updateLocation = async (req, res, next) => {
 export const removeLocation = async (req, res, next) => {
   try {
     await Location.deleteOne({
-      _id: req.params.id,
+      slug: req.params.slug,
       campaign: req.params.campaignId,
     });
     return res.json({

@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
 
 const LocationSchema = new mongoose.Schema({
+  slug: { type: String, required: true, unique: true },
+  campaign: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Campaign', 
+    required: true 
+  },
   name: { type: String, required: true },
   type: {
     type: String,
@@ -14,21 +20,19 @@ const LocationSchema = new mongoose.Schema({
     label: { type: String, required: true },
     isSecret: { type: Boolean, default: false },
   }],
-  campaign: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Campaign', 
-    required: true 
-  },
+  tags: { type: [String] },
+  isPublic: { type: Boolean, default: false },
 }, {
   timestamps: true,
   toJSON: {
     transform: function(doc, ret) {
-      ret.id = ret._id;
       delete ret._id;
       return ret;
     },
     virtuals: true,
   },
 });
+
+LocationSchema.index({ slug: 1 }, { unique: true })
 
 export default mongoose.model('Location', LocationSchema);
