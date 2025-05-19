@@ -1,4 +1,10 @@
-import { Badge, Button, Card, Group, Text, Title } from '@mantine/core';
+import {
+  Badge,
+  Button,
+  Card,
+  Group,
+  Title,
+} from '@mantine/core';
 import { Location } from '../../types/location';
 import LocationType from '../LocationType';
 
