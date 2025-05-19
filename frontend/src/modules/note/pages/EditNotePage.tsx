@@ -50,16 +50,24 @@ const EditNotePage = () => {
     setError(undefined);
 
     try {
+      const queryData = {
+        category: data.category,
+        content: data.content,
+        isPublic: data.isPublic,
+        slug: data.slug,
+        tags: data.tags,
+        title: data.title,
+      }
       if (isEditing) {
         await updateNote({
           campaignId,
           noteId,
-          data,
+          data: queryData,
         });
       } else {
         await createNote({
           campaignId,
-          data,
+          data: queryData,
         });
       }
     } catch (error) {
