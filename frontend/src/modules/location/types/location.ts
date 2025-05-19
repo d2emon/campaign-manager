@@ -6,10 +6,9 @@ export interface Marker {
 }
 
 export interface Location {
-  id: string;
+  slug: string;
   name: string;
-  slug?: string;
-  type: string;
+  type?: string;
   mapImage?: string;
   markers?: Marker[];
   campaign: string;

@@ -19,7 +19,7 @@ const LocationList = ({ locations, campaignId = '', className, withAddButton = f
   const navigate = useNavigate();
 
   const handleLocationClick = (location: Location) => {
-    navigate(`/campaigns/${campaignId}/locations/${location.id}`);
+    navigate(`/campaigns/${campaignId}/locations/${location.slug}`);
   };
 
   return (
@@ -43,7 +43,7 @@ const LocationList = ({ locations, campaignId = '', className, withAddButton = f
         empty="В этой кампании пока нет локаций"
         items={locations && locations.map((location) => (
           <LocationCard
-            key={location.id}
+            key={location.slug}
             location={location}
             onClick={handleLocationClick}
             withDeleteButton={!!onDelete}

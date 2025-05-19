@@ -42,7 +42,7 @@ const Breadcrumbs = ({
     }
     if (location) {
       breadcrumbs.push({
-        path: `/campaigns/${campaign.id}/locations/${location.id}`,
+        path: `/campaigns/${campaign.id}/locations/${location.slug}`,
         label: location.name,
       });
     }

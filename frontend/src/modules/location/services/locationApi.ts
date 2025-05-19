@@ -18,12 +18,14 @@ interface LocationUpdateDTO {
 }
 
 const mapLocation = (location: any): Location => ({
-  id: location?.id,
+  slug: location?.slug,
   name: location?.name,
   type: location?.type,
   mapImage: location?.mapImage,
   markers: location?.markers,
   campaign: location?.campaign,
+  tags: location?.tags,
+  isPublic: location?.isPublic,
   createdAt: location?.createdAt,
   updatedAt: location?.updatedAt,
 });

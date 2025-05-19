@@ -113,14 +113,14 @@ const CampaignForm = ({
   };
 
   const handleEditLocation = (location: Location) => {
-    navigate(`/campaigns/${initialData?.id}/locations/${location.id}/edit`);
+    navigate(`/campaigns/${initialData?.id}/locations/${location.slug}/edit`);
   };
 
   const handleDeleteLocation = async (location: Location) => {
     if (window.confirm('Вы уверены, что хотите удалить эту локацию?')) {
-      await deleteLocation({ campaignId: initialData?.id || '', locationId: location.id });
+      await deleteLocation({ campaignId: initialData?.id || '', locationId: location.slug });
       // Обновляем список локаций после удаления
-      const updatedLocations = initialData?.locations?.filter(l => l.id !== location.id) || [];
+      const updatedLocations = initialData?.locations?.filter(l => l.slug !== location.slug) || [];
       onSubmit({ ...initialData, locations: updatedLocations });
     }
   };
