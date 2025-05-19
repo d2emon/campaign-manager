@@ -20,7 +20,7 @@ const NoteDetails = ({
   return (
     <CampaignItem
       isLoading={isLoading}
-      isPrivate={true}
+      isPrivate={!note.isPublic}
       title={note.title}
       withEdit
       withDelete
