@@ -12,6 +12,8 @@ export interface Location {
   mapImage?: string;
   markers?: Marker[];
   campaign: string;
+  tags?: string[];
+  isPublic?: boolean;
   createdAt: string;
   updatedAt: string;
 }
