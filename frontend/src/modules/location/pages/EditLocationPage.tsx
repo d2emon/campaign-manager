@@ -39,7 +39,6 @@ const EditLocationPage = () => {
     error: updateError,
   }] = useUpdateLocationMutation();
   const [uploadImage, {
-    error: uploadImageError,
     isLoading: isUploadingImage,
   }] = useUploadImageMutation();
 
@@ -137,7 +136,6 @@ const EditLocationPage = () => {
         isEditing={isEditing}
         isLoading={isLoading}
         isUploadingImage={isUploadingImage}
-        uploadImageError={(uploadImageError as LocationErrorResponse)?.data?.error}
         onSubmit={handleSubmit}
         onCancel={goToCampaign}
         onUploadImage={handleUploadImage}

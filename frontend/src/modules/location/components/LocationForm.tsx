@@ -1,20 +1,26 @@
 import { useEffect } from 'react';
-import { AlertCircle, Upload } from 'react-feather';
+import {
+  AlertCircle,
+  Image as Photo,
+  Upload,
+  X,
+} from 'react-feather';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Alert,
   Button,
   Card,
-  FileInput,
   Group,
   Image,
   Loader,
   NativeSelect,
   Switch,
   TagsInput,
+  Text,
   TextInput,
 } from '@mantine/core';
+import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import * as yup from 'yup';
 import slugify from 'helpers/slugify';
 import { Location } from '../types/location';
@@ -25,7 +31,6 @@ interface LocationFormProps {
   isEditing?: boolean;
   isLoading?: boolean;
   isUploadingImage?: boolean;
-  uploadImageError?: string;
   onSubmit: (values: Partial<Location>) => void;
   onCancel?: () => void;
   onUploadImage?: (value: File | null) => Promise<string>;
@@ -70,7 +75,6 @@ const LocationForm = ({
   isEditing = false,
   isLoading = false,
   isUploadingImage = false,
-  uploadImageError,
   onSubmit,
   onCancel,
   onUploadImage,
@@ -110,8 +114,12 @@ const LocationForm = ({
     return () => subscription.unsubscribe();
   }, [setValue, watch]);
 
-  const handleUploadImage = async (value: File | null) => {
+  const handleDropImage = async (values: File[]) => {
+    if (values.length < 1) {
+      return;
+    }
     if (onUploadImage) {
+      const value = values[0];
       const url = await onUploadImage(value);
       setValue('mapImage', url);
     }
@@ -158,47 +166,85 @@ const LocationForm = ({
           ]}
         />
 
-
-        { isUploadingImage ? (
-          <Group justify="center">
-            <Loader />
-          </Group>
-        ) : (
-          <>
-            {mapImage && (
-              <Image
-                alt="Предпросмотр карты"
-                radius="md"
-                src={mapImage}
-                fallbackSrc="https://placehold.co/600x400?text=Placeholder"
+        <Card
+          bg="gray.2"
+          className="space-y-6"
+        >
+          { (isUploadingImage && false) ? (
+            <Group justify="center">
+              <Loader />
+            </Group>
+          ) : (
+            <>
+              <Controller
+                name="mapImage"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <TextInput
+                    id="mapImage"
+                    error={fieldState.error?.message}
+                    label="Ссылка на изображение"
+                    placeholder="Ссылка на изображение"
+                    {...field}
+                  />
+                )}
               />
-            )}
 
-            <Controller
-              name="mapImage"
-              control={control}
-              render={({ field, fieldState }) => (
-                <TextInput
-                  id="mapImage"
-                  error={fieldState.error?.message}
-                  label="Ссылка на изображение"
-                  placeholder='https://placehold.co/600x400?text=Placeholder'
-                  {...field}
-                />
-              )}
-            />
+              <Dropzone
+                onDrop={handleDropImage}
+                onReject={(files) => console.error("Неподходящие файлы:", files)}
+                maxSize={5 * 1024 ** 2} // 5MB
+                accept={IMAGE_MIME_TYPE} // JPG, PNG, GIF, WEBP
+                multiple={false} // Только один файл
+              >
+                <Group
+                  justify="center"
+                  gap="xl"
+                  mih={100}
+                  style={{ pointerEvents: "none" }}
+                >
+                  <Dropzone.Accept>
+                    <Upload
+                      size={52}
+                      color="blue"
+                    />
+                  </Dropzone.Accept>
+                  <Dropzone.Reject>
+                    <X
+                      size={52}
+                      color="red"
+                    />
+                  </Dropzone.Reject>
+                  <Dropzone.Idle>
+                    <Photo
+                      size={52}
+                      color="gray"
+                    />
+                  </Dropzone.Idle>
 
-            <FileInput
-              id="mapImageFile"
-              error={uploadImageError}
-              label="Загрузить изображение"
-              rightSection={<Upload />}
-              accept="image/*"
-              clearable
-              onChange={handleUploadImage}
-            />
-          </>
-        )}
+                  <div>
+                    <Text size="xl" inline>
+                      Перетащите изображение сюда
+                    </Text>
+                    <Text size="sm" c="dimmed" inline mt={7}>
+                      Поддерживаются: JPG, PNG, WEBP, GIF (макс. 5MB)
+                    </Text>
+                  </div>
+                </Group>
+
+                {mapImage && (
+                  <Image
+                    alt="Предпросмотр карты"
+                    radius="md"
+                    src={mapImage}
+                    fallbackSrc="https://placehold.co/600x400?text=Placeholder"
+                  />
+                )}
+              </Dropzone>
+            </>
+          )}
+        </Card>
+
 
         <Controller
           name="tags"
