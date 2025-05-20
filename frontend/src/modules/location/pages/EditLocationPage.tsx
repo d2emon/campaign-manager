@@ -96,8 +96,8 @@ const EditLocationPage = () => {
 
   useEffect(() => {
     if (isCreateSuccess || isUpdateSuccess) {
-      // reloadCampaign();
-      // goToCampaign();
+      reloadCampaign();
+      goToCampaign();
     }
   }, [
     goToCampaign,
