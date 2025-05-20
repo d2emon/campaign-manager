@@ -57,7 +57,7 @@ const EditNotePage = () => {
         slug: data.slug,
         tags: data.tags,
         title: data.title,
-      }
+      };
       if (isEditing) {
         await updateNote({
           campaignId,
