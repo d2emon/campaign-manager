@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Group,
+  Image,
   Title,
 } from '@mantine/core';
 import { Location } from '../../types/location';
@@ -92,12 +93,7 @@ const LocationCard = ({
           )}
         </Group>
       </Group>
-      <Group>
-        <div className="mt-2">
-          <p className="text-sm text-gray-600">
-            {location.type}
-          </p>
-        </div>
+      <Group mb="md">
         {location.tags?.map((tag) => (
           <Badge
             key={tag}
@@ -107,6 +103,13 @@ const LocationCard = ({
           </Badge>
         ))}
       </Group>
+      { location.mapImage && (<Image
+        alt={location.name}
+        radius="md"
+        src={location.mapImage}
+        fallbackSrc="https://placehold.co/600x400?text=Placeholder"
+        h={200}
+      />) }
     </Card>
   );
 };
