@@ -9,6 +9,7 @@ import config from './helpers/config.js';
 
 import indexRouter from './routes/index.js';
 import campaignRouter from './routes/campaign.js';
+import imageRouter from './routes/image.js';
 import locationRouter from './routes/location.js';
 import noteRouter from './routes/note.js';
 import npcRouter from './routes/npc.js';
@@ -35,9 +36,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static('uploads'));
+app.use('/images', express.static('public/images'));
 
 app.use('/', indexRouter);
 app.use('/api/v1/campaigns', campaignRouter);
+app.use('/api/v1/image', imageRouter);
 app.use('/api/v1/location', locationRouter);
 app.use('/api/v1/note', noteRouter);
 app.use('/api/v1/npc', npcRouter);
