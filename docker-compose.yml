@@ -31,6 +31,10 @@ services:
     volumes:
       - ./backend/package.json:/app/package.json
       - ./backend/src/:/app/src
+      - public:/app/public
+      - uploads:/app/uploads
     command: npm run dev
 volumes:
   mongo-data:
+  public:
+  uploads:
