@@ -50,10 +50,19 @@ const EditLocationPage = () => {
     setError(undefined);
 
     try {
+      const queryData = {
+        isPublic: data.isPublic,
+        mapImage: data.mapImage,
+        markers: data.markers,
+        name: data.name,
+        slug: data.slug,
+        type: data.type,
+        tags: data.tags,
+      };
       if (isEditing) {
-        await updateLocation({ campaignId, locationId, data });
+        await updateLocation({ campaignId, locationId, data: queryData });
       } else {
-        await createLocation({ campaignId, data });
+        await createLocation({ campaignId, data: queryData });
       }
     } catch (error) {
       console.error('Error saving location:', error);
