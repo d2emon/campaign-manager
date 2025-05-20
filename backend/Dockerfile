@@ -10,6 +10,10 @@ RUN npm install
 COPY ./src ./src
 COPY ./.env.dev ./.env
 
+RUN mkdir ./public
+RUN mkdir ./public/images
+RUN mkdir ./uploads
+
 ENV DEBUG=campaign-manager:*
 
 EXPOSE 5000
