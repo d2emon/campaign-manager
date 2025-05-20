@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Card, Title } from '@mantine/core';
+import { Button, Card, Title } from '@mantine/core';
 import DetailPage from 'components/layout/DetailPage';
-import Button from 'components/ui/Button';
-import ButtonBlock from 'components/ui/ButtonBlock';
 import ErrorBlock from 'components/ui/ErrorBlock';
 import { useJoinCampaignMutation } from 'modules/campaign/services/campaignApi';
 import useCampaign from '../hooks/useCampaign';
@@ -61,7 +59,7 @@ const JoinCampaignPage = () => {
           Вы собираетесь присоединиться к кампании. Нажмите кнопку ниже для подтверждения.
         </p>
 
-        <ButtonBlock>
+        <div className="flex justify-end space-x-4">
           <Button
             variant="secondary"
             onClick={goToCampaign}
@@ -74,7 +72,7 @@ const JoinCampaignPage = () => {
           >
             Присоединиться
           </Button>
-        </ButtonBlock>
+        </div>
       </Card>
     </DetailPage>
   );

@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Button } from '@mantine/core';
 import * as yup from 'yup';
-import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
 import PasswordField from 'components/ui/PasswordField';
 import PasswordStrength from 'components/ui/PasswordStrength';
@@ -94,7 +94,6 @@ const RegisterForm = ({ isLoading, onSubmit }: RegisterFormProps) => {
       <Button
         type="submit"
         disabled={isLoading}
-        full
       >
         { isLoading ? 'Загрузка...' : 'Зарегистрироваться' }        
       </Button>

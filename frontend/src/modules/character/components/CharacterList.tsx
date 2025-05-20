@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { Card } from '@mantine/core';
-import Button from 'components/ui/Button';
+import { Button, Card } from '@mantine/core';
 import { Character } from '../types/character';
+
 interface CharacterListProps {
   characters?: Character[];
   className?: string;

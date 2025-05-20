@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Button } from '@mantine/core';
 import * as yup from 'yup';
-import Button from 'components/ui/Button';
 import Field from 'components/ui/Field';
 import { Character } from '../types/character';
 
