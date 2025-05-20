@@ -11,10 +11,21 @@ interface LocationCreateDTO {
   data: Partial<Location>;
 }
 
-interface LocationUpdateDTO {
+interface LocationHandlerDTO {
   locationId: string;
   campaignId: string;
+}
+
+interface LocationUpdateDTO extends LocationHandlerDTO {
   data: Partial<Location>;
+}
+
+interface LocationMapUploadDTO extends LocationHandlerDTO {
+  data: FormData;
+}
+
+interface LocationMapUploadResponse {
+  url?: string;
 }
 
 const mapLocation = (location: any): Location => ({
@@ -42,7 +53,7 @@ export const locationsApi = createApi({
       }),
       transformResponse: (response: any) => mapLocation(response),
     }),
-    getLocation: builder.query<Location, { campaignId: string; locationId: string }>({
+    getLocation: builder.query<Location, LocationHandlerDTO>({
       query: ({ campaignId, locationId }) => ({
         url: `/api/v1/location/${campaignId}/${locationId}`,
       }),
@@ -56,10 +67,17 @@ export const locationsApi = createApi({
       }),
       transformResponse: (response: any) => mapLocation(response),
     }),
-    deleteLocation: builder.mutation<void, { campaignId: string; locationId: string }>({
+    deleteLocation: builder.mutation<void, LocationHandlerDTO>({
       query: ({ campaignId, locationId }) => ({
         url: `/api/v1/location/${campaignId}/${locationId}`,
         method: 'DELETE',
+      }),
+    }),
+    uploadImage: builder.mutation<LocationMapUploadResponse, LocationMapUploadDTO>({
+      query: ({ campaignId, locationId, data }) => ({
+        url: `/api/v1/image/map/${campaignId}/${locationId}`,
+        method: 'POST',
+        body: data,
       }),
     }),
   }),
@@ -70,4 +88,5 @@ export const {
   useGetLocationQuery,
   useUpdateLocationMutation,
   useDeleteLocationMutation,
+  useUploadImageMutation,
 } = locationsApi;
