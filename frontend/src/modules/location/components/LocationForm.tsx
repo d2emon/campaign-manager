@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Group,
+  Image,
   NativeSelect,
   Switch,
   TagsInput,
@@ -36,6 +37,9 @@ const schema = yup.object({
   type: yup
     .string()
     .required('Выберите тип локации'),
+  mapImage: yup
+    .string()
+    .required('Укажите ссылку на изображение карты'),
   tags: yup
     .array()
     .of(yup.string().required())
@@ -50,6 +54,7 @@ interface LocationFormData {
   slug: string;
   name: string;
   type: string;
+  mapImage: string;
   tags: string[];
   isPublic: boolean;
 };
@@ -95,6 +100,8 @@ const LocationForm = ({
     return () => subscription.unsubscribe();
   }, [setValue, watch]);
 
+  const mapImage = watch('mapImage');
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card className="space-y-6">
@@ -135,6 +142,21 @@ const LocationForm = ({
             { value: 'tavern', label: 'Таверна' },
           ]}
         />
+
+        <TextInput
+          id="mapImage"
+          error={errors.mapImage?.message}
+          label="Ссылка на изображение"
+          {...register('mapImage')}
+        />
+
+        { mapImage && (
+          <Image
+            radius="md"
+            src={mapImage}
+            fallbackSrc="https://placehold.co/600x400?text=Placeholder"
+          />
+        ) }
 
         <Controller
           name="tags"
