@@ -1,8 +1,8 @@
 import CampaignItem from 'components/ui/CampaignItem';
-import DataMap from 'components/ui/DataMap';
 import Locations from 'components/ui/Locations';
 import LocationType from './LocationType';
 import { Location } from '../types/location';
+import { Image } from '@mantine/core';
 
 interface LocationDetailsProps {
   location: Location;
@@ -31,9 +31,13 @@ const LocationDetails = ({
       onEdit={onEdit}
       onDelete={onDelete}
     >
-      <div className="mb-6">
-        <DataMap title="Карта" image={location.mapImage} />
-      </div>
+      { location.mapImage && (
+        <Image
+          radius="md"
+          src={location.mapImage}
+          fallbackSrc="https://placehold.co/600x400?text=Placeholder"
+        />
+      ) }
 
       {location.markers && (
         <div className="mb-6">
