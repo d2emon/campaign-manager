@@ -1,4 +1,6 @@
-import Badge from 'components/ui/Badge';
+import {
+  Badge,
+} from '@mantine/core';
 import CampaignItem from 'components/ui/CampaignItem';
 import DataBlock from 'components/ui/DataBlock';
 import DataItem from 'components/ui/DataItem';
