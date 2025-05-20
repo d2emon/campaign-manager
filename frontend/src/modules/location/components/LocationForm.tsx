@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
-import { AlertCircle } from 'react-feather';
+import { AlertCircle, Upload } from 'react-feather';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Alert,
   Button,
   Card,
+  FileInput,
   Group,
   Image,
+  Loader,
   NativeSelect,
   Switch,
   TagsInput,
@@ -22,8 +24,11 @@ interface LocationFormProps {
   initialData?: Location | null;
   isEditing?: boolean;
   isLoading?: boolean;
-  onSubmit: (data: Partial<Location>) => void;
+  isUploadingImage?: boolean;
+  uploadImageError?: string;
+  onSubmit: (values: Partial<Location>) => void;
   onCancel?: () => void;
+  onUploadImage?: (value: File | null) => Promise<string>;
 }
 
 const schema = yup.object({
@@ -64,8 +69,11 @@ const LocationForm = ({
   initialData,
   isEditing = false,
   isLoading = false,
+  isUploadingImage = false,
+  uploadImageError,
   onSubmit,
-  onCancel
+  onCancel,
+  onUploadImage,
 }: LocationFormProps) => {
   const {
     control,
@@ -79,6 +87,8 @@ const LocationForm = ({
     resolver: yupResolver(schema),
     defaultValues: initialData || undefined
   });
+
+  const mapImage = watch('mapImage');
 
   useEffect(() => {
     if (initialData) {
@@ -100,7 +110,12 @@ const LocationForm = ({
     return () => subscription.unsubscribe();
   }, [setValue, watch]);
 
-  const mapImage = watch('mapImage');
+  const handleUploadImage = async (value: File | null) => {
+    if (onUploadImage) {
+      const url = await onUploadImage(value);
+      setValue('mapImage', url);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -143,20 +158,47 @@ const LocationForm = ({
           ]}
         />
 
-        <TextInput
-          id="mapImage"
-          error={errors.mapImage?.message}
-          label="Ссылка на изображение"
-          {...register('mapImage')}
-        />
 
-        { mapImage && (
-          <Image
-            radius="md"
-            src={mapImage}
-            fallbackSrc="https://placehold.co/600x400?text=Placeholder"
-          />
-        ) }
+        { isUploadingImage ? (
+          <Group justify="center">
+            <Loader />
+          </Group>
+        ) : (
+          <>
+            {mapImage && (
+              <Image
+                alt="Предпросмотр карты"
+                radius="md"
+                src={mapImage}
+                fallbackSrc="https://placehold.co/600x400?text=Placeholder"
+              />
+            )}
+
+            <Controller
+              name="mapImage"
+              control={control}
+              render={({ field, fieldState }) => (
+                <TextInput
+                  id="mapImage"
+                  error={fieldState.error?.message}
+                  label="Ссылка на изображение"
+                  placeholder='https://placehold.co/600x400?text=Placeholder'
+                  {...field}
+                />
+              )}
+            />
+
+            <FileInput
+              id="mapImageFile"
+              error={uploadImageError}
+              label="Загрузить изображение"
+              rightSection={<Upload />}
+              accept="image/*"
+              clearable
+              onChange={handleUploadImage}
+            />
+          </>
+        )}
 
         <Controller
           name="tags"
