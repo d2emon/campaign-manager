@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { AlertCircle } from 'react-feather';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Alert,
@@ -63,6 +63,7 @@ const LocationForm = ({
   onCancel
 }: LocationFormProps) => {
   const {
+    control,
     register,
     handleSubmit,
     reset,
@@ -135,18 +136,32 @@ const LocationForm = ({
           ]}
         />
 
-        <TagsInput
-          id="tags"
-          error={errors.tags?.message}
-          label="Теги"
-          {...register('tags')}
-          onChange={(value) => setValue('tags', value)}
+        <Controller
+          name="tags"
+          control={control}
+          render={({ field, fieldState }) => (
+            <TagsInput
+              id="tags"
+              label="Теги"
+              error={fieldState.error?.message}
+              value={field.value || []}
+              onChange={field.onChange}
+            />    
+          )}
         />
 
-        <Switch
-          id="isPublic"
-          label="Доступна игрокам"
-          {...register('isPublic')}
+        <Controller
+          name="isPublic"
+          control={control}
+          render={({ field, fieldState }) => (
+            <Switch
+              id="isPublic"
+              label="Доступна игрокам"
+              error={fieldState.error?.message}
+              checked={field.value}
+              onChange={(event) => field.onChange(event.currentTarget.checked)}
+            />    
+          )}
         />
 
         <Group justify="flex-end">
