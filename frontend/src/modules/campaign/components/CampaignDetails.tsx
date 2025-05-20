@@ -1,7 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import { Badge, Box, Group, Text } from '@mantine/core';
-import Avatar from 'components/ui/Avatar';
-  import CampaignItem from 'components/ui/CampaignItem';
+import {
+  Badge,
+  Box,
+  Group,
+  Image,
+  Text,
+} from '@mantine/core';
+import CampaignItem from 'components/ui/CampaignItem';
 import DataBlock from 'components/ui/DataBlock';
 import DataItem from 'components/ui/DataItem';
 import DataItemLink from 'components/ui/DataItemLink';
@@ -43,11 +48,11 @@ const CampaignDetails = ({ campaign, isLoading=false, onDelete, onEdit, onGenera
         </Group>
 
         <Group mt="md" mb="md">
-          <Avatar
-            src={campaign.coverImage}
+          <Image
             alt={campaign.title}
-            className="w-full object-cover"
-            size="xxl"
+            radius="md"
+            src={campaign.coverImage}
+            fallbackSrc="https://placehold.co/48x48?text=Placeholder"
           />
         </Group>
 
