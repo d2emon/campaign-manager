@@ -75,7 +75,6 @@ const NoteForm = ({
     register,
     handleSubmit,
     reset,
-    getValues,
     setValue,
     watch,
     formState: { errors },
