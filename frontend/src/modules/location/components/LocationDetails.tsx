@@ -33,6 +33,7 @@ const LocationDetails = ({
     >
       { location.mapImage && (
         <Image
+          alt={location.name}
           radius="md"
           src={location.mapImage}
           fallbackSrc="https://placehold.co/600x400?text=Placeholder"
