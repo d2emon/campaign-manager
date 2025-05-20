@@ -8,6 +8,7 @@ import {
   useCreateLocationMutation,
   useGetLocationQuery,
   useUpdateLocationMutation,
+  useUploadImageMutation,
 } from '../services/locationApi';
 import { Location } from '../types/location';
 
@@ -37,6 +38,10 @@ const EditLocationPage = () => {
     isSuccess: isUpdateSuccess,
     error: updateError,
   }] = useUpdateLocationMutation();
+  const [uploadImage, {
+    error: uploadImageError,
+    isLoading: isUploadingImage,
+  }] = useUploadImageMutation();
 
   const location = (locationId && !getLocation.isLoading)
     ? getLocation.data
@@ -44,35 +49,55 @@ const EditLocationPage = () => {
   const isEditing = !!locationId;
   const isLoading = isLoadingCampaign || getLocation.isLoading;
 
-  const handleSubmit = async (data: Partial<Location>) => {
+  const handleUploadImage = async (image: File | null) => {
+    if (!location) {
+      return '';
+    }
+    if (!image) {
+      return '';
+    }
+    
+    const data = new FormData();
+    data.append('image', image);
+    const result = await uploadImage({
+      campaignId,
+      locationId,
+      data,
+    });
+    return result?.data?.url || '';
+  };
+
+  const handleSubmit = async (values: Partial<Location>) => {
     if (!campaignId) return;
 
     setError(undefined);
 
     try {
-      const queryData = {
-        isPublic: data.isPublic,
-        mapImage: data.mapImage,
-        markers: data.markers,
-        name: data.name,
-        slug: data.slug,
-        type: data.type,
-        tags: data.tags,
+      const data = {
+        isPublic: values.isPublic,
+        mapImage: values.mapImage,
+        markers: values.markers,
+        name: values.name,
+        slug: values.slug,
+        type: values.type,
+        tags: values.tags,
       };
+
       if (isEditing) {
-        await updateLocation({ campaignId, locationId, data: queryData });
+        await updateLocation({ campaignId, locationId, data });
       } else {
-        await createLocation({ campaignId, data: queryData });
+        await createLocation({ campaignId, data });
       }
     } catch (error) {
       console.error('Error saving location:', error);
+      setError(`${error}`);
     }
   };
 
   useEffect(() => {
     if (isCreateSuccess || isUpdateSuccess) {
-      reloadCampaign();
-      goToCampaign();
+      // reloadCampaign();
+      // goToCampaign();
     }
   }, [
     goToCampaign,
@@ -111,8 +136,11 @@ const EditLocationPage = () => {
         initialData={location}
         isEditing={isEditing}
         isLoading={isLoading}
+        isUploadingImage={isUploadingImage}
+        uploadImageError={(uploadImageError as LocationErrorResponse)?.data?.error}
         onSubmit={handleSubmit}
         onCancel={goToCampaign}
+        onUploadImage={handleUploadImage}
       />
     </DetailPage>
   );
