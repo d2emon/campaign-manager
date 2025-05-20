@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import Spinner from 'components/ui/Spinner';
+import { Loader } from '@mantine/core';
 import { Campaign } from 'modules/campaign/types/campaign';
 import { Character } from 'modules/character/types/character';
 import { Location } from 'modules/location/types/location';
@@ -36,7 +36,7 @@ const DetailPage = ({
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Spinner size="lg" />
+        <Loader />
       </div>
     );
   }
