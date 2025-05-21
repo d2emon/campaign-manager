@@ -1,16 +1,13 @@
-export interface MapToken {
-  id: string;
-  x: number;
-  y: number;
-  color: string;
-}
+import { MouseEvent } from 'react';
 
 interface MapMarkerProps {
-  id?: string;
+  id?: number;
   x?: number;
   y?: number;
+  title?: string;
   color?: string;
-  onSelect?: (id: string | null) => void;
+  onSelect?: (id: number | null) => void;
+  onMove?: (id: number | null) => void;
 }
 
 const MapMarker = ({
@@ -18,23 +15,37 @@ const MapMarker = ({
   x = 0,
   y = 0,
   color = 'blue',
+  title,
   onSelect,
+  onMove,
 }: MapMarkerProps) => {
-  const handleSelect = () => {
+  const handleSelect = (e: MouseEvent<SVGSVGElement>) => {
     if (onSelect) {
+      e.stopPropagation();
       onSelect(id || null);
     }
   }
 
+  const handleMove = (e: MouseEvent<SVGSVGElement>) => {
+    if (onMove) {
+      e.stopPropagation();
+      onMove(id || null);
+    }
+  }
+
   return (
-    <circle
-      cx={x}
-      cy={y}
-      r="10"
-      fill={color}
-      onMouseDown={handleSelect}
+    <g
+      transform={`translate(${x}, ${y})`}
+      onClick={handleSelect}
+      onMouseDown={handleMove}
       style={{ cursor: 'pointer' }}
-    />
+    >
+      <circle
+        r="10"
+        fill={color}
+      />
+      { title && (<text y="-15" textAnchor="middle" fill="black">{title}</text>) }
+    </g>
   );
 };
 
