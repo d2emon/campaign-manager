@@ -12,9 +12,7 @@ const Locations = ({ title, markers }: LocationsProps) => {
       <div className="mt-2 text-gray-600">
         {markers?.map((marker, index) => (
           <div key={index}>
-            <p>{marker.label}</p>
-            <p>{marker.x}</p>
-            <p>{marker.y}</p>
+            <p>{marker.label} ({marker.x}, {marker.y})</p>
           </div>
         ))}
       </div>
