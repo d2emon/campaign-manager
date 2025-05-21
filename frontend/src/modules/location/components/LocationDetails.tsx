@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import { Image } from '@mantine/core';
 import CampaignItem from 'components/ui/CampaignItem';
 import LocationMap from 'components/ui/LocationMap';
-import { MapToken } from 'components/ui/LocationMap/MapMarker';
 import Locations from 'components/ui/Locations';
+import { Location, Marker } from '../types/location';
 import LocationType from './LocationType';
-import { Location } from '../types/location';
 
 interface LocationDetailsProps {
   location: Location;
@@ -20,41 +19,27 @@ const LocationDetails = ({
   onDelete,
   onEdit,
 }: LocationDetailsProps) => {
-  const [tokens, setTokens] = useState<MapToken[]>([
-    { id: '1', x: 10, y: 10, color: 'red' },
-    { id: '2', x: 200, y: 10, color: 'blue' },
-  ]);
+  const [markers, setMarkers] = useState<Marker[]>([]);
 
-  const mapContent = `
-    <rect x="0" y="0" width="400" height="400" 
-      fill="none" stroke="black" stroke-width="5px" stroke-opacity="0.5"/>
-    <g fill-opacity="0.6" stroke="black" stroke-width="0.5px">
-      <circle cx="200px" cy="200px" r="104px" fill="red"   transform="translate(  0,-52)" />
-      <circle cx="200px" cy="200px" r="104px" fill="blue"  transform="translate( 60, 52)" />
-      <circle cx="200px" cy="200px" r="104px" fill="green" transform="translate(-60, 52)" />
-    </g>
-  `;
-
-  const onTokenMove = (id: string | null, x: number, y: number) => {
-    console.log(id, x, y);
+  const onMarkerMove = (id: number | null, x: number, y: number) => {
     if (!id) {
-      setTokens([
-        ...tokens,
+      setMarkers([
+        ...markers,
         {
-          id: `${tokens.length + 1}`,
           x,
           y,
-          color: 'green',
+          label: `${markers.length}`,
+          isSecret: true,
         },
       ]);
       return;
     }
-    setTokens(tokens.map((token: MapToken) => {
-      if (token.id !== id) {
-        return token;
+    setMarkers(markers.map((marker: Marker, markerId: number) => {
+      if (markerId !== id) {
+        return marker;
       }
       return {
-        ...token,
+        ...marker,
         x,
         y,
       };
@@ -62,15 +47,7 @@ const LocationDetails = ({
   };
 
   useEffect(() => {
-    setTokens(location.markers
-      ? location.markers.map((marker, id) => ({
-        id: `${id}`,
-        x: marker.x,
-        y: marker.y,
-        color: marker.isSecret ? 'red' : 'blue',
-      }))
-      : [],
-    );
+    setMarkers(location.markers ? [...location.markers] : []);
   }, [location]);
 
   return (
@@ -98,9 +75,9 @@ const LocationDetails = ({
 
       <LocationMap
         backgroundImage={location.mapImage}
-        content={mapContent}
-        tokens={tokens}
-        onTokenMove={onTokenMove}
+        content=""
+        tokens={markers}
+        onTokenMove={onMarkerMove}
       />
 
       {location.markers && (
